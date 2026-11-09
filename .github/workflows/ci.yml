@@ -1,0 +1,44 @@
+name: Template CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  template:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: skills/exam-prep-app/assets/app-template
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26
+          cache: npm
+          cache-dependency-path: skills/exam-prep-app/assets/app-template/package-lock.json
+      - run: npm ci
+      # Lint, typecheck, tests and the content validator on the bundled sample.
+      - run: npm run check
+      - run: npm run build
+
+  scaffold:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 26
+      # A scaffolded app with the sample content must pass the same gates as the template.
+      - run: node skills/exam-prep-app/scripts/new-app.mjs --target "$RUNNER_TEMP/demo" --code AZ-104 --title "Microsoft Azure Administrator" --course AZ-104T00 --keep-sample
+      - run: npm ci && npm run check && npm run build
+        working-directory: ${{ runner.temp }}/demo
+      # Without the sample, the empty app must still build.
+      - run: node skills/exam-prep-app/scripts/new-app.mjs --target "$RUNNER_TEMP/empty" --code AZ-104 --title "Microsoft Azure Administrator" --course AZ-104T00
+      - run: npm ci && npm run build
+        working-directory: ${{ runner.temp }}/empty
