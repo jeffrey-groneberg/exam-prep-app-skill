@@ -8,6 +8,7 @@ import { renderInline } from './inline.tsx'
 import { Icon } from './Icon.tsx'
 import { FeedbackLink } from './Feedback.tsx'
 import type { IconName } from './icons.generated.ts'
+import { exam } from '../config.ts'
 
 const TONES: Tone[] = ['user', 'app', 'platform', 'model', 'data', 'tool', 'safety', 'external', 'neutral']
 
@@ -411,7 +412,7 @@ export function Diagram({ diagram, lang, mini = false }: DiagramProps) {
         {usedTones.map((tone) => (
           <li key={tone}>
             <span className={`dg-swatch tone-${tone}`} aria-hidden="true" />
-            {t.labels.tone[tone]}
+            {exam.toneLabels?.[tone] ? tx(exam.toneLabels[tone], lang) : t.labels.tone[tone]}
           </li>
         ))}
       </ul>

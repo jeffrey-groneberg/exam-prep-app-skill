@@ -1,5 +1,9 @@
 import { daysUntil, isIsoDay, plural, utcDay } from './format.ts'
 
+/** "72.5%", "25–30%": English writes the percent sign without a space. */
+const fmtPct = (n: number) => `${n.toLocaleString('en-US', { maximumFractionDigits: 1 })}%`
+const fmtRange = (a: number, b: number) => `${a}–${b}%`
+
 /**
  * English UI copy. The German dictionary (de.ts) must have exactly the same keys; TypeScript enforces it.
  * Strings may use the content's inline markup: **bold**, `code`.
@@ -20,6 +24,8 @@ export const en = {
       if (days === 1) return 'tomorrow'
       return `in ${days} days`
     },
+    percent: fmtPct,
+    percentRange: fmtRange,
   },
 
   meta: {
@@ -136,12 +142,12 @@ export const en = {
     quickMeta: '10 mixed questions, instant feedback',
     simulation: 'Exam simulation',
     simulationMeta: (questions: number, minutes: number) => `${questions} questions · ${minutes} min`,
-    lastScore: (percent: number) => ` · last ${percent} %`,
+    lastScore: (percent: number) => ` · last ${fmtPct(percent)}`,
     simulationCta: 'Simulation',
     readiness: 'Exam readiness',
     skillsMap: 'Skills map',
     ofExam: ' of the exam',
-    retained: (name: string, pct: number) => `${name}: ${pct} % retained`,
+    retained: (name: string, pct: number) => `${name}: ${fmtPct(pct)} retained`,
     readinessNote: 'Retained = answered correctly across reviews (Leitner boxes), not just clicked.',
   },
 
@@ -241,7 +247,7 @@ export const en = {
   session: {
     emptyTitle: 'No matching questions',
     emptyText: 'There are no questions for this selection (yet). Change the filters or pick another module.',
-    score: (n: number, pct: number) => ` of ${n} fully correct · ${pct} % of the points`,
+    score: (n: number, pct: number) => ` of ${n} fully correct · ${fmtPct(pct)} of the points`,
     marked: 'Marked for review',
     reviewNow: (n: number) => `Review ${plural(n, 'mistake', 'mistakes')} now`,
     newRound: 'New round',
@@ -372,7 +378,7 @@ export const en = {
       `**${minutes} minutes**. The real exam runs ${examMinutes} minutes; most exams have 40–60 questions.`,
       '**Weighted by domain** (midpoint of the official ranges), spread widely across the skills; a **case study** comes at the end.',
       '**Mark and review**: mark questions for review and jump to them from the overview before you submit.',
-      `**Points per part**, no penalty for wrong answers. The guideline here is **${passPercent} %** – the real exam reports a scaled score (700 of 1000) that need not equal ${passPercent} % of the points.`,
+      `**Points per part**, no penalty for wrong answers. The guideline here is **${fmtPct(passPercent)}** – the real exam reports a scaled score (700 of 1000) that need not equal ${fmtPct(passPercent)} of the points.`,
     ],
     start: 'Start simulation',
     noQuestions: 'The simulation starts once the question bank has questions.',
@@ -382,7 +388,7 @@ export const en = {
     history: 'Past simulations',
     reached: 'Guideline reached',
     below: 'Below guideline',
-    historyScore: (percent: number, c: number, n: number, minutes: number) => `${percent} % · ${c}/${n} correct · ${minutes} min`,
+    historyScore: (percent: number, c: number, n: number, minutes: number) => `${fmtPct(percent)} · ${c}/${n} correct · ${minutes} min`,
     caseSuffix: ' · Case study',
     position: (i: number, n: number) => `Question ${i} of ${n}`,
     timeLeft: (t: string) => `Time left ${t}`,
@@ -400,11 +406,11 @@ export const en = {
     keepWorking: 'Keep working',
     mark: 'Mark for review',
     toOverview: 'Go to overview',
-    resultTitle: (passed: boolean, percent: number) => (passed ? `Guideline reached: ${percent} % of the points` : `Still below the guideline: ${percent} % of the points`),
+    resultTitle: (passed: boolean, percent: number) => (passed ? `Guideline reached: ${fmtPct(percent)} of the points` : `Still below the guideline: ${fmtPct(percent)} of the points`),
     resultSub: (date: string, c: number, n: number, used: number, minutes: number, scaled: number) =>
       `${date} · ${c} of ${n} questions fully correct · ${used} of ${minutes} minutes · ${scaled}/1000 on a linear scale (not an official scaled score)`,
     byArea: 'Performance by area',
-    areaMeta: (n: number, a: number, b: number) => ` · ${plural(n, 'question', 'questions')} · weight ${a}–${b} %`,
+    areaMeta: (n: number, a: number, b: number) => ` · ${plural(n, 'question', 'questions')} · weight ${fmtRange(a, b)}`,
     reportNote: 'As in the official score report: longer bars show strengths, shorter ones weaknesses. Areas with few questions vary a lot.',
     practiceWrong: (n: number) => `Practice ${plural(n, 'wrong question', 'wrong questions')}`,
     newSimulation: 'New simulation',
@@ -450,8 +456,8 @@ export const en = {
     status: 'Status',
     read: 'read',
     simulations: 'Simulations',
-    trendBar: (date: string, percent: number) => `${date}: ${percent} %`,
-    trendNote: (percent: number) => `The line at ${percent} % is this app’s guideline.`,
+    trendBar: (date: string, percent: number) => `${date}: ${fmtPct(percent)}`,
+    trendNote: (percent: number) => `The line at ${fmtPct(percent)} is this app’s guideline.`,
     data: 'Data',
     dataText: 'Your progress lives only in this browser (localStorage). Export it with your own cards to take it to another device. Resetting deletes your progress; your own cards stay and start again in stage 1.',
     export: 'Export progress',
@@ -470,7 +476,7 @@ export const en = {
     subEnd: (date: string, q: number, l: number, m: number, c: number) =>
       `${date ? ` (as of ${date})` : ''} → module of the official course → lesson → questions. ${plural(q, 'question', 'questions')}, ${l} of ${m} lessons, ${plural(c, 'case study', 'case studies')}.`,
     gaps: 'No questions yet',
-    domainHead: (weightFrom: number, weightTo: number, n: number) => ` · ${weightFrom}–${weightTo} % · ${plural(n, 'question', 'questions')}`,
+    domainHead: (weightFrom: number, weightTo: number, n: number) => ` · ${fmtRange(weightFrom, weightTo)} · ${plural(n, 'question', 'questions')}`,
     table: (id: string) => `Coverage ${id}`,
     skill: 'Skill',
     modulesLesson: 'Modules (lesson)',
@@ -500,13 +506,17 @@ export const en = {
     sandboxText: 'Try the real exam interface with all question types: navigation, marking, review screen.',
     course: (number: string, title: string) => `Course ${number}${title ? `: ${title}` : ''}`,
     courseText: 'The official course – its learning paths are this app’s learning path.',
+    /** Titles of the Microsoft Learn pages, which stay English. */
+    durationTitle: 'Exam duration and exam experience',
     durationText: 'Duration, breaks, question types and access to Microsoft Learn during the exam.',
+    scoringTitle: 'Exam scoring and score reports',
     scoringText: 'Scaled scores (700 to pass), partial credit, no penalty for guessing.',
     community: 'From the community (not official)',
     examDay: 'Good to know for exam day',
-    facts: (minutes: number) => [
-      `Exam time: ${minutes} minutes. Most exams have 40–60 questions.`,
-      'You pass at 700 of 1000. The score is scaled and doesn’t necessarily equal 70 % of the points.',
+    /** seat: seat time in minutes (exam.json exam.seatMinutes), 0 when unknown. */
+    facts: (minutes: number, seat: number) => [
+      seat ? `${minutes} minutes exam time, ${seat} minutes seat time. Most exams have 40–60 questions.` : `Exam time: ${minutes} minutes. Most exams have 40–60 questions.`,
+      'You pass at 700 of 1000. The score is scaled and doesn’t necessarily equal 70% of the points.',
       'Questions with several parts usually give one point per correct part. Wrong answers cost nothing – answer every question.',
       'In role-based exams you can open Microsoft Learn in a split window (without Q&A and practice assessments). The clock keeps running.',
       'Question types in the sandbox: multiple choice, build list (ordering), drag and drop, hot area, active screen, case studies and possibly labs.',
@@ -519,10 +529,15 @@ export const en = {
       'Every question cites at least one current page on learn.microsoft.com and the date it was checked.',
       'Community material only points at what to focus on. Only what the current Learn docs confirm makes it in, in the app’s own words.',
     ],
+    policyFeedback: 'Found a mistake? Every question, lesson section, diagram, code sample and card has a feedback link. It opens a GitHub issue that already says where the problem is.',
     asOf: (outline: string, catalog: string) =>
       `As of: skills outline from ${outline || '–'}${catalog ? `, course structure from the Learn catalog on ${catalog}` : ''}.`,
     matrix: 'View the coverage matrix',
     paths: 'Learning paths and modules on Microsoft Learn',
+    skillTitle: 'An app like this for your exam',
+    skillLink: 'The exam-prep-app agent skill on GitHub',
+    skillText:
+      'This app was built with an AI agent. The workflow is a free skill for GitHub Copilot and other agents: it researches the exam, study guide and course on Microsoft Learn, writes its own lessons, questions and cards, checks them against the docs and publishes the app on GitHub Pages – for any Microsoft certification.',
   },
 
   cards: {
@@ -537,7 +552,7 @@ export const en = {
     putBack: 'Put back',
     box: 'Your box',
     tally: (n: number) => ` of ${n} cards stand at the front`,
-    inFront: (pct: number) => `${pct} % of the cards in stage 3`,
+    inFront: (pct: number) => `${fmtPct(pct)} of the cards in stage 3`,
     round: (n: number) => `Round with ${plural(n, 'card', 'cards')}`,
     newCard: 'New card',
     roundNote: (size: number) =>

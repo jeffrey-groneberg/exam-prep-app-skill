@@ -358,13 +358,13 @@ export function Home() {
                     <div className="readiness__label">
                       <span className="readiness__name">{tx(d.short, lang)}</span>
                       <span className="readiness__weight">
-                        {d.weight[0]}–{d.weight[1]} %<span className="sr-only">{t.home.ofExam}</span>
+                        {t.format.percentRange(d.weight[0], d.weight[1])}<span className="sr-only">{t.home.ofExam}</span>
                       </span>
                     </div>
                     <div className="meter" role="meter" aria-valuemin={0} aria-valuemax={100} aria-valuenow={pct} aria-label={t.home.retained(tx(d.short, lang), pct)}>
                       <span className={`meter__fill bg-domain-${domainHue(d.id)}`} style={{ width: `${pct}%` }} />
                     </div>
-                    <span className="readiness__pct">{m.attempted ? `${pct} %` : '–'}</span>
+                    <span className="readiness__pct">{m.attempted ? t.format.percent(pct) : '–'}</span>
                   </li>
                 )
               })}

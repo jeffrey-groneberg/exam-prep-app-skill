@@ -175,7 +175,7 @@ function main() {
 
   const todo = ['links.practiceAssessment: find the official practice assessment on the exam page (links.examPage) and add its link']
   if (!opts.keepSample) todo.push('skillsOutlineDate: set the date of the study guide version ("Skills measured as of …") the outline follows')
-  todo.push('exam: check minutes and questions on the exam page; exam length differs by exam level')
+  todo.push('exam: check minutes and questions on the exam page (add seatMinutes if it states the seat time); exam length differs by exam level')
   if (!opts.keepSample) {
     todo.push('codeLanguage: set the language of the exam’s code (for example Python or PowerShell), or leave it empty')
     todo.push('legacyNames: list renamed or retired product names the exam’s products had, so the validator rejects them')
@@ -197,7 +197,7 @@ function main() {
     courseNumber,
     courseTitle: catalog?.course?.title ?? '',
     codeLanguage: opts.keepSample ? sample.codeLanguage : '',
-    exam: { ...sample.exam },
+    exam: { minutes: sample.exam.minutes, questions: sample.exam.questions, passPercent: sample.exam.passPercent },
     links: {
       examPage: `https://learn.microsoft.com/credentials/certifications/exams/${codeLower}/`,
       studyGuide: `https://learn.microsoft.com/credentials/certifications/resources/study-guides/${codeLower}`,
@@ -206,6 +206,7 @@ function main() {
       examSandbox: 'https://aka.ms/examdemo',
     },
     feedback: { issuesUrl: opts.repo ? `https://github.com/${opts.repo}/issues/new` : '' },
+    official: [],
     community: [],
     legacyNames: opts.keepSample ? sample.legacyNames : [],
     sourceDocsets: opts.keepSample ? sample.sourceDocsets : GENERIC_DOCSETS,

@@ -334,8 +334,9 @@ export interface ExamLinks {
   examSandbox: string
 }
 
-export interface CommunityLink {
-  title: string
+/** A link on the Resources page; a plain-string title stays the same in both languages (an official title). */
+export interface ResourceLink {
+  title: Text
   url: string
   note?: Text
 }
@@ -372,12 +373,17 @@ export interface ExamConfig {
   courseTitle?: string
   /** Language of code samples and code questions; "Python" is highlighted. */
   codeLanguage?: string
-  exam: { minutes: number; questions: number; passPercent: number }
+  /** seatMinutes: optional seat time of the real exam, shown on Resources. */
+  exam: { minutes: number; questions: number; passPercent: number; seatMinutes?: number }
   links: ExamLinks
   /** Feedback links open a prefilled issue here; without an issuesUrl the app shows none. */
   feedback?: { issuesUrl?: string }
-  community: CommunityLink[]
+  /** Further official Microsoft pages for this exam (certification page, exam prep video …). */
+  official?: ResourceLink[]
+  community: ResourceLink[]
   legacyNames: LegacyName[]
+  /** Exam-specific names for diagram tones in the legend, e.g. platform: "Foundry platform". */
+  toneLabels?: Partial<Record<Tone, L10n>>
   sourceDocsets: Array<{ prefix: string; label: string }>
   targets: ExamTargets
 }

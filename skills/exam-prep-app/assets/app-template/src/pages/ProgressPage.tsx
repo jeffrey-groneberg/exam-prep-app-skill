@@ -64,7 +64,7 @@ export function ProgressPage() {
               <div>
                 <p className="skills-row__title">{tx(d.title, lang)}</p>
                 <p className="skills-row__weight">
-                  {d.id} · {d.weight[0]}–{d.weight[1]} %
+                  {d.id} · {t.format.percentRange(d.weight[0], d.weight[1])}
                 </p>
               </div>
             </div>
@@ -155,7 +155,7 @@ export function ProgressPage() {
                   <Link to={`/exam/result/${e.id}`} className="exam-trend__bar" aria-label={t.progress.trendBar(t.format.date(e.finishedAt), e.summary.percent)}>
                     <span className={e.summary.passed ? 'bg-ok' : 'bg-brand-soft'} style={{ height: `${Math.max(4, e.summary.percent)}%` }} />
                   </Link>
-                  <span className="exam-trend__label">{e.summary.percent} %</span>
+                  <span className="exam-trend__label">{t.format.percent(e.summary.percent)}</span>
                 </li>
               ))}
           </ol>

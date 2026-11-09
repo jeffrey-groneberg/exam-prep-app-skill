@@ -1,8 +1,12 @@
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useLocation } from 'react-router-dom'
 import { useT } from '../i18n/index.ts'
+import { legacyTarget } from '../lib/legacy-routes.ts'
 
 export function NotFound() {
   const t = useT()
+  const { pathname, search, hash } = useLocation()
+  const legacy = legacyTarget(pathname, search, hash)
+  if (legacy) return <Navigate to={legacy} replace />
   return (
     <div className="page">
       <header className="page-head">

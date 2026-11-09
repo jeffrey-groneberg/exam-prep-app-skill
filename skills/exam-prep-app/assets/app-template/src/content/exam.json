@@ -17,7 +17,8 @@
   "exam": {
     "minutes": 100,
     "questions": 50,
-    "passPercent": 70
+    "passPercent": 70,
+    "seatMinutes": 120
   },
   "links": {
     "examPage": "https://learn.microsoft.com/credentials/certifications/exams/ai-103/",
@@ -29,7 +30,22 @@
   "feedback": {
     "issuesUrl": "https://github.com/jeffrey-groneberg/exam-prep-app-skill/issues/new"
   },
+  "official": [
+    {
+      "title": "Exam Prep Video",
+      "url": "https://aka.ms/AI103-ExamPrep",
+      "note": { "en": "Official preparation video for the exam.", "de": "Offizielles Vorbereitungsvideo zur Prüfung." }
+    },
+    {
+      "title": { "en": "Certification: Azure AI Apps and Agents Developer Associate", "de": "Zertifizierung: Azure AI Apps and Agents Developer Associate" },
+      "url": "https://learn.microsoft.com/credentials/certifications/azure-ai-apps-and-agents-developer-associate/",
+      "note": { "en": "The certification this exam earns, with exam registration.", "de": "Zertifizierungsseite mit Prüfungsanmeldung." }
+    }
+  ],
   "community": [],
+  "toneLabels": {
+    "platform": { "en": "Foundry platform", "de": "Foundry-Plattform" }
+  },
   "legacyNames": [
     { "pattern": "\\bAzure AI Studio\\b", "current": "Microsoft Foundry" },
     { "pattern": "\\bAzure OpenAI Studio\\b", "current": "Microsoft Foundry portal" },

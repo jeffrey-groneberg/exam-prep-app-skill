@@ -26,7 +26,8 @@
       "properties": {
         "minutes": { "type": "integer", "minimum": 1, "description": "Exam time of the full simulation." },
         "questions": { "type": "integer", "minimum": 1, "description": "Questions in the full simulation." },
-        "passPercent": { "type": "number", "minimum": 1, "maximum": 100, "description": "The app's pass guideline in percent of points (the real exam reports a scaled score)." }
+        "passPercent": { "type": "number", "minimum": 1, "maximum": 100, "description": "The app's pass guideline in percent of points (the real exam reports a scaled score)." },
+        "seatMinutes": { "type": "integer", "minimum": 1, "description": "Optional seat time of the real exam (exam time plus agreements and survey), shown with the exam-day facts on Resources." }
       }
     },
     "links": {
@@ -54,19 +55,21 @@
         }
       }
     },
+    "official": {
+      "type": "array",
+      "description": "Optional further official Microsoft pages for this exam, e.g. the certification page or an exam prep video, listed under Official from Microsoft on Resources.",
+      "items": { "$ref": "#/$defs/link" }
+    },
     "community": {
       "type": "array",
       "description": "Optional non-official material, shown in its own section on Resources.",
-      "items": {
-        "type": "object",
-        "required": ["title", "url"],
-        "additionalProperties": false,
-        "properties": {
-          "title": { "type": "string", "minLength": 2 },
-          "url": { "type": "string", "pattern": "^https://" },
-          "note": { "anyOf": [{ "type": "string" }, { "$ref": "#/$defs/l10n" }] }
-        }
-      }
+      "items": { "$ref": "#/$defs/link" }
+    },
+    "toneLabels": {
+      "type": "object",
+      "description": "Optional exam-specific names for diagram tones in the legend, e.g. platform: Foundry platform.",
+      "additionalProperties": false,
+      "properties": { "user": { "$ref": "#/$defs/l10n" }, "app": { "$ref": "#/$defs/l10n" }, "platform": { "$ref": "#/$defs/l10n" }, "model": { "$ref": "#/$defs/l10n" }, "data": { "$ref": "#/$defs/l10n" }, "tool": { "$ref": "#/$defs/l10n" }, "safety": { "$ref": "#/$defs/l10n" }, "external": { "$ref": "#/$defs/l10n" }, "neutral": { "$ref": "#/$defs/l10n" } }
     },
     "legacyNames": {
       "type": "array",
@@ -109,6 +112,16 @@
     }
   },
   "$defs": {
+    "link": {
+      "type": "object",
+      "required": ["title", "url"],
+      "additionalProperties": false,
+      "properties": {
+        "title": { "anyOf": [{ "type": "string", "minLength": 2 }, { "$ref": "#/$defs/l10n" }], "description": "Link text; a plain string when it is the same in both languages (an official title)." },
+        "url": { "type": "string", "pattern": "^https://" },
+        "note": { "anyOf": [{ "type": "string" }, { "$ref": "#/$defs/l10n" }] }
+      }
+    },
     "l10n": {
       "type": "object",
       "required": ["en", "de"],

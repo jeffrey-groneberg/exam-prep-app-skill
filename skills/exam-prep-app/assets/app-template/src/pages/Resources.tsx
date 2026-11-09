@@ -3,9 +3,10 @@ import { Icon } from '../components/Icon.tsx'
 import { learningPaths, moduleById, CATALOG_RETRIEVED } from '../content/outline.ts'
 import { useProgress } from '../lib/store.ts'
 import { tx, useT } from '../i18n/index.ts'
-import { exam } from '../config.ts'
+import { exam, SKILL_CREDIT_URL } from '../config.ts'
+import { feedbackEnabled } from '../lib/feedback.ts'
 
-interface ResourceLink {
+interface OfficialItem {
   title: string
   url: string
   text: string
@@ -16,14 +17,15 @@ export function Resources() {
   const t = useT()
   const r = t.resources
   const { links } = exam
-  const official: ResourceLink[] = [
+  const official: OfficialItem[] = [
     { title: r.examPage(exam.code, tx(exam.title, lang)), url: links.examPage, text: r.examPageText },
     { title: r.studyGuide(exam.code), url: links.studyGuide, text: r.studyGuideText },
     { title: r.practiceAssessment, url: links.practiceAssessment, text: r.practiceAssessmentText },
     { title: r.sandbox, url: links.examSandbox, text: r.sandboxText },
+    ...(exam.official ?? []).map((item) => ({ title: tx(item.title, lang), url: item.url, text: tx(item.note, lang) })),
     { title: r.course(exam.courseNumber ?? '', exam.courseTitle ?? ''), url: links.course, text: r.courseText },
-    { title: 'Exam duration and exam experience', url: 'https://learn.microsoft.com/en-us/credentials/support/exam-duration-exam-experience', text: r.durationText },
-    { title: 'Exam scoring and score reports', url: 'https://learn.microsoft.com/en-us/credentials/certifications/exam-scoring-reports', text: r.scoringText },
+    { title: r.durationTitle, url: 'https://learn.microsoft.com/en-us/credentials/support/exam-duration-exam-experience', text: r.durationText },
+    { title: r.scoringTitle, url: 'https://learn.microsoft.com/en-us/credentials/certifications/exam-scoring-reports', text: r.scoringText },
   ].filter((item) => item.url)
   const community = exam.community
 
@@ -45,7 +47,7 @@ export function Resources() {
                 {item.title}
                 <Icon name="open" size={14} />
               </a>
-              <p>{item.text}</p>
+              {item.text && <p>{item.text}</p>}
             </li>
           ))}
         </ul>
@@ -60,7 +62,7 @@ export function Resources() {
             {community.map((item) => (
               <li key={item.url}>
                 <a href={item.url} target="_blank" rel="noreferrer" className="resource-list__link">
-                  {item.title}
+                  {tx(item.title, lang)}
                   <Icon name="open" size={14} />
                 </a>
                 {item.note && <p>{tx(item.note, lang)}</p>}
@@ -76,7 +78,7 @@ export function Resources() {
             {r.examDay}
           </h2>
           <ul className="facts">
-            {r.facts(exam.exam.minutes).map((f) => (
+            {r.facts(exam.exam.minutes, exam.exam.seatMinutes ?? 0).map((f) => (
               <li key={f}>
                 <Icon name="info" size={18} />
                 <span>{f}</span>
@@ -95,6 +97,12 @@ export function Resources() {
                 <span>{text}</span>
               </li>
             ))}
+            {feedbackEnabled && (
+              <li>
+                <Icon name="feedback" size={18} />
+                <span>{r.policyFeedback}</span>
+              </li>
+            )}
             <li>
               <Icon name="calendar" size={18} />
               <span>{r.asOf(t.format.day(exam.skillsOutlineDate), t.format.day(CATALOG_RETRIEVED))}</span>
@@ -133,6 +141,23 @@ export function Resources() {
               </div>
             ))}
           </div>
+        </section>
+      )}
+
+      {SKILL_CREDIT_URL && (
+        <section className="panel" aria-labelledby="skill-h">
+          <h2 id="skill-h" className="panel__title">
+            {r.skillTitle}
+          </h2>
+          <ul className="resource-list">
+            <li>
+              <a href={SKILL_CREDIT_URL} target="_blank" rel="noreferrer" className="resource-list__link">
+                {r.skillLink}
+                <Icon name="open" size={14} />
+              </a>
+              <p>{r.skillText}</p>
+            </li>
+          </ul>
         </section>
       )}
     </div>

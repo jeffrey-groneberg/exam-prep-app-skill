@@ -1,6 +1,10 @@
 import type { Messages } from './en.ts'
 import { daysUntil, plural } from './format.ts'
 
+/** „72,5 %“, „25–30 %“: Dezimalkomma, Leerzeichen vor dem Prozentzeichen. */
+const fmtPct = (n: number) => `${n.toLocaleString('de-DE', { maximumFractionDigits: 1 })} %`
+const fmtRange = (a: number, b: number) => `${a}–${b} %`
+
 /** Deutsche Oberfläche: dieselben Schlüssel wie en.ts (TypeScript prüft das). */
 export const de: Messages = {
   locale: 'de-DE',
@@ -15,6 +19,8 @@ export const de: Messages = {
       if (days === 1) return 'morgen'
       return `in ${days} Tagen`
     },
+    percent: fmtPct,
+    percentRange: fmtRange,
   },
 
   meta: {
@@ -129,12 +135,12 @@ export const de: Messages = {
     quickMeta: '10 gemischte Fragen, sofortiges Feedback',
     simulation: 'Prüfungssimulation',
     simulationMeta: (questions: number, minutes: number) => `${questions} Fragen · ${minutes} Min`,
-    lastScore: (percent: number) => ` · zuletzt ${percent} %`,
+    lastScore: (percent: number) => ` · zuletzt ${fmtPct(percent)}`,
     simulationCta: 'Simulation',
     readiness: 'Prüfungsbereitschaft',
     skillsMap: 'Skills-Landkarte',
     ofExam: ' der Prüfung',
-    retained: (name: string, pct: number) => `${name}: ${pct} % gefestigt`,
+    retained: (name: string, pct: number) => `${name}: ${fmtPct(pct)} gefestigt`,
     readinessNote: 'Gefestigt = über Wiederholungen hinweg richtig beantwortet (Leitner-Boxen), nicht bloß angeklickt.',
   },
 
@@ -234,7 +240,7 @@ export const de: Messages = {
   session: {
     emptyTitle: 'Keine passenden Fragen',
     emptyText: 'Für diese Auswahl gibt es (noch) keine Fragen. Ändere die Filter oder wähle ein anderes Modul.',
-    score: (n: number, pct: number) => ` von ${n} vollständig richtig · ${pct} % der Punkte`,
+    score: (n: number, pct: number) => ` von ${n} vollständig richtig · ${fmtPct(pct)} der Punkte`,
     marked: 'Zum Wiederholen vorgemerkt',
     reviewNow: (n: number) => `${n} Fehler sofort wiederholen`,
     newRound: 'Neue Runde',
@@ -363,7 +369,7 @@ export const de: Messages = {
       `**${minutes} Minuten**. Die echte Prüfung dauert ${examMinutes} Minuten; die meisten Prüfungen haben 40–60 Fragen.`,
       '**Nach Domains gewichtet** (Mittelwert der offiziellen Spannen), breit über die Skills verteilt; eine **Fallstudie** kommt am Ende.',
       '**Markieren & überprüfen**: Fragen zur Überprüfung markieren und vor der Abgabe in der Übersicht ansteuern.',
-      `**Punkte pro Teil**, kein Abzug für falsche Antworten. Als Richtwert gilt hier **${passPercent} %** – die echte Prüfung meldet einen skalierten Wert (700 von 1000), der nicht ${passPercent} % der Punkte entsprechen muss.`,
+      `**Punkte pro Teil**, kein Abzug für falsche Antworten. Als Richtwert gilt hier **${fmtPct(passPercent)}** – die echte Prüfung meldet einen skalierten Wert (700 von 1000), der nicht ${fmtPct(passPercent)} der Punkte entsprechen muss.`,
     ],
     start: 'Simulation starten',
     noQuestions: 'Die Simulation startet, sobald die Fragenbank Fragen enthält.',
@@ -373,7 +379,7 @@ export const de: Messages = {
     history: 'Bisherige Simulationen',
     reached: 'Richtwert erreicht',
     below: 'Unter Richtwert',
-    historyScore: (percent: number, c: number, n: number, minutes: number) => `${percent} % · ${c}/${n} richtig · ${minutes} Min`,
+    historyScore: (percent: number, c: number, n: number, minutes: number) => `${fmtPct(percent)} · ${c}/${n} richtig · ${minutes} Min`,
     caseSuffix: ' · Fallstudie',
     position: (i: number, n: number) => `Frage ${i} von ${n}`,
     timeLeft: (t: string) => `Verbleibende Zeit ${t}`,
@@ -391,11 +397,11 @@ export const de: Messages = {
     keepWorking: 'Weiter bearbeiten',
     mark: 'Zur Überprüfung markieren',
     toOverview: 'Zur Übersicht',
-    resultTitle: (passed: boolean, percent: number) => (passed ? `Richtwert erreicht: ${percent} % der Punkte` : `Noch unter dem Richtwert: ${percent} % der Punkte`),
+    resultTitle: (passed: boolean, percent: number) => (passed ? `Richtwert erreicht: ${fmtPct(percent)} der Punkte` : `Noch unter dem Richtwert: ${fmtPct(percent)} der Punkte`),
     resultSub: (date: string, c: number, n: number, used: number, minutes: number, scaled: number) =>
       `${date} · ${c} von ${n} Fragen vollständig richtig · ${used} von ${minutes} Minuten · linear umgerechnet ${scaled}/1000 (kein offizieller Skalenwert)`,
     byArea: 'Leistung nach Bereich',
-    areaMeta: (n: number, a: number, b: number) => ` · ${plural(n, 'Frage', 'Fragen')} · Gewicht ${a}–${b} %`,
+    areaMeta: (n: number, a: number, b: number) => ` · ${plural(n, 'Frage', 'Fragen')} · Gewicht ${fmtRange(a, b)}`,
     reportNote: 'Wie im offiziellen Score Report: Längere Balken zeigen Stärken, kürzere Schwächen. Bereiche mit wenigen Fragen schwanken stark.',
     practiceWrong: (n: number) => `${plural(n, 'falsche Frage', 'falsche Fragen')} üben`,
     newSimulation: 'Neue Simulation',
@@ -441,8 +447,8 @@ export const de: Messages = {
     status: 'Stand',
     read: 'gelesen',
     simulations: 'Simulationen',
-    trendBar: (date: string, percent: number) => `${date}: ${percent} %`,
-    trendNote: (percent: number) => `Die Linie bei ${percent} % ist der Richtwert dieser App.`,
+    trendBar: (date: string, percent: number) => `${date}: ${fmtPct(percent)}`,
+    trendNote: (percent: number) => `Die Linie bei ${fmtPct(percent)} ist der Richtwert dieser App.`,
     data: 'Daten',
     dataText: 'Dein Fortschritt liegt nur lokal im Browser (localStorage). Exportiere ihn samt deiner eigenen Zettel, um ihn auf ein anderes Gerät mitzunehmen. Zurücksetzen löscht den Lernstand; deine eigenen Zettel bleiben und starten wieder in Fach 1.',
     export: 'Fortschritt exportieren',
@@ -461,7 +467,7 @@ export const de: Messages = {
     subEnd: (date: string, q: number, l: number, m: number, c: number) =>
       `${date ? ` (Stand ${date})` : ''} → Modul des offiziellen Kurses → Lektion → Fragen. ${plural(q, 'Frage', 'Fragen')}, ${l} von ${m} Lektionen, ${plural(c, 'Fallstudie', 'Fallstudien')}.`,
     gaps: 'Noch ohne Fragen',
-    domainHead: (weightFrom: number, weightTo: number, n: number) => ` · ${weightFrom}–${weightTo} % · ${plural(n, 'Frage', 'Fragen')}`,
+    domainHead: (weightFrom: number, weightTo: number, n: number) => ` · ${fmtRange(weightFrom, weightTo)} · ${plural(n, 'Frage', 'Fragen')}`,
     table: (id: string) => `Abdeckung ${id}`,
     skill: 'Skill',
     modulesLesson: 'Module (Lektion)',
@@ -491,12 +497,14 @@ export const de: Messages = {
     sandboxText: 'Die echte Prüfungsoberfläche mit allen Fragetypen ausprobieren: Navigation, Markieren, Review-Bildschirm.',
     course: (number: string, title: string) => `Kurs ${number}${title ? `: ${title}` : ''}`,
     courseText: 'Offizieller Kurs – seine Lernpfade sind der Lernpfad dieser App.',
+    durationTitle: 'Exam duration and exam experience',
     durationText: 'Dauer, Pausen, Fragetypen und Zugriff auf Microsoft Learn während der Prüfung.',
+    scoringTitle: 'Exam scoring and score reports',
     scoringText: 'Skalierte Punkte (700 zum Bestehen), Teilpunkte, kein Abzug fürs Raten.',
     community: 'Aus der Community (nicht offiziell)',
     examDay: 'Gut zu wissen für den Prüfungstag',
-    facts: (minutes: number) => [
-      `Prüfungszeit: ${minutes} Minuten. Die meisten Prüfungen haben 40–60 Fragen.`,
+    facts: (minutes: number, seat: number) => [
+      seat ? `${minutes} Minuten Prüfungszeit, ${seat} Minuten Sitzzeit. Die meisten Prüfungen haben 40–60 Fragen.` : `Prüfungszeit: ${minutes} Minuten. Die meisten Prüfungen haben 40–60 Fragen.`,
       'Bestehen ab 700 von 1000 Punkten. Der Wert ist skaliert und entspricht nicht unbedingt 70 % der Punkte.',
       'Bei mehrteiligen Fragen gibt es meist einen Punkt pro richtigem Teil. Falsche Antworten kosten nichts – beantworte jede Frage.',
       'In rollenbasierten Prüfungen kannst du Microsoft Learn in einem geteilten Fenster öffnen (ohne Q&A und Practice Assessments). Die Zeit läuft dabei weiter.',
@@ -510,9 +518,14 @@ export const de: Messages = {
       'Jede Frage nennt mindestens eine aktuelle Seite auf learn.microsoft.com und ein Prüfdatum.',
       'Community-Material dient nur als Hinweis auf Schwerpunkte. Übernommen wird nur, was die aktuelle Learn-Doku bestätigt, in eigenen Worten.',
     ],
+    policyFeedback: 'Fehler gefunden? Jede Frage, jeder Lektionsabschnitt, jedes Diagramm, jedes Codebeispiel und jeder Zettel hat einen Feedback-Link. Er öffnet ein GitHub-Issue, in dem schon steht, wo es klemmt.',
     asOf: (outline: string, catalog: string) => `Stand: Skills-Outline vom ${outline || '–'}${catalog ? `, Kursstruktur aus dem Learn-Katalog vom ${catalog}` : ''}.`,
     matrix: 'Abdeckungsmatrix ansehen',
     paths: 'Lernpfade und Module auf Microsoft Learn',
+    skillTitle: 'Eine App wie diese für deine Prüfung',
+    skillLink: 'Agent-Skill exam-prep-app auf GitHub',
+    skillText:
+      'Diese App ist mit einem KI-Agenten entstanden. Den Ablauf gibt es als frei verfügbaren Skill für GitHub Copilot und andere Agenten: Er recherchiert Prüfung, Study Guide und Kurs auf Microsoft Learn, schreibt eigene Lektionen, Fragen und Zettel, prüft sie gegen die Doku und veröffentlicht die App auf GitHub Pages – für jede Microsoft-Zertifizierung.',
   },
 
   cards: {
@@ -527,7 +540,7 @@ export const de: Messages = {
     putBack: 'Zurücklegen',
     box: 'Dein Kasten',
     tally: (n: number) => ` von ${n} Zetteln stehen vorne`,
-    inFront: (pct: number) => `${pct} % der Zettel in Fach 3`,
+    inFront: (pct: number) => `${fmtPct(pct)} der Zettel in Fach 3`,
     round: (n: number) => `Runde mit ${plural(n, 'Zettel', 'Zetteln')}`,
     newCard: 'Neuer Zettel',
     roundNote: (size: number) =>

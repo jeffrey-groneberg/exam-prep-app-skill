@@ -111,9 +111,7 @@ function Setup() {
               <li key={d.id} className="dist__row">
                 <span className={`domain-chip domain-${domainHue(d.id)}`}>{d.id}</span>
                 <span className="dist__name">{tx(d.title, lang)}</span>
-                <span className="dist__weight">
-                  {d.weight[0]}–{d.weight[1]} %
-                </span>
+                <span className="dist__weight">{t.format.percentRange(d.weight[0], d.weight[1])}</span>
                 <span className="dist__n">{t.common.questions(quotas[d.id] ?? 0)}</span>
               </li>
             ))}
@@ -361,7 +359,7 @@ function Results({ record }: { record: ExamRecord }) {
         <div className="score-line" aria-hidden="true">
           <span className="score-line__fill" style={{ width: `${s.percent}%` }} />
           <span className="score-line__mark" style={{ left: `${EXAM_DEFAULTS.passPercent}%` }}>
-            {EXAM_DEFAULTS.passPercent} %
+            {t.format.percent(EXAM_DEFAULTS.passPercent)}
           </span>
         </div>
         <ul className="report-bars">
@@ -377,10 +375,10 @@ function Results({ record }: { record: ExamRecord }) {
                     {dom ? t.exam.areaMeta(d.possible, dom.weight[0], dom.weight[1]) : ''}
                   </span>
                 </span>
-                <div className="meter" role="meter" aria-valuemin={0} aria-valuemax={100} aria-valuenow={d.percent} aria-label={`${dom ? tx(dom.short, lang) : d.domain}: ${d.percent} %`}>
+                <div className="meter" role="meter" aria-valuemin={0} aria-valuemax={100} aria-valuenow={d.percent} aria-label={`${dom ? tx(dom.short, lang) : d.domain}: ${t.format.percent(d.percent)}`}>
                   <span className={`meter__fill bg-domain-${domainHue(d.domain)}`} style={{ width: `${d.percent}%` }} />
                 </div>
-                <span className="report-bars__pct">{d.possible ? `${d.percent} %` : '–'}</span>
+                <span className="report-bars__pct">{d.possible ? t.format.percent(d.percent) : '–'}</span>
               </li>
             )
           })}
@@ -415,7 +413,7 @@ function Results({ record }: { record: ExamRecord }) {
                     <span className="result-item__num">{i + 1}</span>
                     <span className={`domain-chip domain-${domainHue(q.domain)}`}>{q.domain}</span>
                     <span className="result-item__stem" lang={lang}>{tx(q.stem, lang).replace(/[`*]/g, '')}</span>
-                    {!r.correct && r.score > 0 && <span className="tag">{Math.round(r.score * 100)} %</span>}
+                    {!r.correct && r.score > 0 && <span className="tag">{t.format.percent(Math.round(r.score * 100))}</span>}
                   </summary>
                   <div className="result-item__body">
                     <QuestionView question={q} lang={lang} answer={answer} onChange={() => undefined} revealed seed={7} caseStudy={q.caseId ? caseById.get(q.caseId) : undefined} />
