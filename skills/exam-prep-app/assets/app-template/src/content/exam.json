@@ -1,0 +1,70 @@
+{
+  "$schema": "./schema/exam.schema.json",
+  "code": "AI-103",
+  "title": {
+    "en": "Developing AI Apps and Agents on Azure",
+    "de": "Developing AI Apps and Agents on Azure"
+  },
+  "appName": "AI-103 Prep",
+  "shortName": "AI-103",
+  "badge": "103",
+  "storageKey": "ai-103-prep:v1",
+  "defaultLang": "en",
+  "skillsOutlineDate": "2026-04-16",
+  "courseNumber": "AI-103T00",
+  "courseTitle": "Develop AI apps and agents on Azure",
+  "codeLanguage": "Python",
+  "exam": {
+    "minutes": 100,
+    "questions": 50,
+    "passPercent": 70
+  },
+  "links": {
+    "examPage": "https://learn.microsoft.com/credentials/certifications/exams/ai-103/",
+    "studyGuide": "https://learn.microsoft.com/credentials/certifications/resources/study-guides/ai-103",
+    "course": "https://learn.microsoft.com/training/courses/ai-103t00/",
+    "practiceAssessment": "https://aka.ms/AI103-PA",
+    "examSandbox": "https://aka.ms/examdemo"
+  },
+  "feedback": {
+    "issuesUrl": "https://github.com/jeffrey-groneberg/exam-prep-app-skill/issues/new"
+  },
+  "community": [],
+  "legacyNames": [
+    { "pattern": "\\bAzure AI Studio\\b", "current": "Microsoft Foundry" },
+    { "pattern": "\\bAzure OpenAI Studio\\b", "current": "Microsoft Foundry portal" },
+    { "pattern": "\\bAzure AI Foundry\\b", "current": "Microsoft Foundry" },
+    { "pattern": "\\bAI Foundry Agent Service\\b", "current": "Foundry Agent Service" },
+    { "pattern": "\\bCognitive Services\\b(?!(?: [A-Z][A-Za-z]+)* (?:User|Contributor|Reader|Writer|Owner)\\b)", "current": "Foundry Tools" },
+    { "pattern": "\\bAzure AI services\\b", "current": "Foundry Tools" },
+    { "pattern": "\\bForm Recognizer\\b", "current": "Azure Document Intelligence in Foundry Tools" },
+    { "pattern": "\\bLUIS\\b|\\bLanguage Understanding \\(LUIS\\)", "current": "conversational language understanding" },
+    { "pattern": "\\bQnA Maker\\b", "current": "question answering" },
+    { "pattern": "\\bAssistants API\\b", "current": "Responses API (Agents v2)" },
+    { "pattern": "\\bprompt flow\\b", "flags": "i", "current": "workflows / Agent Framework" },
+    { "pattern": "\\bAzure AI (?:User|Owner|Account Owner|Project Manager)\\b", "current": "Foundry User / Foundry Owner / Foundry Account Owner / Foundry Project Manager" }
+  ],
+  "sourceDocsets": [
+    { "prefix": "/training/", "label": "Training" },
+    { "prefix": "/agent-framework/", "label": "Agent Framework" },
+    { "prefix": "/azure/foundry/", "label": "Foundry" },
+    { "prefix": "/azure/search/", "label": "AI Search" },
+    { "prefix": "/azure/ai-services/content-understanding/", "label": "Content Understanding" },
+    { "prefix": "/azure/ai-services/document-intelligence/", "label": "Document Intelligence" },
+    { "prefix": "/azure/ai-services/speech-service/", "label": "Speech" },
+    { "prefix": "/azure/ai-services/language-service/", "label": "Language" },
+    { "prefix": "/azure/ai-services/translator/", "label": "Translator" },
+    { "prefix": "/azure/ai-services/content-safety/", "label": "Content Safety" },
+    { "prefix": "/python/api/", "label": "Python SDK" },
+    { "prefix": "/rest/api/", "label": "REST API" },
+    { "prefix": "/web-iq/", "label": "Web IQ" },
+    { "prefix": "/microsoft-365/", "label": "Microsoft 365" }
+  ],
+  "targets": {
+    "minQuestions": 30,
+    "minPerBullet": 1,
+    "minPerModule": 3,
+    "minCases": 1,
+    "domainShareTolerance": 3
+  }
+}

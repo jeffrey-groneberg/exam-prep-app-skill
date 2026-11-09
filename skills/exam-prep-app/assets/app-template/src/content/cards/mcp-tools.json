@@ -1,0 +1,1156 @@
+{
+  "$schema": "../schema/card-file.schema.json",
+  "module": "mcp-tools",
+  "cards": [
+    {
+      "id": "z-mcp-tools-concept-1",
+      "source": { "kind": "concept", "index": 0 },
+      "front": {
+        "en": "Which roles do the MCP server and the MCP client play, and who is the client for a Foundry prompt agent?",
+        "de": "Welche Rolle spielen MCP-Server und MCP-Client, und wer ist bei einem Foundry-Prompt-Agent der Client?"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "The client hosts the tools, the server lists and calls them; for a prompt agent, the Agent Service runtime is the client.",
+            "de": "Der Client hostet die Tools, der Server listet und ruft sie auf; beim Prompt Agent ist die Agent-Service-Runtime der Client."
+          },
+          "correct": false,
+          "why": {
+            "en": "Roles reversed: the server hosts the tools, and the client discovers and calls them.",
+            "de": "Rollen vertauscht: Der Server hostet die Tools, der Client entdeckt und ruft sie auf."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "The server hosts tools (names, descriptions, input schemas), the client lists and calls them; for a prompt agent, the model deployment is the client.",
+            "de": "Der Server hostet Tools (Namen, Beschreibungen, Eingabeschemas), der Client listet und ruft sie auf; beim Prompt Agent ist das Modell-Deployment der Client."
+          },
+          "correct": false,
+          "why": {
+            "en": "The model only picks a tool and its arguments; the client that talks to the server is the Agent Service runtime.",
+            "de": "Das Modell wählt nur ein Tool und dessen Argumente; der Client, der mit dem Server spricht, ist die Agent-Service-Runtime."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "The server hosts tools (names, descriptions, input schemas), the client lists and calls them; for a prompt agent, the Agent Service runtime is the client.",
+            "de": "Der Server hostet Tools (Namen, Beschreibungen, Eingabeschemas), der Client listet und ruft sie auf; beim Prompt Agent ist die Agent-Service-Runtime der Client."
+          },
+          "correct": true,
+          "why": {
+            "en": "The server publishes the tools; for a Foundry prompt agent, the Agent Service runtime connects, lists and calls them — in your own code, an MCP client session does that.",
+            "de": "Der Server veröffentlicht die Tools; bei einem Foundry-Prompt-Agent verbindet sich die Agent-Service-Runtime, listet und ruft sie auf – in deinem eigenen Code macht das eine MCP-Client-Session."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "The client hosts the tools, the server lists and calls them; for a prompt agent, the model deployment is the client.",
+            "de": "Der Client hostet die Tools, der Server listet und ruft sie auf; beim Prompt Agent ist das Modell-Deployment der Client."
+          },
+          "correct": false,
+          "why": {
+            "en": "Wrong twice: the server hosts the tools, and the model only picks a tool call — the client is the Agent Service runtime.",
+            "de": "Doppelt falsch: Der Server hostet die Tools, und das Modell wählt nur einen Tool-Aufruf – der Client ist die Agent-Service-Runtime."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-mcp-tools-concept-2",
+      "source": { "kind": "concept", "index": 1 },
+      "front": {
+        "en": "Why do tools added on an MCP server appear without redeploying the agent, and what can still hide them?",
+        "de": "Warum erscheinen neue Tools eines MCP-Servers ohne Redeployment des Agents, und was kann sie trotzdem ausblenden?"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "The client fetches the server's current tool list at runtime; a non-empty `allowed_tools` list can still filter them out.",
+            "de": "Der Client holt die aktuelle Tool-Liste des Servers zur Laufzeit; eine nicht leere `allowed_tools`-Liste kann sie trotzdem herausfiltern."
+          },
+          "correct": true,
+          "why": {
+            "en": "Discovery runs at runtime, so nothing is redeployed; only a non-empty `allowed_tools` list that lacks the new names filters them out.",
+            "de": "Die Discovery läuft zur Laufzeit, also wird nichts neu bereitgestellt; nur eine nicht leere `allowed_tools`-Liste ohne die neuen Namen filtert sie heraus."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "The client fetches the server's current tool list at runtime; setting `require_approval` to `always` can still hide new tools.",
+            "de": "Der Client holt die aktuelle Tool-Liste des Servers zur Laufzeit; `require_approval` auf `always` kann die neuen Tools trotzdem ausblenden."
+          },
+          "correct": false,
+          "why": {
+            "en": "Approval hides nothing — it pauses each call for a human decision; only `allowed_tools` filters what the model sees.",
+            "de": "Eine Freigabe blendet nichts aus – sie hält jeden Aufruf für eine menschliche Entscheidung an; nur `allowed_tools` filtert, was das Modell sieht."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "The client fetches the server's current tool list at runtime; passing `allowed_tools=[]` can still hide them.",
+            "de": "Der Client holt die aktuelle Tool-Liste des Servers zur Laufzeit; `allowed_tools=[]` kann sie trotzdem ausblenden."
+          },
+          "correct": false,
+          "why": {
+            "en": "An empty list hides nothing: `allowed_tools=[]` exposes every tool, just like leaving the parameter out.",
+            "de": "Eine leere Liste blendet nichts aus: `allowed_tools=[]` gibt jedes Tool frei, genau wie ein fehlender Parameter."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Foundry copies the server's tools into each agent version when you save it; only a new version without them can hide them again.",
+            "de": "Foundry kopiert die Tools des Servers beim Speichern in jede neue Agent Version; nur eine neue Version ohne sie kann sie wieder ausblenden."
+          },
+          "correct": false,
+          "why": {
+            "en": "Nothing is copied into a version: the client reads the tool list at runtime, which is exactly why no redeployment is needed.",
+            "de": "In eine Version wird nichts kopiert: Der Client liest die Tool-Liste zur Laufzeit – genau deshalb ist kein Redeployment nötig."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-mcp-tools-concept-3",
+      "source": { "kind": "concept", "index": 2 },
+      "front": {
+        "en": "How does `MCPTool` attach a remote server to a prompt agent, and how do you add more than one server?",
+        "de": "Wie bindet `MCPTool` einen Remote-Server an einen Prompt Agent, und wie fügst du mehrere Server hinzu?"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "It sets `server_label` (unique per agent) and `server_url`; further servers go into the same `MCPTool` as extra `allowed_tools` entries.",
+            "de": "Es setzt `server_label` (eindeutig pro Agent) und `server_url`; weitere Server kommen als zusätzliche `allowed_tools`-Einträge in dasselbe `MCPTool`."
+          },
+          "correct": false,
+          "why": {
+            "en": "`allowed_tools` holds tool names of that one server, not other servers; each server needs its own `MCPTool`.",
+            "de": "`allowed_tools` enthält Tool-Namen dieses einen Servers, keine weiteren Server; jeder Server braucht sein eigenes `MCPTool`."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "It reads the server's OpenAPI spec from `server_url`; each further server becomes a separate `MCPTool` in `tools`.",
+            "de": "Es liest die OpenAPI-Spezifikation unter `server_url`; jeder weitere Server wird ein eigenes `MCPTool` in `tools`."
+          },
+          "correct": false,
+          "why": {
+            "en": "MCP servers describe their tools through the protocol (`tools/list`), not an OpenAPI spec; `MCPTool` takes `server_label` and `server_url`.",
+            "de": "MCP-Server beschreiben ihre Tools über das Protokoll (`tools/list`), nicht per OpenAPI-Spezifikation; `MCPTool` nimmt `server_label` und `server_url`."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "It reads the server's OpenAPI spec from `server_url`; further servers go into the same `MCPTool` as extra `allowed_tools` entries.",
+            "de": "Es liest die OpenAPI-Spezifikation unter `server_url`; weitere Server kommen als zusätzliche `allowed_tools`-Einträge in dasselbe `MCPTool`."
+          },
+          "correct": false,
+          "why": {
+            "en": "Both parts are off: MCP servers describe their tools through the protocol, not OpenAPI, and `allowed_tools` lists tool names, not further servers.",
+            "de": "Beides stimmt nicht: MCP-Server beschreiben ihre Tools über das Protokoll, nicht per OpenAPI, und `allowed_tools` listet Tool-Namen, keine weiteren Server."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "It sets `server_label` (unique per agent) and `server_url`; each further server becomes a separate `MCPTool` in `tools`.",
+            "de": "Es setzt `server_label` (eindeutig pro Agent) und `server_url`; jeder weitere Server wird ein eigenes `MCPTool` in `tools`."
+          },
+          "correct": true,
+          "why": {
+            "en": "One `MCPTool` attaches one remote server, optionally with `allowed_tools`, `require_approval`, `project_connection_id` and `headers`; more servers mean more tools.",
+            "de": "Ein `MCPTool` bindet genau einen Remote-Server an, optional mit `allowed_tools`, `require_approval`, `project_connection_id` und `headers`; mehr Server heißt mehr Tools."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-mcp-tools-concept-4",
+      "source": { "kind": "concept", "index": 3 },
+      "front": {
+        "en": "What does a non-empty `allowed_tools` list restrict, and what is exposed without one?",
+        "de": "Was schränkt eine nicht leere `allowed_tools`-Liste ein, und was ist ohne sie verfügbar?"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "It restricts the model to the listed tool names; without a list, no tool on the server is exposed until you add names.",
+            "de": "Sie beschränkt das Modell auf die gelisteten Tool-Namen; ohne Liste ist kein Tool des Servers verfügbar, bis du Namen ergänzt."
+          },
+          "correct": false,
+          "why": {
+            "en": "The default is the opposite: without `allowed_tools`, every tool on the server is available to the model.",
+            "de": "Der Standard ist das Gegenteil: Ohne `allowed_tools` steht dem Modell jedes Tool des Servers zur Verfügung."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "It restricts the model to the listed tool names; without a list, or with `[]`, every tool on the server is exposed.",
+            "de": "Sie beschränkt das Modell auf die gelisteten Tool-Namen; ohne Liste oder mit `[]` ist jedes Tool des Servers verfügbar."
+          },
+          "correct": true,
+          "why": {
+            "en": "A non-empty `allowed_tools` list is the core tool-access control; omitting it or passing `[]` exposes all tools.",
+            "de": "Eine nicht leere `allowed_tools`-Liste ist die zentrale Tool-Zugriffskontrolle; fehlt sie oder ist sie `[]`, sind alle Tools verfügbar."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "It names the tools that skip human approval; without a list, every tool on the server stays hidden.",
+            "de": "Sie benennt die Tools, die ohne menschliche Freigabe laufen; ohne Liste bleibt jedes Tool des Servers verborgen."
+          },
+          "correct": false,
+          "why": {
+            "en": "Approval rules belong to `require_approval`; `allowed_tools` decides which tools the model may call, and without it all are exposed.",
+            "de": "Freigaberegeln gehören zu `require_approval`; `allowed_tools` entscheidet, welche Tools das Modell aufrufen darf – ohne die Liste sind alle verfügbar."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "It limits which users may call the tools; without a list, only the project owner can call them.",
+            "de": "Sie legt fest, welche Nutzer die Tools aufrufen dürfen; ohne Liste darf nur der Projektbesitzer sie aufrufen."
+          },
+          "correct": false,
+          "why": {
+            "en": "`allowed_tools` holds tool names, not users; the identity the server sees comes from the project connection, and without the list all tools are exposed.",
+            "de": "`allowed_tools` enthält Tool-Namen, keine Nutzer; die Identität, die der Server sieht, kommt aus der Projektverbindung – ohne die Liste sind alle Tools verfügbar."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-mcp-tools-concept-5",
+      "source": { "kind": "concept", "index": 4 },
+      "front": {
+        "en": "What does `require_approval` do by default, and how do you set different approval rules per tool?",
+        "de": "Was bewirkt `require_approval` standardmäßig, und wie legst du pro Tool unterschiedliche Freigaberegeln fest?"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Calls run at once without any approval (default `never`); a per-tool policy lists tool names under `never` and `always`.",
+            "de": "Aufrufe laufen sofort und ganz ohne Freigabe (Standard `never`); eine Richtlinie pro Tool listet Tool-Namen unter `never` und `always`."
+          },
+          "correct": false,
+          "why": {
+            "en": "The default is `always`, not `never` — which is why the first response often holds only an approval request.",
+            "de": "Standard ist `always`, nicht `never` – deshalb enthält die erste Antwort oft nur eine Freigabeanfrage."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Calls run at once without any approval (default `never`); per-tool rules go into the agent instructions, e.g. “ask before refunds”.",
+            "de": "Aufrufe laufen sofort und ganz ohne Freigabe (Standard `never`); Regeln pro Tool stehen in den Agent-Anweisungen, etwa „vor Erstattungen fragen“."
+          },
+          "correct": false,
+          "why": {
+            "en": "Both parts are wrong: the default is `always`, and per-tool rules belong in `require_approval` — instructions are not an access control.",
+            "de": "Beides falsch: Standard ist `always`, und Regeln pro Tool gehören in `require_approval` – Anweisungen sind keine Zugriffskontrolle."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Every call waits for approval (default `always`); a per-tool policy lists tool names under `never` and `always`.",
+            "de": "Jeder Aufruf wartet auf eine Freigabe (Standard `always`); eine Richtlinie pro Tool listet Tool-Namen unter `never` und `always`."
+          },
+          "correct": true,
+          "why": {
+            "en": "By default each call first returns an `mcp_approval_request`; `MCPToolRequireApproval(never=…, always=…)` sets rules per tool name.",
+            "de": "Standardmäßig liefert jeder Aufruf zuerst ein `mcp_approval_request`; `MCPToolRequireApproval(never=…, always=…)` legt Regeln pro Tool-Name fest."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Every call waits for approval (default `always`); per-tool rules go into the agent instructions, e.g. “ask before refunds”.",
+            "de": "Jeder Aufruf wartet auf eine Freigabe (Standard `always`); Regeln pro Tool stehen in den Agent-Anweisungen, etwa „vor Erstattungen fragen“."
+          },
+          "correct": false,
+          "why": {
+            "en": "Instructions are not an access control; per-tool approval rules belong in `require_approval` with `never` and `always` lists.",
+            "de": "Anweisungen sind keine Zugriffskontrolle; Freigaberegeln pro Tool gehören in `require_approval` mit Listen unter `never` und `always`."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-mcp-tools-concept-6",
+      "source": { "kind": "concept", "index": 5 },
+      "front": {
+        "en": "How does an agent reference MCP credentials, and what decides which identity the MCP server sees?",
+        "de": "Wie verweist ein Agent auf MCP-Zugangsdaten, und was bestimmt, welche Identität der MCP-Server sieht?"
+      },
+      "back": {
+        "en": "Store keys or tokens in a project connection and reference it with `project_connection_id` (the samples pass the connection name). The connection’s authentication type decides which identity the server sees: one shared key or token (key-based), the agent’s own Entra identity, the project’s managed identity, the calling user (Microsoft Entra client user delegation) or each user after their own sign-in to the provider (OAuth identity passthrough). Prefer Microsoft Entra when the server supports it: no secrets to manage and automatic token rotation.",
+        "de": "Speichere Keys oder Tokens in einer Projektverbindung und verweise mit `project_connection_id` darauf (die Beispiele übergeben den Verbindungsnamen). Der Authentifizierungstyp der Verbindung entscheidet, welche Identität der Server sieht: ein geteilter Key oder Token (Key-basiert), die eigene Entra-Identität des Agents, die Managed Identity des Projekts, der aufrufende Nutzer (Microsoft Entra Client User Delegation) oder jeder Nutzer nach eigener Anmeldung beim Anbieter (OAuth Identity Passthrough). Bevorzuge Microsoft Entra, wenn der Server es unterstützt: keine Secrets zu verwalten und automatische Token-Rotation."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Via `project_connection_id`; the connection's auth type decides: a shared key, the agent or project identity, or the user.",
+            "de": "Über `project_connection_id`; der Auth-Typ der Verbindung entscheidet: geteilter Key, Agent- oder Projektidentität oder der Nutzer."
+          },
+          "correct": true,
+          "why": {
+            "en": "Credentials live in a project connection; its type — key-based, agent identity, project managed identity, user delegation or OAuth passthrough — sets the identity.",
+            "de": "Zugangsdaten liegen in einer Projektverbindung; ihr Typ – Key-basiert, Agent-Identität, Projekt-Managed-Identity, User Delegation oder OAuth Passthrough – bestimmt die Identität."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Via `project_connection_id`; the server always sees the project's managed identity, whatever the auth type.",
+            "de": "Über `project_connection_id`; der Server sieht immer die Managed Identity des Projekts, egal welcher Auth-Typ."
+          },
+          "correct": false,
+          "why": {
+            "en": "The project managed identity is just one option; key-based, agent identity, user delegation and OAuth passthrough show the server other identities.",
+            "de": "Die Projekt-Managed-Identity ist nur eine Option; Key-basiert, Agent-Identität, User Delegation und OAuth Passthrough zeigen dem Server andere Identitäten."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Via `server_label`, which names the stored key; the model deployment's identity is what the server sees.",
+            "de": "Über `server_label`, das den gespeicherten Key benennt; der Server sieht die Identität des Modell-Deployments."
+          },
+          "correct": false,
+          "why": {
+            "en": "`server_label` only names the server inside the agent; credentials come from the connection in `project_connection_id`, and its auth type decides.",
+            "de": "`server_label` benennt nur den Server im Agent; Zugangsdaten kommen aus der Verbindung in `project_connection_id`, und ihr Auth-Typ entscheidet."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Via `project_connection_id`; once approvals are on, the server sees the identity of the human reviewer.",
+            "de": "Über `project_connection_id`; sobald Freigaben aktiv sind, sieht der Server die Identität der jeweils prüfenden Person."
+          },
+          "correct": false,
+          "why": {
+            "en": "An approval only decides whether a call runs; the identity the server sees still comes from the connection's authentication type.",
+            "de": "Eine Freigabe entscheidet nur, ob ein Aufruf läuft; welche Identität der Server sieht, bestimmt weiter der Authentifizierungstyp der Verbindung."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-mcp-tools-concept-7",
+      "source": { "kind": "concept", "index": 6 },
+      "front": {
+        "en": "When do you choose a Foundry toolbox, and when an AI gateway, for your MCP tools?",
+        "de": "Wann wählst du für deine MCP-Tools eine Foundry-Toolbox und wann ein AI Gateway?"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Toolbox: enforce rate limits, IP filters and logging on MCP traffic; AI gateway: reuse one curated tool set across agents.",
+            "de": "Toolbox: Ratenlimits, IP-Filter und Logging für MCP-Traffic durchsetzen; AI Gateway: einen kuratierten Tool-Satz in mehreren Agents wiederverwenden."
+          },
+          "correct": false,
+          "why": {
+            "en": "Swapped: rate limits, IP filters and logging come from the gateway's API Management policies; reuse is the toolbox's job.",
+            "de": "Vertauscht: Ratenlimits, IP-Filter und Logging kommen aus den API-Management-Richtlinien des Gateways; Wiederverwendung ist Aufgabe der Toolbox."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Toolbox: let the toolbox itself enforce approvals on every tool call; AI gateway: host local stdio MCP servers in Azure for agents.",
+            "de": "Toolbox: Freigaben bei jedem Tool-Aufruf von der Toolbox selbst durchsetzen lassen; AI Gateway: lokale stdio-MCP-Server in Azure hosten."
+          },
+          "correct": false,
+          "why": {
+            "en": "A toolbox's `require_approval` is metadata that the consuming runtime must enforce, and local servers are hosted on Container Apps or Functions, not in a gateway.",
+            "de": "Das `require_approval` einer Toolbox ist eine Metainformation, die die nutzende Runtime durchsetzen muss; lokale Server hostest du in Container Apps oder Functions, nicht im Gateway."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Toolbox: give one agent private tools that no other agent can see; AI gateway: required for every MCP tool you add in Foundry.",
+            "de": "Toolbox: einem Agent private Tools geben, die kein anderer Agent sieht; AI Gateway: Pflicht für jedes MCP-Tool, das du in Foundry anlegst."
+          },
+          "correct": false,
+          "why": {
+            "en": "A toolbox exists to share one tool set across agents, and the AI gateway is an optional preview — MCP tools work without it.",
+            "de": "Eine Toolbox ist gerade zum Teilen eines Tool-Satzes über Agents da, und das AI Gateway ist eine optionale Preview – MCP-Tools funktionieren auch ohne."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Toolbox: reuse one versioned tool set across agents and frameworks; AI gateway: govern MCP traffic centrally via API Management.",
+            "de": "Toolbox: einen versionierten Tool-Satz in Agents und Frameworks wiederverwenden; AI Gateway: MCP-Traffic zentral über API Management steuern."
+          },
+          "correct": true,
+          "why": {
+            "en": "A toolbox bundles tools behind one versioned, MCP-compatible endpoint; an AI gateway (preview) routes new MCP tools through API Management policies.",
+            "de": "Eine Toolbox bündelt Tools hinter einem versionierten, MCP-kompatiblen Endpoint; ein AI Gateway (Preview) leitet neue MCP-Tools durch API-Management-Richtlinien."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-mcp-tools-concept-8",
+      "source": { "kind": "concept", "index": 7 },
+      "front": {
+        "en": "How does tool search work in a toolbox, what does a toolbox guardrail check, and how do agents connect?",
+        "de": "Wie funktioniert Tool Search in einer Toolbox, was prüft ein Toolbox-Guardrail, und wie verbinden sich Agents?"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "`tool_search` finds matching tools and `call_tool` runs one; the guardrail is just the model's own content filter; agents connect with an API key.",
+            "de": "`tool_search` findet passende Tools, `call_tool` führt eines aus; der Guardrail ist nur der eigene Inhaltsfilter des Modells; Agents verbinden sich mit einem API-Key."
+          },
+          "correct": false,
+          "why": {
+            "en": "Two slips: a toolbox guardrail works independently of model-level content filters, and the toolbox endpoint takes Entra tokens, not API keys.",
+            "de": "Zwei Fehler: Ein Toolbox-Guardrail arbeitet unabhängig von Inhaltsfiltern des Modells, und der Toolbox-Endpoint nimmt Entra-Tokens, keine API-Keys."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "`tool_search` finds matching tools and `call_tool` runs one; a guardrail screens tool inputs and outputs; agents connect with an Entra token.",
+            "de": "`tool_search` findet passende Tools, `call_tool` führt eines aus; ein Guardrail prüft Tool-Ein- und -Ausgaben; Agents verbinden sich mit einem Entra-Token."
+          },
+          "correct": true,
+          "why": {
+            "en": "Tool search hides the full list behind two meta-tools, the guardrail works at the toolbox layer, and `…/toolboxes/<name>/mcp` accepts Entra tokens only.",
+            "de": "Tool Search versteckt die volle Liste hinter zwei Meta-Tools, der Guardrail arbeitet auf Toolbox-Ebene, und `…/toolboxes/<name>/mcp` akzeptiert nur Entra-Tokens."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Every tool stays in `tools/list`, ranked by relevance; a guardrail screens tool inputs and outputs; agents connect with an API key.",
+            "de": "Jedes Tool bleibt in `tools/list`, nach Relevanz sortiert; ein Guardrail prüft Tool-Ein- und -Ausgaben; Agents verbinden sich mit einem API-Key."
+          },
+          "correct": false,
+          "why": {
+            "en": "Tool search hides the tools from `tools/list` behind `tool_search` and `call_tool`, and API keys aren't supported — agents need an Entra token.",
+            "de": "Tool Search versteckt die Tools in `tools/list` hinter `tool_search` und `call_tool`, und API-Keys werden nicht unterstützt – Agents brauchen ein Entra-Token."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Every tool stays in `tools/list`, ranked by relevance; the guardrail is just the model's own content filter; agents connect with an Entra token.",
+            "de": "Jedes Tool bleibt in `tools/list`, nach Relevanz sortiert; der Guardrail ist nur der eigene Inhaltsfilter des Modells; Agents verbinden sich mit einem Entra-Token."
+          },
+          "correct": false,
+          "why": {
+            "en": "Tool search hides the tools from `tools/list` (only pinned ones stay), and the guardrail screens tool inputs and outputs independently of the model's content filters.",
+            "de": "Tool Search blendet die Tools in `tools/list` aus (nur gepinnte bleiben), und der Guardrail prüft Tool-Ein- und -Ausgaben unabhängig von den Inhaltsfiltern des Modells."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-mcp-tools-trap-1",
+      "source": { "kind": "trap", "index": 0 },
+      "front": {
+        "en": "What happens if you set `allowed_tools=[]` to block a server's tools, and what works instead?",
+        "de": "Was passiert, wenn du mit `allowed_tools=[]` die Tools eines Servers blockieren willst, und was hilft stattdessen?"
+      },
+      "back": {
+        "en": "`allowed_tools=[]` does not block tools — it allows all of them. Use a non-empty list, or remove the MCP tool from the agent.",
+        "de": "`allowed_tools=[]` blockiert keine Tools – es erlaubt alle. Nutze eine nicht leere Liste oder entferne das MCP-Tool aus dem Agent."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Every tool is blocked as intended; the server stays attached, so you can re-enable tools later.",
+            "de": "Jedes Tool wird wie gewünscht blockiert; der Server bleibt angebunden, sodass du Tools später wieder freigeben kannst."
+          },
+          "correct": false,
+          "why": {
+            "en": "That's the trap: `allowed_tools=[]` blocks nothing — it exposes all tools of the server.",
+            "de": "Genau das ist die Falle: `allowed_tools=[]` blockiert nichts – es gibt alle Tools des Servers frei."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Only read tools stay callable; list the write tools you want to block in `allowed_tools` instead.",
+            "de": "Nur lesende Tools bleiben aufrufbar; liste stattdessen die schreibenden Tools zum Blockieren in `allowed_tools`."
+          },
+          "correct": false,
+          "why": {
+            "en": "`allowed_tools` is an allowlist, not a blocklist: listed names are the only tools allowed, and `[]` allows all of them.",
+            "de": "`allowed_tools` ist eine Allowlist, keine Blocklist: Nur gelistete Namen sind erlaubt, und `[]` erlaubt alle."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Nothing is blocked — `[]` exposes every tool; use a non-empty allowlist or remove the MCP tool from the agent.",
+            "de": "Nichts wird blockiert – `[]` gibt jedes Tool frei; nutze eine nicht leere Allowlist oder entferne das MCP-Tool aus dem Agent."
+          },
+          "correct": true,
+          "why": {
+            "en": "An empty list behaves like no list at all and exposes every tool; to narrow which tools the agent can call, pass a non-empty list or remove the MCP tool.",
+            "de": "Eine leere Liste wirkt wie gar keine und gibt jedes Tool frei; um einzuschränken, welche Tools der Agent aufrufen kann, übergib eine nicht leere Liste oder entferne das MCP-Tool."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Nothing is blocked — `[]` exposes every tool; `require_approval` set to `always` hides them instead.",
+            "de": "Nichts wird blockiert – `[]` gibt jedes Tool frei; `require_approval` auf `always` blendet sie stattdessen aus."
+          },
+          "correct": false,
+          "why": {
+            "en": "Approvals pause calls for a human decision but hide no tools; restrict access with a non-empty list or remove the MCP tool.",
+            "de": "Freigaben halten Aufrufe für eine menschliche Entscheidung an, blenden aber keine Tools aus; schränke mit einer nicht leeren Liste ein oder entferne das MCP-Tool."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-mcp-tools-trap-2",
+      "source": { "kind": "trap", "index": 1 },
+      "front": {
+        "en": "Why might the first response of an agent with an MCP tool contain no answer text at all?",
+        "de": "Warum kann die erste Antwort eines Agents mit MCP-Tool überhaupt keinen Antworttext enthalten?"
+      },
+      "back": {
+        "en": "`require_approval` defaults to `always`, so the first response may contain only an `mcp_approval_request`. There is no answer until your app responds.",
+        "de": "`require_approval` ist standardmäßig `always`, daher kann die erste Antwort nur ein `mcp_approval_request` und keinen Text enthalten, bis deine App antwortet."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "MCP tools return `function_call` items, which your own code must run before the agent writes any answer text.",
+            "de": "MCP-Tools liefern `function_call`-Items, die dein eigener Code ausführen muss, bevor der Agent Antworttext schreibt."
+          },
+          "correct": false,
+          "why": {
+            "en": "`function_call` items come from function tools; with the MCP tool, the service calls the server itself once the call is approved.",
+            "de": "`function_call`-Items stammen von Function Tools; beim MCP-Tool ruft der Dienst den Server selbst auf, sobald der Aufruf freigegeben ist."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "`allowed_tools` was left empty, so the model had no tools to call and returned no text.",
+            "de": "`allowed_tools` blieb leer, also hatte das Modell keine Tools und lieferte keinen Text."
+          },
+          "correct": false,
+          "why": {
+            "en": "An empty `allowed_tools` list exposes every tool; it can't leave the model without tools.",
+            "de": "Eine leere `allowed_tools`-Liste gibt jedes Tool frei; ohne Tools lässt sie das Modell nicht."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "The first response only lists the server's tools (`tools/list`); the answer text always comes in a second call.",
+            "de": "Die erste Antwort listet nur die Tools des Servers (`tools/list`); der eigentliche Antworttext kommt immer erst im zweiten Aufruf."
+          },
+          "correct": false,
+          "why": {
+            "en": "Discovery happens inside the service; without a pending approval, the first response already contains the answer.",
+            "de": "Die Discovery läuft im Dienst; ohne offene Freigabe enthält schon die erste Antwort den Text."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "`require_approval` defaults to `always`, so it may hold only an `mcp_approval_request` until your app replies.",
+            "de": "`require_approval` ist standardmäßig `always`, daher kann sie nur ein `mcp_approval_request` enthalten, bis deine App antwortet."
+          },
+          "correct": true,
+          "why": {
+            "en": "With the default `always`, the call pauses: the response carries the approval request, and the answer follows after your `mcp_approval_response`.",
+            "de": "Mit dem Standard `always` pausiert der Aufruf: Die Antwort trägt die Freigabeanfrage, der Text folgt nach deinem `mcp_approval_response`."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-mcp-tools-trap-3",
+      "source": { "kind": "trap", "index": 2 },
+      "front": {
+        "en": "Where do you send an MCP approval, what goes into `approval_request_id`, and what if you get it wrong?",
+        "de": "Wohin schickst du eine MCP-Freigabe, was gehört in `approval_request_id`, und was passiert bei einem Fehler?"
+      },
+      "back": {
+        "en": "Send the approval in the same conversation and set `approval_request_id` to the request item's `id`. Otherwise the agent never continues.",
+        "de": "Schick die Freigabe in derselben Conversation und setze `approval_request_id` auf die `id` des Anfrage-Items – sonst setzt der Agent nie fort."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Into the same conversation, with the response's `id`; otherwise the call runs without approval.",
+            "de": "In dieselbe Conversation, mit der `id` der Response; sonst läuft der Aufruf ohne Freigabe."
+          },
+          "correct": false,
+          "why": {
+            "en": "It must be the request item's `id`, not the response id — and a wrong id stalls the agent instead of skipping the approval.",
+            "de": "Es muss die `id` des Anfrage-Items sein, nicht die Response-ID – und eine falsche ID lässt den Agent hängen, statt die Freigabe zu überspringen."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Into the same conversation, with the request item's `id`; otherwise the agent never continues.",
+            "de": "In dieselbe Conversation, mit der `id` des Anfrage-Items; sonst setzt der Agent nie fort."
+          },
+          "correct": true,
+          "why": {
+            "en": "The `mcp_approval_response` must point at the request item's `id` in the same conversation, or the paused call never resumes.",
+            "de": "Das `mcp_approval_response` muss in derselben Conversation auf die `id` des Anfrage-Items verweisen, sonst läuft der pausierte Aufruf nie weiter."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Into a new conversation, with the request item's `id`; otherwise the call runs without approval.",
+            "de": "In eine neue Conversation, mit der `id` des Anfrage-Items; sonst läuft der Aufruf ohne Freigabe."
+          },
+          "correct": false,
+          "why": {
+            "en": "The approval belongs in the same conversation as the request; if it never arrives there, nothing runs unapproved — the agent simply never continues.",
+            "de": "Die Freigabe gehört in dieselbe Conversation wie die Anfrage; kommt sie dort nie an, läuft nichts ungeprüft – der Agent setzt einfach nie fort."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Into a new conversation, with the response's `id`; otherwise the agent never continues.",
+            "de": "In eine neue Conversation, mit der `id` der Response; sonst setzt der Agent nie fort."
+          },
+          "correct": false,
+          "why": {
+            "en": "Both references are off: the approval goes into the same conversation, and `approval_request_id` takes the request item's `id`, not the response id.",
+            "de": "Beide Angaben stimmen nicht: Die Freigabe gehört in dieselbe Conversation, und `approval_request_id` nimmt die `id` des Anfrage-Items, nicht die Response-ID."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-mcp-tools-trap-4",
+      "source": { "kind": "trap", "index": 3 },
+      "front": {
+        "en": "Which MCP endpoints does Foundry Agent Service accept, and how do you handle long-running tools?",
+        "de": "Welche MCP-Endpoints akzeptiert Foundry Agent Service, und wie gehst du mit lang laufenden Tools um?"
+      },
+      "back": {
+        "en": "Only remote MCP endpoints: a server on `localhost` or stdio must first be hosted, for example on Azure Container Apps or Azure Functions. A synchronous MCP tool call fails after 100 seconds; for longer tools run the agent in background mode (preview: `background=True`, then poll the response) with a supporting model such as `gpt-5.4` and a server that implements MCP tasks — or split the work.",
+        "de": "Nur Remote-MCP-Endpoints: Ein Server auf `localhost` oder über stdio muss zuerst gehostet werden, etwa in Azure Container Apps oder Azure Functions. Ein synchroner MCP-Tool-Aufruf scheitert nach 100 Sekunden; für längere Tools führst du den Agent im Background Mode aus (Preview: `background=True`, dann die Antwort abfragen) – mit einem unterstützten Modell wie `gpt-5.4` und einem Server, der MCP Tasks implementiert – oder teilst die Arbeit auf."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Only remote endpoints; past the 100-second limit of a synchronous call, use background mode or split the work.",
+            "de": "Nur Remote-Endpoints; über dem 100-Sekunden-Limit eines synchronen Aufrufs Background Mode nutzen oder die Arbeit aufteilen."
+          },
+          "correct": true,
+          "why": {
+            "en": "Foundry reaches only remote endpoints (host `localhost` or stdio servers first), and a synchronous MCP call fails after 100 seconds — background mode (preview) or smaller steps help.",
+            "de": "Foundry erreicht nur Remote-Endpoints (`localhost`- oder stdio-Server hostest du zuerst), und ein synchroner MCP-Aufruf scheitert nach 100 Sekunden – Background Mode (Preview) oder kleinere Schritte helfen."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Remote, `localhost` and stdio endpoints alike; for long-running tools, raise the call timeout in the MCP tool's `headers`.",
+            "de": "Remote-, `localhost`- und stdio-Endpoints gleichermaßen; für lang laufende Tools erhöhst du das Timeout in den `headers` des MCP-Tools."
+          },
+          "correct": false,
+          "why": {
+            "en": "Foundry can't reach `localhost` or stdio servers, so host them first; long tools need background mode or smaller steps, not headers.",
+            "de": "Foundry erreicht keine `localhost`- oder stdio-Server, also hoste sie zuerst; lange Tools brauchen Background Mode oder kleinere Schritte, keine Header."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Only remote endpoints; synchronous MCP tool calls have no time limit, so long-running tools need no special handling.",
+            "de": "Nur Remote-Endpoints; synchrone MCP-Tool-Aufrufe haben kein Zeitlimit, lang laufende Tools brauchen also keine besondere Behandlung."
+          },
+          "correct": false,
+          "why": {
+            "en": "A synchronous MCP tool call fails after 100 seconds; longer work needs background mode (preview) or splitting.",
+            "de": "Ein synchroner MCP-Tool-Aufruf scheitert nach 100 Sekunden; längere Arbeit braucht Background Mode (Preview) oder Aufteilen."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Only endpoints routed through an AI gateway; its API Management policies raise the timeout for long-running tools.",
+            "de": "Nur Endpoints, die über ein AI Gateway laufen; dessen API-Management-Richtlinien erhöhen das Timeout für lang laufende Tools."
+          },
+          "correct": false,
+          "why": {
+            "en": "The AI gateway is an optional preview for governance; any reachable remote endpoint works, and long tools need background mode or splitting.",
+            "de": "Das AI Gateway ist eine optionale Preview für Governance; jeder erreichbare Remote-Endpoint geht, und lange Tools brauchen Background Mode oder Aufteilen."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-mcp-tools-trap-5",
+      "source": { "kind": "trap", "index": 4 },
+      "front": {
+        "en": "How should you treat tool descriptions and results from third-party MCP servers, and what really controls access?",
+        "de": "Wie behandelst du Tool-Beschreibungen und Ergebnisse fremder MCP-Server, und was kontrolliert den Zugriff wirklich?"
+      },
+      "back": {
+        "en": "As untrusted input (indirect prompt injection). Instructions are not an access control — `allowed_tools`, approvals and identity permissions are.",
+        "de": "Als nicht vertrauenswürdigen Input (indirekte Prompt Injection). Anweisungen sind keine Zugriffskontrolle – `allowed_tools`, Freigaben und Identitätsberechtigungen schon."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "As trusted input, because you attached the server yourself; the agent's instructions control access.",
+            "de": "Als vertrauenswürdigen Input, weil du den Server selbst angebunden hast; die Anweisungen des Agents steuern den Zugriff."
+          },
+          "correct": false,
+          "why": {
+            "en": "Attaching a server doesn't make its content trustworthy, and instructions are no access control.",
+            "de": "Das Anbinden macht die Inhalte eines Servers nicht vertrauenswürdig, und Anweisungen sind keine Zugriffskontrolle."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "As untrusted input that may carry prompt injection; clear agent instructions such as “never delete data without asking” control access.",
+            "de": "Als nicht vertrauenswürdigen Input, der Prompt Injection enthalten kann; klare Agent-Anweisungen wie „lösche nie Daten ohne Rückfrage“ steuern den Zugriff."
+          },
+          "correct": false,
+          "why": {
+            "en": "Partly right: instructions are not an access control — `allowed_tools`, approvals and identity permissions are.",
+            "de": "Nur teilweise richtig: Anweisungen sind keine Zugriffskontrolle – `allowed_tools`, Freigaben und Identitätsberechtigungen schon."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "As untrusted input that may carry prompt injection; `allowed_tools`, approvals and identity permissions control access.",
+            "de": "Als nicht vertrauenswürdigen Input, der Prompt Injection enthalten kann; `allowed_tools`, Freigaben und Identitätsberechtigungen steuern den Zugriff."
+          },
+          "correct": true,
+          "why": {
+            "en": "Third-party descriptions and results can smuggle in instructions (indirect prompt injection); access is enforced by allowlists, approvals and identity permissions — not by instructions.",
+            "de": "Fremde Beschreibungen und Ergebnisse können Anweisungen einschleusen (indirekte Prompt Injection); Zugriff setzen Allowlists, Freigaben und Identitätsberechtigungen durch – nicht Anweisungen."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "As untrusted input that may carry prompt injection; the content filter of the model deployment decides which tools may run.",
+            "de": "Als nicht vertrauenswürdigen Input, der Prompt Injection enthalten kann; der Inhaltsfilter des Modell-Deployments entscheidet, welche Tools laufen dürfen."
+          },
+          "correct": false,
+          "why": {
+            "en": "Content filters screen content; they don't authorize tools — access comes from `allowed_tools`, approvals and identity permissions.",
+            "de": "Inhaltsfilter prüfen Inhalte, sie autorisieren keine Tools – Zugriff regeln `allowed_tools`, Freigaben und Identitätsberechtigungen."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-mcp-tools-trap-6",
+      "source": { "kind": "trap", "index": 5 },
+      "front": {
+        "en": "Which tools can't go into a Foundry toolbox, and how do you use them instead?",
+        "de": "Welche Tools passen nicht in eine Foundry-Toolbox, und wie nutzt du sie stattdessen?"
+      },
+      "back": {
+        "en": "Function calling (it runs client-side), Azure Functions, SharePoint, Grounding with Bing, Fabric data agent, image generation and computer use. Attach them to the agent directly; MCP, Web search and Fabric IQ do fit in a toolbox.",
+        "de": "Function Calling (läuft clientseitig), Azure Functions, SharePoint, Grounding with Bing, Fabric Data Agent, Bildgenerierung und Computer Use. Diese hängst du direkt an den Agent; MCP, Web Search und Fabric IQ passen dagegen in eine Toolbox."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "MCP servers, Web search and Fabric IQ — wrap each one in a function tool and attach that function tool to the agent instead.",
+            "de": "MCP-Server, Web Search und Fabric IQ – verpacke jedes in ein Function Tool und hänge dieses Function Tool stattdessen an den Agent."
+          },
+          "correct": false,
+          "why": {
+            "en": "MCP, Web search and Fabric IQ are exactly the tools that do fit in a toolbox.",
+            "de": "MCP, Web Search und Fabric IQ sind genau die Tools, die in eine Toolbox passen."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Function calling, Azure Functions, SharePoint, Grounding with Bing, Fabric data agent, image generation and computer use — attach them directly.",
+            "de": "Function Calling, Azure Functions, SharePoint, Grounding with Bing, Fabric Data Agent, Bildgenerierung und Computer Use – direkt an den Agent hängen."
+          },
+          "correct": true,
+          "why": {
+            "en": "These tools don't fit in a toolbox (function calling even runs client-side), so you attach them to the agent itself.",
+            "de": "Diese Tools passen nicht in eine Toolbox (Function Calling läuft sogar clientseitig), also hängst du sie direkt an den Agent."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "OpenAPI tools, file search, MCP servers and Web search — attach each of them to the agent directly instead of to a toolbox.",
+            "de": "OpenAPI-Tools, File Search, MCP-Server und Web Search – hänge jedes davon direkt an den Agent statt in eine Toolbox."
+          },
+          "correct": false,
+          "why": {
+            "en": "A toolbox bundles MCP servers, OpenAPI tools, file search and Web search behind one endpoint — all of these fit.",
+            "de": "Eine Toolbox bündelt MCP-Server, OpenAPI-Tools, File Search und Web Search hinter einem Endpoint – die passen alle."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Only function calling and Azure Functions; SharePoint, Grounding with Bing, Fabric data agent and computer use go into the toolbox like MCP servers.",
+            "de": "Nur Function Calling und Azure Functions; SharePoint, Grounding with Bing, Fabric Data Agent und Computer Use kommen wie MCP-Server mit in die Toolbox."
+          },
+          "correct": false,
+          "why": {
+            "en": "SharePoint, Grounding with Bing, Fabric data agent and computer use can't go into a toolbox either; like image generation, they attach to the agent directly.",
+            "de": "Auch SharePoint, Grounding with Bing, Fabric Data Agent und Computer Use passen nicht in eine Toolbox; wie Bildgenerierung hängen sie direkt am Agent."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-mcp-tools-takeaway-1",
+      "source": { "kind": "takeaway", "index": 0 },
+      "front": {
+        "en": "Who publishes and who discovers MCP tools, and what does that spare you when tools change?",
+        "de": "Wer veröffentlicht MCP-Tools, wer entdeckt sie, und was ersparst du dir dadurch, wenn sich Tools ändern?"
+      },
+      "back": {
+        "en": "The server publishes, the client discovers and calls them. Tools change without redeploying the agent.",
+        "de": "Der Server veröffentlicht, der Client entdeckt und ruft auf – Tools ändern sich ohne Redeployment des Agents."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "The server publishes, the client discovers and calls them — tools change without redeploying the agent.",
+            "de": "Der Server veröffentlicht, der Client entdeckt und ruft sie auf – Tools ändern sich ohne Redeployment des Agents."
+          },
+          "correct": true,
+          "why": {
+            "en": "Because the client reads the tool list at runtime, changes on the server reach the agent without a new deployment.",
+            "de": "Weil der Client die Tool-Liste zur Laufzeit liest, erreichen Änderungen am Server den Agent ohne neues Deployment."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "The client publishes, the server discovers them — tools change without redeploying the agent.",
+            "de": "Der Client veröffentlicht, der Server entdeckt sie – Tools ändern sich ohne Redeployment des Agents."
+          },
+          "correct": false,
+          "why": {
+            "en": "Roles reversed: the server publishes the tools, and the client — for a prompt agent, the Agent Service runtime — discovers them.",
+            "de": "Rollen vertauscht: Der Server veröffentlicht die Tools, und der Client – beim Prompt Agent die Agent-Service-Runtime – entdeckt sie."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "The server publishes, the client discovers and calls them — new tools skip the approval step.",
+            "de": "Der Server veröffentlicht, der Client entdeckt und ruft sie auf – neue Tools überspringen die Freigabe."
+          },
+          "correct": false,
+          "why": {
+            "en": "Discovery doesn't change approvals: with the default `always`, a new tool's calls wait for approval like any other.",
+            "de": "Discovery ändert nichts an Freigaben: Mit dem Standard `always` warten auch die Aufrufe eines neuen Tools auf eine Freigabe."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "The client publishes, the server discovers them — new tools skip the approval step.",
+            "de": "Der Client veröffentlicht, der Server entdeckt sie – neue Tools überspringen die Freigabe."
+          },
+          "correct": false,
+          "why": {
+            "en": "Roles are reversed, and discovery doesn't skip approvals — with the default `always`, a new tool's calls still wait for approval.",
+            "de": "Rollen vertauscht, und Discovery überspringt keine Freigaben – mit dem Standard `always` warten auch die Aufrufe eines neuen Tools auf eine Freigabe."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-mcp-tools-takeaway-2",
+      "source": { "kind": "takeaway", "index": 1 },
+      "front": {
+        "en": "What does least privilege look like for an agent's MCP tools?",
+        "de": "Wie sehen minimale Rechte für die MCP-Tools eines Agents aus?"
+      },
+      "back": {
+        "en": "A non-empty `allowed_tools` list plus approvals for write operations.",
+        "de": "Eine nicht leere `allowed_tools`-Liste plus Freigaben für schreibende Operationen."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "An empty `allowed_tools` list (`[]`) plus approvals for write operations.",
+            "de": "Eine leere `allowed_tools`-Liste (`[]`) plus Freigaben für schreibende Operationen."
+          },
+          "correct": false,
+          "why": {
+            "en": "`[]` exposes every tool on the server, so approvals on writes alone aren't least privilege.",
+            "de": "`[]` gibt jedes Tool des Servers frei, daher sind Freigaben für Schreibzugriffe allein keine minimalen Rechte."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "A non-empty `allowed_tools` list plus `require_approval` set to `never` for every tool.",
+            "de": "Eine nicht leere `allowed_tools`-Liste plus `require_approval` auf `never` für jedes Tool."
+          },
+          "correct": false,
+          "why": {
+            "en": "Without approvals, write operations run unchecked; least privilege keeps a human approval on writes.",
+            "de": "Ohne Freigaben laufen schreibende Operationen ungeprüft; minimale Rechte behalten eine menschliche Freigabe für Schreibzugriffe."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "An empty `allowed_tools` list (`[]`) plus `require_approval` set to `never` for every tool.",
+            "de": "Eine leere `allowed_tools`-Liste (`[]`) plus `require_approval` auf `never` für jedes Tool."
+          },
+          "correct": false,
+          "why": {
+            "en": "The opposite of least privilege: `[]` exposes every tool, and `never` lets write operations run unchecked.",
+            "de": "Das Gegenteil von minimalen Rechten: `[]` gibt jedes Tool frei, und `never` lässt schreibende Operationen ungeprüft laufen."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "A non-empty `allowed_tools` list plus approvals for write operations.",
+            "de": "Eine nicht leere `allowed_tools`-Liste plus Freigaben für schreibende Operationen."
+          },
+          "correct": true,
+          "why": {
+            "en": "Expose only the tools the agent needs, and keep a human check on every call that changes data.",
+            "de": "Gib nur die Tools frei, die der Agent braucht, und lass jeden Aufruf, der Daten ändert, von einem Menschen prüfen."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-mcp-tools-takeaway-3",
+      "source": { "kind": "takeaway", "index": 2 },
+      "front": {
+        "en": "Which steps make up the MCP approval loop, and how long does it repeat?",
+        "de": "Aus welchen Schritten besteht die MCP-Freigabeschleife, und wie lange wiederholt sie sich?"
+      },
+      "back": {
+        "en": "`mcp_approval_request` → human review → `mcp_approval_response` in the same conversation. It repeats while new requests arrive.",
+        "de": "`mcp_approval_request` → menschliche Prüfung → `mcp_approval_response` in derselben Conversation – wiederholt, solange neue Anfragen kommen."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "`mcp_approval_request` → human review → `mcp_approval_response` in a brand-new conversation, sent only once per agent version.",
+            "de": "`mcp_approval_request` → menschliche Prüfung → `mcp_approval_response` in einer neuen Conversation, nur ein einziges Mal pro Agent Version."
+          },
+          "correct": false,
+          "why": {
+            "en": "The response must go into the same conversation, and the loop runs for every new request, not once per version.",
+            "de": "Die Antwort muss in dieselbe Conversation, und die Schleife läuft bei jeder neuen Anfrage, nicht einmal pro Version."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "`function_call` → human review → `function_call_output` in the same conversation, repeated while requests arrive.",
+            "de": "`function_call` → menschliche Prüfung → `function_call_output` in derselben Conversation, wiederholt, solange Anfragen kommen."
+          },
+          "correct": false,
+          "why": {
+            "en": "That's the function-tool loop, where your code runs each call; MCP approvals use `mcp_approval_request` and `mcp_approval_response`.",
+            "de": "Das ist die Schleife für Function Tools, in der dein Code jeden Aufruf ausführt; MCP-Freigaben nutzen `mcp_approval_request` und `mcp_approval_response`."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "`mcp_approval_request` → human review → `mcp_approval_response` in the same conversation, repeated while requests arrive.",
+            "de": "`mcp_approval_request` → menschliche Prüfung → `mcp_approval_response` in derselben Conversation, wiederholt, solange Anfragen kommen."
+          },
+          "correct": true,
+          "why": {
+            "en": "Each pending call arrives as a request, a person decides, and your app answers in the same conversation — as often as new requests appear.",
+            "de": "Jeder offene Aufruf kommt als Anfrage, ein Mensch entscheidet, und deine App antwortet in derselben Conversation – so oft, wie neue Anfragen kommen."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "`function_call` → human review → `function_call_output` in a brand-new conversation, sent only once per agent version.",
+            "de": "`function_call` → menschliche Prüfung → `function_call_output` in einer neuen Conversation, nur ein einziges Mal pro Agent Version."
+          },
+          "correct": false,
+          "why": {
+            "en": "Wrong items and wrong scope: MCP approvals use `mcp_approval_request` and `mcp_approval_response` in the same conversation, repeated for every new request.",
+            "de": "Falsche Items und falscher Rahmen: MCP-Freigaben nutzen `mcp_approval_request` und `mcp_approval_response` in derselben Conversation, wiederholt bei jeder neuen Anfrage."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-mcp-tools-takeaway-4",
+      "source": { "kind": "takeaway", "index": 3 },
+      "front": {
+        "en": "Where do MCP credentials belong, and which kind of authentication is preferable?",
+        "de": "Wo gehören MCP-Zugangsdaten hin, und welche Art der Authentifizierung ist vorzuziehen?"
+      },
+      "back": {
+        "en": "In a project connection (`project_connection_id`), preferably Entra-based.",
+        "de": "In eine Projektverbindung (`project_connection_id`), möglichst Entra-basiert."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "In environment variables of your app, preferably a long-lived API key.",
+            "de": "In Umgebungsvariablen deiner App, möglichst ein langlebiger API-Key."
+          },
+          "correct": false,
+          "why": {
+            "en": "MCP credentials belong in a project connection, and Microsoft Entra beats long-lived keys.",
+            "de": "MCP-Zugangsdaten gehören in eine Projektverbindung, und Microsoft Entra schlägt langlebige Keys."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "In a project connection (`project_connection_id`), preferably Microsoft Entra-based.",
+            "de": "In eine Projektverbindung (`project_connection_id`), möglichst Microsoft-Entra-basiert."
+          },
+          "correct": true,
+          "why": {
+            "en": "Connections keep secrets out of code, and Entra means no secrets to manage plus automatic token rotation.",
+            "de": "Verbindungen halten Secrets aus dem Code, und Entra heißt: keine Secrets zu verwalten und automatische Token-Rotation."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "In a project connection (`project_connection_id`), preferably a shared API key.",
+            "de": "In eine Projektverbindung (`project_connection_id`), möglichst ein geteilter API-Key."
+          },
+          "correct": false,
+          "why": {
+            "en": "The place is right, but Microsoft Entra is preferred: no secrets to manage and automatic token rotation.",
+            "de": "Der Ort stimmt, aber Microsoft Entra ist vorzuziehen: keine Secrets zu verwalten und automatische Token-Rotation."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "In the agent's `instructions`, preferably an OAuth token per user.",
+            "de": "In die `instructions` des Agents, möglichst ein OAuth-Token pro Nutzer."
+          },
+          "correct": false,
+          "why": {
+            "en": "Instructions are text the model reads — never a place for secrets; credentials go into a project connection.",
+            "de": "Anweisungen sind Text, den das Modell liest – nie ein Ort für Secrets; Zugangsdaten kommen in eine Projektverbindung."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-mcp-tools-takeaway-5",
+      "source": { "kind": "takeaway", "index": 4 },
+      "front": {
+        "en": "Where do MCP servers go when you need reuse and central governance?",
+        "de": "Wohin gehören MCP-Server, wenn du Wiederverwendung und zentrale Governance brauchst?"
+      },
+      "back": {
+        "en": "Put them in a toolbox or route them through an AI gateway (preview).",
+        "de": "In eine Toolbox oder hinter ein AI Gateway (Preview)."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Into each agent's own `MCPTool` definition, copied into every agent that needs them.",
+            "de": "In die eigene `MCPTool`-Definition jedes Agents, kopiert in jeden Agent, der sie braucht."
+          },
+          "correct": false,
+          "why": {
+            "en": "Copies per agent give neither reuse nor a central control point — that's what a toolbox or an AI gateway adds.",
+            "de": "Kopien pro Agent bieten weder Wiederverwendung noch einen zentralen Steuerpunkt – genau das bringen Toolbox oder AI Gateway."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Into a client-side bridge in each app that turns the server's tools into function tools.",
+            "de": "In eine clientseitige Brücke in jeder App, die die Server-Tools zu Function Tools macht."
+          },
+          "correct": false,
+          "why": {
+            "en": "A bridge lets one app control its own calls; it isn't shared or centrally governed across agents.",
+            "de": "Eine Brücke lässt eine App ihre eigenen Aufrufe steuern; geteilt oder zentral gesteuert wird sie nicht."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Onto `localhost` over stdio, so that every agent on the same machine can share one copy of each server.",
+            "de": "Auf `localhost` über stdio, damit jeder Agent auf derselben Maschine eine Kopie jedes Servers teilt."
+          },
+          "correct": false,
+          "why": {
+            "en": "Foundry Agent Service reaches only remote endpoints; local stdio servers must be hosted first.",
+            "de": "Foundry Agent Service erreicht nur Remote-Endpoints; lokale stdio-Server müssen zuerst gehostet werden."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Into a Foundry toolbox, or routed through an AI gateway on Azure API Management.",
+            "de": "In eine Foundry-Toolbox oder hinter ein AI Gateway auf Basis von Azure API Management."
+          },
+          "correct": true,
+          "why": {
+            "en": "A toolbox shares one versioned tool set across agents; an AI gateway (preview) enforces API Management policies on MCP traffic.",
+            "de": "Eine Toolbox teilt einen versionierten Tool-Satz über Agents; ein AI Gateway (Preview) setzt API-Management-Richtlinien für MCP-Traffic durch."
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,354 @@
+{
+  "$schema": "../schema/question-file.schema.json",
+  "module": "custom-tools",
+  "questions": [
+    {
+      "id": "q-custom-tools-01",
+      "type": "code",
+      "domain": "D2",
+      "skill": "2.2.1",
+      "module": "custom-tools",
+      "difficulty": 2,
+      "stem": {
+        "en": "Complete the function tool so that it works with `strict=True` while the user may leave `carrier` empty, and attach it to the agent definition.",
+        "de": "Vervollständige das Function Tool so, dass es mit `strict=True` funktioniert, während der Nutzer `carrier` leer lassen darf, und hänge es an die Agent-Definition."
+      },
+      "template": "tool = FunctionTool(\n    name=\"create_return_label\",\n    description=\"Create a return shipping label for an order.\",\n    parameters={\n        \"type\": \"object\",\n        \"properties\": {\n            \"order_id\": {\"type\": \"string\", \"description\": \"Order number\"},\n            \"carrier\": {\"type\": [\"string\", \"null\"], \"description\": \"Carrier or null\"},\n        },\n        \"required\": {{b1}},\n        \"additionalProperties\": {{b2}},\n    },\n    strict=True,\n)\ndefinition = PromptAgentDefinition(model=\"gpt-5-mini\", instructions=\"...\", {{b3}}=[tool])",
+      "blanks": [
+        {
+          "id": "b1",
+          "options": [
+            { "id": "a", "code": "[\"order_id\", \"carrier\"]", "correct": true, "why": { "en": "Strict mode requires every property to be listed in `required`; `carrier` stays optional through its `null` type.", "de": "Der Strict-Modus verlangt, dass jede Eigenschaft in `required` steht; `carrier` bleibt über den Typ `null` optional." } },
+            { "id": "b", "code": "[\"order_id\"]", "correct": false, "why": { "en": "Strict mode requires all properties in `required`; express optional values with a `null` union instead of leaving them out.", "de": "Der Strict-Modus verlangt alle Eigenschaften in `required`; optionale Werte drückst du über eine Union mit `null` aus, statt sie wegzulassen." } },
+            { "id": "c", "code": "[]", "correct": false, "why": { "en": "With nothing required the schema breaks strict-mode rules, and the model could omit the order number.", "de": "Ohne Pflichtfelder verletzt das Schema die Regeln des Strict-Modus, und das Modell könnte die Bestellnummer weglassen." } }
+          ]
+        },
+        {
+          "id": "b2",
+          "options": [
+            { "id": "a", "code": "False", "correct": true, "why": { "en": "Strict mode requires `additionalProperties: false` in every object.", "de": "Der Strict-Modus verlangt `additionalProperties: false` in jedem Objekt." } },
+            { "id": "b", "code": "True", "correct": false, "why": { "en": "Allowing extra keys violates the strict-mode rules.", "de": "Zusätzliche Schlüssel zu erlauben verletzt die Regeln des Strict-Modus." } },
+            { "id": "c", "code": "{\"type\": \"string\"}", "correct": false, "why": { "en": "A schema for extra properties still allows unknown keys; strict mode needs `false`.", "de": "Ein Schema für zusätzliche Eigenschaften erlaubt weiterhin unbekannte Schlüssel; der Strict-Modus braucht `false`." } }
+          ]
+        },
+        {
+          "id": "b3",
+          "options": [
+            { "id": "a", "code": "tools", "correct": true, "why": { "en": "`tools` is the list of tools the agent's model may call.", "de": "`tools` ist die Liste der Tools, die das Modell des Agents aufrufen darf." } },
+            { "id": "b", "code": "functions", "correct": false, "why": { "en": "`PromptAgentDefinition` has no `functions` parameter.", "de": "`PromptAgentDefinition` hat keinen Parameter `functions`." } },
+            { "id": "c", "code": "tool_choice", "correct": false, "why": { "en": "`tool_choice` controls how the model selects among tools; it doesn't register them.", "de": "`tool_choice` steuert, wie das Modell zwischen Tools wählt; registrieren kann es sie nicht." } }
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "Strict function schemas: list every property in `required`, express optional values as a union with `null`, and set `additionalProperties` to `false`.",
+        "de": "Strikte Funktionsschemas: Jede Eigenschaft steht in `required`, optionale Werte sind eine Union mit `null`, und `additionalProperties` ist `false`."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/function-calling",
+        "https://learn.microsoft.com/en-us/azure/foundry/openai/how-to/structured-outputs"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-custom-tools-02",
+      "type": "single",
+      "domain": "D2",
+      "skill": "2.2.1",
+      "module": "custom-tools",
+      "difficulty": 1,
+      "stem": {
+        "en": "You add a `check_stock` function tool to an agent. Which information does the model use to decide when to call it and how to fill in its arguments?",
+        "de": "Du fügst einem Agent ein Function Tool `check_stock` hinzu. Welche Informationen nutzt das Modell, um zu entscheiden, wann es aufgerufen wird und wie die Argumente zu füllen sind?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": { "en": "The tool's name, description and parameter schema, including the property descriptions", "de": "Name, Beschreibung und Parameterschema des Tools, inklusive der Eigenschaftsbeschreibungen" },
+          "correct": true,
+          "why": { "en": "The model only sees the tool definition; meaningful names and well-documented parameters let it work out when and how to call the function.", "de": "Das Modell sieht nur die Tool-Definition; aussagekräftige Namen und gut dokumentierte Parameter lassen es erkennen, wann und wie die Funktion aufzurufen ist." }
+        },
+        {
+          "id": "b",
+          "text": { "en": "The Python source code of `check_stock`", "de": "Den Python-Quellcode von `check_stock`" },
+          "correct": false,
+          "why": { "en": "Your code runs in your app and is never sent to the model.", "de": "Dein Code läuft in deiner App und wird nie an das Modell gesendet." }
+        },
+        {
+          "id": "c",
+          "text": { "en": "The `call_id` values of earlier calls", "de": "Die `call_id`-Werte früherer Aufrufe" },
+          "correct": false,
+          "why": { "en": "A `call_id` is generated per call to match outputs to requests; it doesn't describe the tool.", "de": "Eine `call_id` wird pro Aufruf erzeugt, um Outputs Anfragen zuzuordnen; sie beschreibt das Tool nicht." }
+        },
+        {
+          "id": "d",
+          "text": { "en": "The agent version number", "de": "Die Versionsnummer des Agents" },
+          "correct": false,
+          "why": { "en": "The version identifies a configuration snapshot; it carries no information about when to use a tool.", "de": "Die Version kennzeichnet einen Konfigurationsstand; über den Einsatz eines Tools sagt sie nichts aus." }
+        }
+      ],
+      "explanation": {
+        "en": "Agents use tools declaratively: you describe the function, and the model decides when to call it. Invest in clear names and descriptions.",
+        "de": "Agents nutzen Tools deklarativ: Du beschreibst die Funktion, und das Modell entscheidet, wann es sie aufruft. Investiere in klare Namen und Beschreibungen."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/function-calling",
+        "https://learn.microsoft.com/en-us/training/modules/build-agent-with-custom-tools/4-how-use-custom-tools"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-custom-tools-03",
+      "type": "order",
+      "domain": "D2",
+      "skill": "2.2.2",
+      "module": "custom-tools",
+      "difficulty": 2,
+      "stem": {
+        "en": "Put the steps of a function-calling round trip with a prompt agent in order.",
+        "de": "Bringe die Schritte eines Function-Calling-Durchlaufs mit einem Prompt Agent in die richtige Reihenfolge."
+      },
+      "items": [
+        {
+          "id": "s1",
+          "text": { "en": "Define the `FunctionTool` and create the agent version with it in `tools`", "de": "Das `FunctionTool` definieren und die Agent Version damit in `tools` anlegen" },
+          "why": { "en": "The model can only request functions that are part of the agent definition.", "de": "Das Modell kann nur Funktionen anfordern, die Teil der Agent-Definition sind." }
+        },
+        {
+          "id": "s2",
+          "text": { "en": "Call `responses.create` with the user's message in a conversation", "de": "`responses.create` mit der Nutzernachricht in einer Conversation aufrufen" },
+          "why": { "en": "The prompt triggers the model's decision to call the function.", "de": "Der Prompt löst die Entscheidung des Modells aus, die Funktion aufzurufen." }
+        },
+        {
+          "id": "s3",
+          "text": { "en": "Read the `function_call` items in `response.output`: `name`, `arguments` and `call_id`", "de": "Die `function_call`-Items in `response.output` lesen: `name`, `arguments` und `call_id`" },
+          "why": { "en": "The response tells you which function to run and with which arguments.", "de": "Die Antwort sagt dir, welche Funktion mit welchen Argumenten auszuführen ist." }
+        },
+        {
+          "id": "s4",
+          "text": { "en": "Run your local function with the parsed and validated arguments", "de": "Deine lokale Funktion mit den geparsten und validierten Argumenten ausführen" },
+          "why": { "en": "Execution happens in your app after you parse the JSON arguments.", "de": "Die Ausführung passiert in deiner App, nachdem du die JSON-Argumente geparst hast." }
+        },
+        {
+          "id": "s5",
+          "text": { "en": "Call `responses.create` again in the same conversation with a `function_call_output` that carries the same `call_id`", "de": "`responses.create` erneut in derselben Conversation mit einem `function_call_output` mit derselben `call_id` aufrufen" },
+          "why": { "en": "The output must be linked to the original request before the model can continue.", "de": "Der Output muss mit der ursprünglichen Anfrage verknüpft sein, bevor das Modell weitermachen kann." }
+        },
+        {
+          "id": "s6",
+          "text": { "en": "Read the final answer from `output_text`", "de": "Die finale Antwort aus `output_text` lesen" },
+          "why": { "en": "Only the second response contains the answer that uses your function's result.", "de": "Erst die zweite Antwort enthält die Antwort, die das Ergebnis deiner Funktion nutzt." }
+        }
+      ],
+      "explanation": {
+        "en": "Define → prompt → `function_call` → execute → `function_call_output` (same `call_id`, same conversation) → final answer.",
+        "de": "Definieren → Prompt → `function_call` → ausführen → `function_call_output` (gleiche `call_id`, gleiche Conversation) → finale Antwort."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/function-calling"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-custom-tools-04",
+      "type": "single",
+      "domain": "D2",
+      "skill": "2.2.2",
+      "module": "custom-tools",
+      "difficulty": 3,
+      "stem": {
+        "en": "A response contains three `function_call` items. Two of the functions answer in under a second; the third starts a warehouse recount that takes about 30 minutes. How should your app respond?",
+        "de": "Eine Antwort enthält drei `function_call`-Items. Zwei Funktionen antworten in unter einer Sekunde; die dritte startet eine Lagerinventur, die etwa 30 Minuten dauert. Wie sollte deine App reagieren?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": { "en": "Run all three, return a status such as “recount started, ticket R-77” for the slow one, and send all three `function_call_output` items in one `responses.create` call in the same conversation", "de": "Alle drei ausführen, für die langsame einen Status wie „Inventur gestartet, Ticket R-77“ zurückgeben und alle drei `function_call_output`-Items in einem `responses.create`-Aufruf in derselben Conversation senden" },
+          "correct": true,
+          "why": { "en": "Every call needs an output with its `call_id`, all outputs go back together, and long work should return a status immediately because runs expire 10 minutes after creation.", "de": "Jeder Aufruf braucht einen Output mit seiner `call_id`, alle Outputs gehen gemeinsam zurück, und lange Arbeit sollte sofort einen Status liefern, weil Läufe 10 Minuten nach ihrer Erstellung ablaufen." }
+        },
+        {
+          "id": "b",
+          "text": { "en": "Wait until the recount finishes, then submit all three outputs", "de": "Warten, bis die Inventur fertig ist, und dann alle drei Outputs senden" },
+          "correct": false,
+          "why": { "en": "Thirty minutes exceeds the 10-minute run expiration, so the outputs would arrive too late.", "de": "Dreißig Minuten überschreiten den Ablauf des Laufs nach 10 Minuten, die Outputs kämen also zu spät." }
+        },
+        {
+          "id": "c",
+          "text": { "en": "Submit the two fast outputs now and the recount result later in a new conversation", "de": "Die zwei schnellen Outputs jetzt senden und das Inventurergebnis später in einer neuen Conversation" },
+          "correct": false,
+          "why": { "en": "Outputs must answer the pending calls in the same conversation; a new conversation has no call with that `call_id`.", "de": "Outputs müssen die offenen Aufrufe in derselben Conversation beantworten; eine neue Conversation hat keinen Aufruf mit dieser `call_id`." }
+        },
+        {
+          "id": "d",
+          "text": { "en": "Skip the recount call; the model will retry it automatically", "de": "Den Inventur-Aufruf auslassen; das Modell wiederholt ihn automatisch" },
+          "correct": false,
+          "why": { "en": "The model never executes or retries your functions — it waits for your outputs.", "de": "Das Modell führt deine Funktionen nie aus und wiederholt sie nicht – es wartet auf deine Outputs." }
+        }
+      ],
+      "explanation": {
+        "en": "Answer every function call in a single follow-up request within the 10-minute window; for slow operations return a status right away and let the user check back later.",
+        "de": "Beantworte jeden Funktionsaufruf in einer einzigen Folgeanfrage innerhalb des 10-Minuten-Fensters; bei langsamen Operationen gibst du sofort einen Status zurück und lässt den Nutzer später nachfragen."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/function-calling"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-custom-tools-05",
+      "type": "multi",
+      "domain": "D2",
+      "skill": "2.2.2",
+      "module": "custom-tools",
+      "difficulty": 2,
+      "stem": {
+        "en": "A support agent must answer questions from 200 uploaded PDF policy documents and must remember each customer's preferred language and delivery preferences in future conversations. Which TWO capabilities should you add?",
+        "de": "Ein Support-Agent soll Fragen aus 200 hochgeladenen PDF-Richtlinien beantworten und sich in künftigen Gesprächen an die bevorzugte Sprache und die Lieferwünsche jedes Kunden erinnern. Welche ZWEI Fähigkeiten fügst du hinzu?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": { "en": "The file search tool with the PDFs in a vector store", "de": "Das File-Search-Tool mit den PDFs in einem Vector Store" },
+          "correct": true,
+          "why": { "en": "File search indexes the documents in a vector store and retrieves the relevant passages at answer time.", "de": "File Search indexiert die Dokumente in einem Vector Store und ruft beim Antworten die passenden Abschnitte ab." }
+        },
+        {
+          "id": "b",
+          "text": { "en": "A memory store (preview) attached to the agent", "de": "Einen an den Agent angehängten Memory Store (Preview)" },
+          "correct": true,
+          "why": { "en": "Memory extracts facts such as user preferences and makes them available across sessions.", "de": "Memory extrahiert Fakten wie Nutzerpräferenzen und stellt sie sitzungsübergreifend bereit." }
+        },
+        {
+          "id": "c",
+          "text": { "en": "One shared conversation for all customers", "de": "Eine gemeinsame Conversation für alle Kunden" },
+          "correct": false,
+          "why": { "en": "A conversation holds one session's history; sharing it mixes customers' data and still extracts no preferences.", "de": "Eine Conversation hält den Verlauf einer Sitzung; sie zu teilen vermischt Kundendaten und extrahiert trotzdem keine Präferenzen." }
+        },
+        {
+          "id": "d",
+          "text": { "en": "The Code Interpreter tool with the PDFs attached", "de": "Das Code-Interpreter-Tool mit angehängten PDFs" },
+          "correct": false,
+          "why": { "en": "Code Interpreter runs Python for calculations and data analysis; it isn't the retrieval tool for grounding answers in documents.", "de": "Code Interpreter führt Python für Berechnungen und Datenanalysen aus; es ist nicht das Retrieval-Tool, um Antworten in Dokumenten zu verankern." }
+        },
+        {
+          "id": "e",
+          "text": { "en": "A higher `max_output_tokens` value", "de": "Einen höheren Wert für `max_output_tokens`" },
+          "correct": false,
+          "why": { "en": "It only allows longer answers; it adds neither knowledge nor memory.", "de": "Es erlaubt nur längere Antworten und ergänzt weder Wissen noch Gedächtnis." }
+        }
+      ],
+      "explanation": {
+        "en": "Retrieval grounds answers in your documents; long-term memory carries user facts into future conversations. A conversation alone covers only the current session.",
+        "de": "Retrieval verankert Antworten in deinen Dokumenten; Langzeitgedächtnis trägt Nutzerfakten in künftige Gespräche. Eine Conversation allein deckt nur die aktuelle Sitzung ab."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/file-search",
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/what-is-memory"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-custom-tools-06",
+      "type": "match",
+      "domain": "D2",
+      "skill": "2.2.3",
+      "module": "custom-tools",
+      "difficulty": 2,
+      "caseId": "case-fabrikam-support",
+      "stem": {
+        "en": "Refer to the Fabrikam case study. Match each existing system to the way the agent should integrate it.",
+        "de": "Beziehe dich auf die Fallstudie Fabrikam. Ordne jedem bestehenden System zu, wie der Agent es einbinden sollte."
+      },
+      "prompts": [
+        {
+          "id": "p1",
+          "prompt": { "en": "Order-history REST API", "de": "Bestellhistorien-REST-API" },
+          "answer": "t1",
+          "why": { "en": "An existing HTTP API with an OpenAPI 3.0 description fits the OpenAPI tool; the `x-api-key` value lives in a project connection, which satisfies requirement 3.", "de": "Eine bestehende HTTP-API mit OpenAPI-3.0-Beschreibung passt zum OpenAPI-Tool; der Wert für `x-api-key` liegt in einer Projektverbindung, was Anforderung 3 erfüllt." }
+        },
+        {
+          "id": "p2",
+          "prompt": { "en": "Loyalty-discount engine", "de": "Treuerabatt-Engine" },
+          "answer": "t2",
+          "why": { "en": "The library runs only inside the web app, so the app itself must execute it — that is function calling.", "de": "Die Bibliothek läuft nur in der Web-App, also muss die App sie selbst ausführen – das ist Function Calling." }
+        },
+        {
+          "id": "p3",
+          "prompt": { "en": "In-house MCP server on Azure Container Apps, reachable over HTTPS", "de": "Eigener MCP-Server in Azure Container Apps, per HTTPS erreichbar" },
+          "answer": "t3",
+          "why": { "en": "The Container Apps server already exposes a remote HTTPS MCP endpoint, which the MCP tool attaches by `server_label` and `server_url`.", "de": "Der Server in Container Apps stellt bereits einen Remote-MCP-Endpoint per HTTPS bereit, den das MCP-Tool über `server_label` und `server_url` anbindet." }
+        },
+        {
+          "id": "p4",
+          "prompt": { "en": "Warranty-claim Azure Functions app", "de": "Garantiefall-App in Azure Functions" },
+          "answer": "t4",
+          "why": { "en": "The queue-based Azure Functions tool keeps the existing queue processing and its retries, and the standard agent setup supports it.", "de": "Das Queue-basierte Azure-Functions-Tool behält die bestehende Queue-Verarbeitung samt Wiederholungen bei, und das Standard-Agent-Setup unterstützt es." }
+        }
+      ],
+      "targets": [
+        { "id": "t1", "text": { "en": "OpenAPI tool authenticated through a project connection", "de": "OpenAPI-Tool mit Authentifizierung über eine Projektverbindung" } },
+        { "id": "t2", "text": { "en": "Function tool executed by the web app", "de": "Function Tool, das die Web-App ausführt" } },
+        { "id": "t3", "text": { "en": "MCP tool with `server_label` and `server_url`", "de": "MCP-Tool mit `server_label` und `server_url`" } },
+        { "id": "t4", "text": { "en": "Azure Functions tool with input and output queues", "de": "Azure-Functions-Tool mit Ein- und Ausgabe-Queue" } },
+        { "id": "t5", "text": { "en": "Code Interpreter tool", "de": "Code-Interpreter-Tool" } }
+      ],
+      "explanation": {
+        "en": "Choose the integration by where the code runs and how it is reached: your process → function calling; HTTP API with a spec → OpenAPI tool; Storage queues → Azure Functions tool; MCP endpoint → MCP tool.",
+        "de": "Wähle die Anbindung danach, wo der Code läuft und wie er erreichbar ist: dein Prozess → Function Calling; HTTP-API mit Spec → OpenAPI-Tool; Storage-Queues → Azure-Functions-Tool; MCP-Endpoint → MCP-Tool."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/azure-functions",
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/openapi",
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/function-calling"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-custom-tools-07",
+      "type": "single",
+      "domain": "D2",
+      "skill": "2.2.3",
+      "module": "custom-tools",
+      "difficulty": 3,
+      "stem": {
+        "en": "You add an OpenAPI tool for a partner's shipping API that expects the header `x-api-key`. You created a project connection whose key is `x-api-key` and passed its resource ID to the tool, but the partner's logs show requests arriving without the header. What should you fix?",
+        "de": "Du fügst ein OpenAPI-Tool für die Versand-API eines Partners hinzu, die den Header `x-api-key` erwartet. Du hast eine Projektverbindung mit dem Schlüssel `x-api-key` angelegt und ihre Ressourcen-ID an das Tool übergeben, doch die Protokolle des Partners zeigen Anfragen ohne den Header. Was musst du korrigieren?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": { "en": "In the spec, add an `apiKey` scheme with `name: x-api-key` and `in: header` under `components.securitySchemes`, add a top-level `security` section that references it, and remove any operation parameter for the key", "de": "In der Spec unter `components.securitySchemes` ein `apiKey`-Schema mit `name: x-api-key` und `in: header` sowie einen `security`-Abschnitt auf oberster Ebene ergänzen, der darauf verweist, und jeden Operationsparameter für den Key entfernen" },
+          "correct": true,
+          "why": { "en": "Without both `securitySchemes` and `security`, the key isn't included in requests; the scheme's `name` must match the key name in the connection.", "de": "Ohne `securitySchemes` und `security` wird der Key nicht mitgesendet; der `name` des Schemas muss zum Schlüsselnamen in der Verbindung passen." }
+        },
+        {
+          "id": "b",
+          "text": { "en": "Put the key into the agent instructions so that the model adds the header", "de": "Den Key in die Agent-Anweisungen schreiben, damit das Modell den Header ergänzt" },
+          "correct": false,
+          "why": { "en": "Credentials never belong in prompts or instructions, and the model doesn't set HTTP headers.", "de": "Zugangsdaten gehören nie in Prompts oder Anweisungen, und das Modell setzt keine HTTP-Header." }
+        },
+        {
+          "id": "c",
+          "text": { "en": "Switch the connection to project managed identity", "de": "Die Verbindung auf Projekt-Managed-Identity umstellen" },
+          "correct": false,
+          "why": { "en": "Managed identity works only if the API accepts Microsoft Entra ID tokens; this partner API expects an API key.", "de": "Managed Identity funktioniert nur, wenn die API Microsoft-Entra-ID-Tokens akzeptiert; diese Partner-API erwartet einen API-Key." }
+        },
+        {
+          "id": "d",
+          "text": { "en": "Add the key as the default value of a query parameter in the spec", "de": "Den Key als Standardwert eines Query-Parameters in der Spec eintragen" },
+          "correct": false,
+          "why": { "en": "Credentials don't belong in the spec, and the API expects a header, not a query parameter.", "de": "Zugangsdaten gehören nicht in die Spec, und die API erwartet einen Header, keinen Query-Parameter." }
+        }
+      ],
+      "explanation": {
+        "en": "For API-key authentication the spec declares how the key is sent (`securitySchemes` plus `security`) and the project connection supplies the value. One OpenAPI tool supports one API-key scheme.",
+        "de": "Bei API-Key-Authentifizierung legt die Spec fest, wie der Key gesendet wird (`securitySchemes` plus `security`), und die Projektverbindung liefert den Wert. Ein OpenAPI-Tool unterstützt ein API-Key-Schema."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/openapi"
+      ],
+      "lastVerified": "2026-11-06"
+    }
+  ]
+}

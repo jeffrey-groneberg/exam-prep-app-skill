@@ -1,0 +1,135 @@
+/* Design tokens — the category standard (Microsoft Learn / Fluent 2), executed straight. */
+:root {
+  color-scheme: light;
+
+  --font-ui: 'Segoe UI Variable Text', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Segoe UI Variable Display', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+  --font-code: 'Cascadia Code Variable', 'Cascadia Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Neutrals */
+  --bg: #f5f5f5;
+  --surface: #ffffff;
+  --surface-alt: #fafafa;
+  --surface-sunken: #f0f0f0;
+  --line: #e0e0e0;
+  --line-soft: #ebebeb;
+  --line-strong: #d1d1d1;
+  --ink: #242424;
+  --ink-2: #424242;
+  --ink-3: #616161;
+  --ink-disabled: #bdbdbd;
+
+  /* Brand (Fluent 2 web brand ramp) */
+  --brand: #0f6cbd;
+  --brand-hover: #115ea3;
+  --brand-press: #0f548c;
+  --brand-ink: #0f548c;
+  --brand-tint: #ebf3fc;
+  --brand-tint-2: #cfe4fa;
+  --brand-soft: #96c6fa;
+
+  /* Status */
+  --ok: #107c10;
+  --ok-ink: #0e700e;
+  --ok-tint: #f1faf1;
+  --ok-line: #9fd89f;
+  --bad: #c50f1f;
+  --bad-ink: #b10e1c;
+  --bad-tint: #fdf3f4;
+  --bad-line: #eeacb2;
+  --warn: #bc4b09;
+  --warn-tint: #fff9f5;
+  --warn-line: #fdcfb4;
+  --mark: #c48a00;
+
+  /* Exam domains by position in the outline (fill · ink for text · tint for backgrounds) */
+  --d1: #0f6cbd;
+  --d1-ink: #0f548c;
+  --d1-tint: #ebf3fc;
+  --d2: #038387;
+  --d2-ink: #026367;
+  --d2-tint: #e6f4f4;
+  --d3: #c239b3;
+  --d3-ink: #8e2483;
+  --d3-tint: #faeef8;
+  --d4: #498205;
+  --d4-ink: #3b6b04;
+  --d4-tint: #eef6e6;
+  --d5: #ca5010;
+  --d5-ink: #9c3d0a;
+  --d5-tint: #fdf0e8;
+  --d6: #8764b8;
+  --d6-ink: #5c2e91;
+  --d6-tint: #f7f4fb;
+
+  /* Diagram tones (fill · stroke · ink) */
+  --tone-user-fill: #fff8e6;
+  --tone-user-stroke: #b98200;
+  --tone-user-ink: #6e4d00;
+  --tone-app-fill: #ebf3fc;
+  --tone-app-stroke: #0f6cbd;
+  --tone-app-ink: #0f548c;
+  --tone-platform-fill: #f0effc;
+  --tone-platform-stroke: #5b5fc7;
+  --tone-platform-ink: #3d3f99;
+  --tone-model-fill: #e6f4f4;
+  --tone-model-stroke: #038387;
+  --tone-model-ink: #025b5e;
+  --tone-data-fill: #eef1f4;
+  --tone-data-stroke: #52657a;
+  --tone-data-ink: #34495e;
+  --tone-tool-fill: #fdf0e8;
+  --tone-tool-stroke: #ca5010;
+  --tone-tool-ink: #8a3707;
+  --tone-safety-fill: #fdf3f4;
+  --tone-safety-stroke: #c50f1f;
+  --tone-safety-ink: #8e0a16;
+  --tone-external-fill: #f0f7e9;
+  --tone-external-stroke: #498205;
+  --tone-external-ink: #355e04;
+  --tone-neutral-fill: #ffffff;
+  --tone-neutral-stroke: #8a8a8a;
+  --tone-neutral-ink: #424242;
+
+  /* Code (VS Code Light+) */
+  --code-bg: #f7f7f7;
+  --tok-keyword: #0000ff;
+  --tok-string: #a31515;
+  --tok-comment: #008000;
+  --tok-number: #098658;
+  --tok-call: #795e26;
+  --tok-class: #1f6e86;
+  --tok-builtin: #795e26;
+
+  /* Shape */
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --shadow-2: 0 0 2px rgb(0 0 0 / 0.12), 0 1px 2px rgb(0 0 0 / 0.14);
+  --shadow-4: 0 0 2px rgb(0 0 0 / 0.12), 0 2px 4px rgb(0 0 0 / 0.14);
+  --shadow-8: 0 0 2px rgb(0 0 0 / 0.12), 0 4px 8px rgb(0 0 0 / 0.14);
+  --shadow-16: 0 0 2px rgb(0 0 0 / 0.12), 0 8px 16px rgb(0 0 0 / 0.14);
+
+  /* Rhythm */
+  --s1: 4px;
+  --s2: 8px;
+  --s3: 12px;
+  --s4: 16px;
+  --s5: 20px;
+  --s6: 24px;
+  --s8: 32px;
+  --s10: 40px;
+  --s12: 48px;
+  --s16: 64px;
+
+  --topbar-h: 56px;
+  /* Notch and rounded-corner insets: non-zero on iPhones held sideways (viewport-fit=cover). */
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --page-max: 1240px;
+  --read-max: 760px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-fast: 150ms;
+  --dur: 280ms;
+}

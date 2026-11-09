@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Exam configuration",
+  "description": "The single source of truth for everything exam-specific outside the content files: names, links, exam format, storage key, legacy names and content targets. Read by the app, vite.config.ts and the scripts.",
+  "type": "object",
+  "required": ["code", "title", "appName", "shortName", "badge", "storageKey", "defaultLang", "skillsOutlineDate", "exam", "links", "feedback", "community", "legacyNames", "sourceDocsets", "targets"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "todo": { "type": "array", "items": { "type": "string" }, "description": "Open setup tasks (new-app.mjs leaves them here); npm run validate warns while any remain. Delete each entry once done." },
+    "code": { "type": "string", "pattern": "^[A-Z]{2,4}-\\d{2,4}[A-Z]?$", "description": "Exam code, e.g. AZ-104." },
+    "title": { "$ref": "#/$defs/l10n", "description": "Official exam title; keep the English title in both languages unless Microsoft publishes a localized one." },
+    "appName": { "type": "string", "minLength": 2, "description": "Name in the header, the document title and the install dialog, e.g. \"AZ-104 Prep\"." },
+    "shortName": { "type": "string", "minLength": 2, "maxLength": 12, "description": "Short name under the home-screen icon." },
+    "badge": { "type": "string", "minLength": 1, "maxLength": 4, "description": "Text in the logo badge and the app icons, e.g. \"104\"." },
+    "storageKey": { "type": "string", "pattern": "^[a-z0-9-]+:v1$", "description": "localStorage key for the learner's progress; changing it starts every learner from scratch." },
+    "defaultLang": { "enum": ["en", "de"], "description": "Language of the UI and the content until the learner switches." },
+    "skillsOutlineDate": { "type": "string", "pattern": "^(\\d{4}-\\d{2}-\\d{2})?$", "description": "Date of the study guide's \"Skills measured as of …\" version the outline follows." },
+    "courseNumber": { "type": "string", "description": "Official course number, e.g. AZ-104T00; empty when the exam has no course." },
+    "courseTitle": { "type": "string", "description": "Official English course title." },
+    "codeLanguage": { "type": "string", "description": "Language of the code samples and code questions, shown on code blocks. \"Python\" gets syntax highlighting; anything else is shown as plain text." },
+    "exam": {
+      "type": "object",
+      "required": ["minutes", "questions", "passPercent"],
+      "additionalProperties": false,
+      "properties": {
+        "minutes": { "type": "integer", "minimum": 1, "description": "Exam time of the full simulation." },
+        "questions": { "type": "integer", "minimum": 1, "description": "Questions in the full simulation." },
+        "passPercent": { "type": "number", "minimum": 1, "maximum": 100, "description": "The app's pass guideline in percent of points (the real exam reports a scaled score)." }
+      }
+    },
+    "links": {
+      "type": "object",
+      "required": ["examPage", "studyGuide", "course", "practiceAssessment", "examSandbox"],
+      "additionalProperties": false,
+      "properties": {
+        "examPage": { "$ref": "#/$defs/url" },
+        "studyGuide": { "$ref": "#/$defs/url" },
+        "course": { "$ref": "#/$defs/url" },
+        "practiceAssessment": { "$ref": "#/$defs/url" },
+        "examSandbox": { "$ref": "#/$defs/url" }
+      }
+    },
+    "feedback": {
+      "type": "object",
+      "required": ["issuesUrl"],
+      "additionalProperties": false,
+      "description": "Feedback links on questions, lesson sections, diagrams, code samples and cards open a prefilled issue in the app's repository.",
+      "properties": {
+        "issuesUrl": {
+          "type": "string",
+          "pattern": "^(https://[^\\s?#]+/issues/new)?$",
+          "description": "\"New issue\" address of the app's public GitHub repository, e.g. https://github.com/owner/repo/issues/new. Empty: the app shows no feedback links."
+        }
+      }
+    },
+    "community": {
+      "type": "array",
+      "description": "Optional non-official material, shown in its own section on Resources.",
+      "items": {
+        "type": "object",
+        "required": ["title", "url"],
+        "additionalProperties": false,
+        "properties": {
+          "title": { "type": "string", "minLength": 2 },
+          "url": { "type": "string", "pattern": "^https://" },
+          "note": { "anyOf": [{ "type": "string" }, { "$ref": "#/$defs/l10n" }] }
+        }
+      }
+    },
+    "legacyNames": {
+      "type": "array",
+      "description": "Renamed or retired product names the validator rejects unless the text frames them as former names.",
+      "items": {
+        "type": "object",
+        "required": ["pattern", "current"],
+        "additionalProperties": false,
+        "properties": {
+          "pattern": { "type": "string", "minLength": 1, "description": "JavaScript regular expression source." },
+          "flags": { "type": "string", "pattern": "^[imsu]*$" },
+          "current": { "type": "string", "minLength": 1, "description": "The current name to use instead." }
+        }
+      }
+    },
+    "sourceDocsets": {
+      "type": "array",
+      "description": "Doc set label per Learn path prefix (without locale); source links read \"<label>: <page title>\".",
+      "items": {
+        "type": "object",
+        "required": ["prefix", "label"],
+        "additionalProperties": false,
+        "properties": {
+          "prefix": { "type": "string", "pattern": "^/.*/$" },
+          "label": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "targets": {
+      "type": "object",
+      "required": ["minQuestions", "minPerBullet", "minPerModule", "minCases", "domainShareTolerance"],
+      "additionalProperties": false,
+      "properties": {
+        "minQuestions": { "type": "integer", "minimum": 0, "description": "Questions the bank must hold (content test)." },
+        "minPerBullet": { "type": "integer", "minimum": 1, "description": "Fewer primary questions on a skills-outline bullet is a validator warning." },
+        "minPerModule": { "type": "integer", "minimum": 1, "description": "Fewer questions in a module is a validator warning." },
+        "minCases": { "type": "integer", "minimum": 0, "description": "Case studies the bank must hold (content test)." },
+        "domainShareTolerance": { "type": "number", "minimum": 0, "description": "Percentage points a domain's share of the bank may fall below the lower end of its official weight (content test)." }
+      }
+    }
+  },
+  "$defs": {
+    "l10n": {
+      "type": "object",
+      "required": ["en", "de"],
+      "additionalProperties": false,
+      "properties": { "en": { "type": "string", "minLength": 1 }, "de": { "type": "string", "minLength": 1 } }
+    },
+    "url": { "type": "string", "pattern": "^(https://.*)?$", "description": "An https URL, or empty while unknown." }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "../schema/case-file.schema.json",
+  "cases": [
+    {
+      "id": "case-fabrikam-support",
+      "title": {
+        "en": "Fabrikam: a customer-support agent with custom tools, MCP and approvals",
+        "de": "Fabrikam: ein Kundenservice-Agent mit Custom Tools, MCP und Freigaben"
+      },
+      "scenario": {
+        "en": "**Fabrikam, Inc.** sells outdoor gear online. The support team is building a customer-support agent as a **prompt agent** in Microsoft Foundry Agent Service. The Foundry project uses the **standard agent setup** and is connected to an Application Insights resource.\n\nThe agent must work with four existing systems:\n- An **order-history REST API**, described by an OpenAPI 3.0 file. It expects an API key in the `x-api-key` header.\n- A **loyalty-discount engine**, a Python library that runs only inside Fabrikam's web app, behind the company firewall.\n- An in-house **MCP server** on Azure Container Apps, reachable over HTTPS. It exposes the tools `get_order_status`, `track_shipment`, `issue_refund` and `delete_customer_profile`.\n- A **warranty-claim** Azure Functions app that already processes claims from Azure Storage queues. Its retry behavior must be kept.\n\nRequirements:\n1. The agent must never be able to call `delete_customer_profile`.\n2. Every refund must be approved by a support supervisor before it runs. Order-status and tracking lookups must not wait for an approval.\n3. No API keys or tokens may appear in code, prompts or agent instructions.\n4. Developers must see latency and token usage for every step of a conversation, but only the compliance team may read prompts and tool-call arguments, because they contain customer data.",
+        "de": "**Fabrikam, Inc.** verkauft Outdoor-Ausrüstung online. Das Support-Team baut einen Kundenservice-Agent als **Prompt Agent** in Microsoft Foundry Agent Service. Das Foundry-Projekt nutzt das **Standard-Agent-Setup** und ist mit einer Application-Insights-Ressource verbunden.\n\nDer Agent muss mit vier bestehenden Systemen arbeiten:\n- Eine **Bestellhistorien-REST-API**, beschrieben durch eine OpenAPI-3.0-Datei. Sie erwartet einen API-Key im Header `x-api-key`.\n- Eine **Treuerabatt-Engine**, eine Python-Bibliothek, die nur innerhalb der Web-App von Fabrikam hinter der Firmen-Firewall läuft.\n- Ein eigener **MCP-Server** in Azure Container Apps, per HTTPS erreichbar. Er stellt die Tools `get_order_status`, `track_shipment`, `issue_refund` und `delete_customer_profile` bereit.\n- Eine **Garantiefall**-App in Azure Functions, die Garantiefälle bereits aus Azure-Storage-Queues verarbeitet. Ihr Wiederholungsverhalten muss erhalten bleiben.\n\nAnforderungen:\n1. Der Agent darf `delete_customer_profile` niemals aufrufen können.\n2. Jede Erstattung muss vor der Ausführung von einer Support-Teamleitung freigegeben werden. Abfragen zu Bestellstatus und Sendungsverfolgung dürfen nicht auf eine Freigabe warten.\n3. API-Keys oder Tokens dürfen weder in Code noch in Prompts oder Agent-Anweisungen stehen.\n4. Entwickler müssen Latenz und Token-Verbrauch jedes Schritts einer Konversation sehen, aber nur das Compliance-Team darf Prompts und Tool-Argumente lesen, weil sie Kundendaten enthalten."
+      },
+      "modules": ["agents-vscode", "custom-tools", "mcp-tools"]
+    }
+  ]
+}

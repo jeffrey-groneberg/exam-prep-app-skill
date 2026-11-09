@@ -1,0 +1,492 @@
+{
+  "$schema": "../schema/question-file.schema.json",
+  "module": "mcp-tools",
+  "questions": [
+    {
+      "id": "q-mcp-tools-01",
+      "type": "single",
+      "domain": "D2",
+      "skill": "2.2.3",
+      "module": "mcp-tools",
+      "difficulty": 1,
+      "stem": {
+        "en": "Your platform team adds a `get_return_policy` tool to the MCP server that your Foundry agent already uses. The agent's MCP tool doesn't set `allowed_tools`. What must you change so that the agent can use the new tool?",
+        "de": "Dein Plattformteam ergänzt den MCP-Server, den dein Foundry-Agent bereits nutzt, um ein Tool `get_return_policy`. Das MCP-Tool des Agents setzt `allowed_tools` nicht. Was musst du ändern, damit der Agent das neue Tool nutzen kann?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": { "en": "Nothing — the agent discovers the server's current tools at runtime", "de": "Nichts – der Agent entdeckt die aktuellen Tools des Servers zur Laufzeit" },
+          "correct": true,
+          "why": { "en": "MCP tools are discovered dynamically, and without `allowed_tools` every tool on the server is available.", "de": "MCP-Tools werden dynamisch entdeckt, und ohne `allowed_tools` ist jedes Tool des Servers verfügbar." }
+        },
+        {
+          "id": "b",
+          "text": { "en": "Add a `FunctionTool` for `get_return_policy` and save a new agent version", "de": "Ein `FunctionTool` für `get_return_policy` ergänzen und eine neue Agent Version speichern" },
+          "correct": false,
+          "why": { "en": "With the MCP tool, the service calls MCP tools directly; you don't wrap them as function tools.", "de": "Mit dem MCP-Tool ruft der Dienst MCP-Tools direkt auf; du verpackst sie nicht als Function Tools." }
+        },
+        {
+          "id": "c",
+          "text": { "en": "Update an OpenAPI specification for the server", "de": "Eine OpenAPI-Spezifikation für den Server aktualisieren" },
+          "correct": false,
+          "why": { "en": "An MCP server describes its tools through the protocol itself; no OpenAPI spec is involved.", "de": "Ein MCP-Server beschreibt seine Tools über das Protokoll selbst; eine OpenAPI-Spec spielt keine Rolle." }
+        },
+        {
+          "id": "d",
+          "text": { "en": "Create a separate project connection for the new tool", "de": "Eine eigene Projektverbindung für das neue Tool anlegen" },
+          "correct": false,
+          "why": { "en": "The existing connection authenticates to the whole server; a new tool doesn't need its own connection.", "de": "Die bestehende Verbindung authentifiziert gegenüber dem ganzen Server; ein neues Tool braucht keine eigene Verbindung." }
+        }
+      ],
+      "explanation": {
+        "en": "Integrate once: tools added on an MCP server reach every agent that uses the server, unless `allowed_tools` filters them out.",
+        "de": "Einmal integrieren: Auf einem MCP-Server ergänzte Tools erreichen jeden Agent, der den Server nutzt – außer `allowed_tools` filtert sie heraus."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol",
+        "https://learn.microsoft.com/en-us/training/modules/connect-agent-to-mcp-tools/2-understand-mcp-tool-discovery"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-mcp-tools-02",
+      "type": "single",
+      "domain": "D2",
+      "skill": "2.2.3",
+      "module": "mcp-tools",
+      "difficulty": 2,
+      "stem": {
+        "en": "You built a Python MCP server that runs on your laptop over stdio. A prompt agent in Foundry Agent Service must use its tools in production. What should you do?",
+        "de": "Du hast einen Python-MCP-Server gebaut, der auf deinem Laptop über stdio läuft. Ein Prompt Agent in Foundry Agent Service soll seine Tools in Produktion nutzen. Was tust du?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": { "en": "Host the server as a remote endpoint, for example on Azure Container Apps or Azure Functions, and add it with the MCP tool", "de": "Den Server als Remote-Endpoint hosten, zum Beispiel in Azure Container Apps oder Azure Functions, und ihn mit dem MCP-Tool anbinden" },
+          "correct": true,
+          "why": { "en": "The Agent Service runtime accepts only remote MCP endpoints, so a local server must be self-hosted first.", "de": "Die Runtime von Agent Service akzeptiert nur Remote-MCP-Endpoints, daher muss ein lokaler Server zuerst selbst gehostet werden." }
+        },
+        {
+          "id": "b",
+          "text": { "en": "Set `server_url` to `http://localhost:8000/mcp`", "de": "`server_url` auf `http://localhost:8000/mcp` setzen" },
+          "correct": false,
+          "why": { "en": "The service runs in Azure and can't reach your laptop; only remote endpoints are accepted.", "de": "Der Dienst läuft in Azure und erreicht deinen Laptop nicht; akzeptiert werden nur Remote-Endpoints." }
+        },
+        {
+          "id": "c",
+          "text": { "en": "Upload the server's Python file to a vector store for file search", "de": "Die Python-Datei des Servers für File Search in einen Vector Store hochladen" },
+          "correct": false,
+          "why": { "en": "File search retrieves text from documents; it doesn't run code or expose tools.", "de": "File Search ruft Text aus Dokumenten ab; Code ausführen oder Tools bereitstellen kann es nicht." }
+        },
+        {
+          "id": "d",
+          "text": { "en": "Run the server inside the Code Interpreter tool", "de": "Den Server im Code-Interpreter-Tool ausführen" },
+          "correct": false,
+          "why": { "en": "Code Interpreter runs sandboxed Python for analysis; it can't host an MCP endpoint for the agent.", "de": "Code Interpreter führt Python in einer Sandbox zur Analyse aus; einen MCP-Endpoint für den Agent kann es nicht hosten." }
+        }
+      ],
+      "explanation": {
+        "en": "Foundry's MCP tool needs a reachable remote endpoint — public, or private with the standard agent setup and private networking. Use a client-side bridge only when your own code must talk to a local server.",
+        "de": "Das MCP-Tool von Foundry braucht einen erreichbaren Remote-Endpoint – öffentlich oder privat mit Standard-Agent-Setup und privatem Netzwerk. Eine clientseitige Brücke nutzt du nur, wenn dein eigener Code mit einem lokalen Server sprechen muss."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-mcp-tools-03",
+      "type": "code",
+      "domain": "D2",
+      "skill": "2.2.5",
+      "module": "mcp-tools",
+      "difficulty": 2,
+      "stem": {
+        "en": "The MCP tool of your agent requires approval. Complete the code so that a supervisor decides on each pending call and the agent then continues.",
+        "de": "Das MCP-Tool deines Agents verlangt Freigaben. Vervollständige den Code so, dass eine Teamleitung über jeden ausstehenden Aufruf entscheidet und der Agent danach fortfährt."
+      },
+      "template": "response = openai.responses.create(conversation=conv.id, input=\"Refund order FAB-1042\")\napprovals = []\nfor item in response.output:\n    if item.type == \"{{b1}}\":\n        ok = supervisor_approves(item.name, item.arguments)\n        approvals.append(McpApprovalResponse(\n            type=\"mcp_approval_response\",\n            approve=ok,\n            {{b2}}=item.id,\n        ))\nif approvals:\n    response = openai.responses.create({{b3}}=conv.id, input=approvals)\nprint(response.output_text)",
+      "blanks": [
+        {
+          "id": "b1",
+          "options": [
+            { "id": "a", "code": "mcp_approval_request", "correct": true, "why": { "en": "Approval-gated MCP calls arrive as output items of this type, with server label, tool name and arguments.", "de": "Freigabepflichtige MCP-Aufrufe kommen als Output-Items dieses Typs, mit Server-Label, Tool-Name und Argumenten." } },
+            { "id": "b", "code": "function_call", "correct": false, "why": { "en": "Function calls come from function tools, not from the MCP tool.", "de": "Function Calls stammen von Function Tools, nicht vom MCP-Tool." } },
+            { "id": "c", "code": "mcp_approval_response", "correct": false, "why": { "en": "That is the item type you send back, not the one you receive.", "de": "Das ist der Item-Typ, den du zurückschickst, nicht der, den du empfängst." } }
+          ]
+        },
+        {
+          "id": "b2",
+          "options": [
+            { "id": "a", "code": "approval_request_id", "correct": true, "why": { "en": "Links your decision to the pending request; it must be the request item's `id`.", "de": "Verknüpft deine Entscheidung mit der offenen Anfrage; es muss die `id` des Anfrage-Items sein." } },
+            { "id": "b", "code": "call_id", "correct": false, "why": { "en": "`call_id` links a `function_call_output` to a function call, not an approval.", "de": "`call_id` verknüpft ein `function_call_output` mit einem Function Call, nicht eine Freigabe." } },
+            { "id": "c", "code": "previous_response_id", "correct": false, "why": { "en": "That parameter chains responses; it isn't a field of an approval response.", "de": "Dieser Parameter verkettet Antworten; er ist kein Feld einer Freigabeantwort." } }
+          ]
+        },
+        {
+          "id": "b3",
+          "options": [
+            { "id": "a", "code": "conversation", "correct": true, "why": { "en": "The approval must go back in the same conversation as the request so that the agent can continue.", "de": "Die Freigabe muss in derselben Conversation wie die Anfrage zurückgehen, damit der Agent fortfahren kann." } },
+            { "id": "b", "code": "thread_id", "correct": false, "why": { "en": "The Responses API has no `thread_id` parameter; threads belonged to the classic agents API.", "de": "Die Responses API hat keinen Parameter `thread_id`; Threads gehörten zur klassischen Agents-API." } },
+            { "id": "c", "code": "store", "correct": false, "why": { "en": "`store` only controls whether the response is persisted; it doesn't link the approval to the conversation.", "de": "`store` steuert nur, ob die Antwort gespeichert wird; die Freigabe verknüpft es nicht mit der Conversation." } }
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "Approval loop: find `mcp_approval_request` items, review tool name and arguments, and answer with `mcp_approval_response` (`approve`, `approval_request_id`) in the same conversation. Otherwise the agent never continues.",
+        "de": "Freigabeschleife: `mcp_approval_request`-Items finden, Tool-Name und Argumente prüfen und mit `mcp_approval_response` (`approve`, `approval_request_id`) in derselben Conversation antworten. Sonst setzt der Agent nie fort."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-mcp-tools-04",
+      "type": "order",
+      "domain": "D2",
+      "skill": "2.2.5",
+      "module": "mcp-tools",
+      "difficulty": 2,
+      "stem": {
+        "en": "Your support agent uses an MCP tool whose per-tool approval policy lists `issue_refund` under `always`, because a support supervisor must approve every refund. A customer asks the agent to refund an order. Put the steps in order.",
+        "de": "Dein Support-Agent nutzt ein MCP-Tool, dessen Freigaberichtlinie pro Tool `issue_refund` unter `always` aufführt, weil eine Support-Teamleitung jede Erstattung freigeben muss. Ein Kunde bittet den Agent, eine Bestellung zu erstatten. Bringe die Schritte in die richtige Reihenfolge."
+      },
+      "items": [
+        {
+          "id": "s1",
+          "text": { "en": "The app calls `responses.create` with the customer's message in the customer's conversation", "de": "Die App ruft `responses.create` mit der Nachricht des Kunden in dessen Conversation auf" },
+          "why": { "en": "Every run starts with the user's request.", "de": "Jeder Lauf beginnt mit der Anfrage des Nutzers." }
+        },
+        {
+          "id": "s2",
+          "text": { "en": "The response contains an `mcp_approval_request` for `issue_refund` with its arguments", "de": "Die Antwort enthält ein `mcp_approval_request` für `issue_refund` mit seinen Argumenten" },
+          "why": { "en": "Because `issue_refund` requires approval, the service pauses instead of calling the server.", "de": "Weil `issue_refund` eine Freigabe verlangt, pausiert der Dienst, statt den Server aufzurufen." }
+        },
+        {
+          "id": "s3",
+          "text": { "en": "The app shows the tool name and arguments to a support supervisor, who approves", "de": "Die App zeigt Tool-Name und Argumente einer Support-Teamleitung, die freigibt" },
+          "why": { "en": "The policy demands a supervisor's decision before the refund runs.", "de": "Die Richtlinie verlangt die Entscheidung einer Teamleitung, bevor die Erstattung läuft." }
+        },
+        {
+          "id": "s4",
+          "text": { "en": "The app sends an `mcp_approval_response` with `approve=True` and the request's `id` as `approval_request_id` in the same conversation", "de": "Die App sendet ein `mcp_approval_response` mit `approve=True` und der `id` der Anfrage als `approval_request_id` in derselben Conversation" },
+          "why": { "en": "The decision must reference the pending request in the same conversation.", "de": "Die Entscheidung muss in derselben Conversation auf die offene Anfrage verweisen." }
+        },
+        {
+          "id": "s5",
+          "text": { "en": "The service calls `issue_refund` on the MCP server, and the agent confirms the refund in `output_text`", "de": "Der Dienst ruft `issue_refund` auf dem MCP-Server auf, und der Agent bestätigt die Erstattung in `output_text`" },
+          "why": { "en": "Only an approved call reaches the server; the final answer comes last.", "de": "Nur ein freigegebener Aufruf erreicht den Server; die finale Antwort kommt zuletzt." }
+        }
+      ],
+      "explanation": {
+        "en": "Request → `mcp_approval_request` → human review → `mcp_approval_response` → tool call → answer. Lookups configured with `never` skip the approval steps.",
+        "de": "Anfrage → `mcp_approval_request` → menschliche Prüfung → `mcp_approval_response` → Tool-Aufruf → Antwort. Abfragen mit `never` überspringen die Freigabeschritte."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-mcp-tools-05",
+      "type": "single",
+      "domain": "D2",
+      "skill": "2.2.5",
+      "module": "mcp-tools",
+      "difficulty": 3,
+      "stem": {
+        "en": "A developer attaches a documentation MCP server with the tools `search_docs`, `fetch_page` and `update_page` to an agent without setting `require_approval`. The first test returns no `output_text`; `response.output` contains only an `mcp_approval_request`. What explains this, and which fix lets the two read tools run unattended while `update_page` still needs approval?",
+        "de": "Ein Entwickler hängt einen Dokumentations-MCP-Server mit den Tools `search_docs`, `fetch_page` und `update_page` an einen Agent, ohne `require_approval` zu setzen. Der erste Test liefert keinen `output_text`; `response.output` enthält nur ein `mcp_approval_request`. Was erklärt das, und welche Korrektur lässt die zwei lesenden Tools ohne Aufsicht laufen, während `update_page` weiterhin eine Freigabe braucht?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": { "en": "`require_approval` defaults to `always`; use a per-tool policy that lists `search_docs` and `fetch_page` under `never` and `update_page` under `always`", "de": "`require_approval` ist standardmäßig `always`; nutze eine Richtlinie pro Tool, die `search_docs` und `fetch_page` unter `never` und `update_page` unter `always` aufführt" },
+          "correct": true,
+          "why": { "en": "Without a value every call waits for approval; per-tool `never` and `always` lists exempt the read tools and keep the write tool gated.", "de": "Ohne Wert wartet jeder Aufruf auf eine Freigabe; `never`- und `always`-Listen pro Tool nehmen die lesenden Tools aus und halten das schreibende Tool unter Freigabe." }
+        },
+        {
+          "id": "b",
+          "text": { "en": "The MCP server is unreachable, so the service returns a placeholder item", "de": "Der MCP-Server ist nicht erreichbar, daher liefert der Dienst ein Platzhalter-Item" },
+          "correct": false,
+          "why": { "en": "An approval request means a call is waiting for a decision; it isn't a connectivity error.", "de": "Eine Freigabeanfrage bedeutet, dass ein Aufruf auf eine Entscheidung wartet; ein Verbindungsfehler ist das nicht." }
+        },
+        {
+          "id": "c",
+          "text": { "en": "`allowed_tools` is empty, so no tool may run; list all three tools", "de": "`allowed_tools` ist leer, daher darf kein Tool laufen; liste alle drei Tools auf" },
+          "correct": false,
+          "why": { "en": "An omitted or empty `allowed_tools` exposes all tools; it never blocks them, and it doesn't control approval.", "de": "Ein fehlendes oder leeres `allowed_tools` macht alle Tools verfügbar; es blockiert nie und steuert keine Freigaben." }
+        },
+        {
+          "id": "d",
+          "text": { "en": "Set `require_approval` to `never` for the whole server", "de": "`require_approval` für den ganzen Server auf `never` setzen" },
+          "correct": false,
+          "why": { "en": "That also removes the approval for `update_page`, which the requirement forbids.", "de": "Das entfernt auch die Freigabe für `update_page`, was die Anforderung verbietet." }
+        }
+      ],
+      "explanation": {
+        "en": "Omitting `require_approval` means `always`. Exempt only trusted read-only tools and keep approvals for tools that change data.",
+        "de": "Fehlt `require_approval`, gilt `always`. Nimm nur vertrauenswürdige lesende Tools aus und behalte Freigaben für Tools, die Daten ändern."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol",
+        "https://learn.microsoft.com/en-us/python/api/azure-ai-projects/azure.ai.projects.models.mcptool"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-mcp-tools-06",
+      "type": "single",
+      "domain": "D1",
+      "skill": "1.4.4",
+      "module": "mcp-tools",
+      "difficulty": 3,
+      "caseId": "case-fabrikam-support",
+      "stem": {
+        "en": "Refer to the Fabrikam case study. Which configuration of the MCP tool meets requirements 1 and 2?",
+        "de": "Beziehe dich auf die Fallstudie Fabrikam. Welche Konfiguration des MCP-Tools erfüllt die Anforderungen 1 und 2?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": { "en": "`allowed_tools` lists `get_order_status`, `track_shipment` and `issue_refund`; a per-tool approval policy puts `issue_refund` under `always` and the two lookups under `never`", "de": "`allowed_tools` listet `get_order_status`, `track_shipment` und `issue_refund`; eine Freigaberichtlinie pro Tool setzt `issue_refund` unter `always` und die zwei Abfragen unter `never`" },
+          "correct": true,
+          "why": { "en": "The allowlist makes `delete_customer_profile` uncallable, and the per-tool policy pauses only refunds for a supervisor.", "de": "Die Allowlist macht `delete_customer_profile` unaufrufbar, und die Richtlinie pro Tool hält nur Erstattungen für eine Teamleitung an." }
+        },
+        {
+          "id": "b",
+          "text": { "en": "`allowed_tools=[]` and `require_approval=\"always\"`", "de": "`allowed_tools=[]` und `require_approval=\"always\"`" },
+          "correct": false,
+          "why": { "en": "An empty list exposes every tool, including `delete_customer_profile`, and every lookup would wait for approval.", "de": "Eine leere Liste macht jedes Tool verfügbar, auch `delete_customer_profile`, und jede Abfrage würde auf eine Freigabe warten." }
+        },
+        {
+          "id": "c",
+          "text": { "en": "Omit `allowed_tools`, set `require_approval=\"never\"` and add “Never delete customer profiles” to the instructions", "de": "`allowed_tools` weglassen, `require_approval=\"never\"` setzen und „Lösche nie Kundenprofile“ in die Anweisungen schreiben" },
+          "correct": false,
+          "why": { "en": "Instructions aren't an access control, and refunds would run without any approval.", "de": "Anweisungen sind keine Zugriffskontrolle, und Erstattungen liefen ganz ohne Freigabe." }
+        },
+        {
+          "id": "d",
+          "text": { "en": "Omit `allowed_tools` and use a per-tool policy that lists `issue_refund` and `delete_customer_profile` under `always`", "de": "`allowed_tools` weglassen und eine Richtlinie pro Tool nutzen, die `issue_refund` und `delete_customer_profile` unter `always` aufführt" },
+          "correct": false,
+          "why": { "en": "The delete tool stays callable — a supervisor could approve it — so requirement 1 isn't met.", "de": "Das Lösch-Tool bleibt aufrufbar – eine Teamleitung könnte es freigeben –, damit ist Anforderung 1 nicht erfüllt." }
+        }
+      ],
+      "explanation": {
+        "en": "`allowed_tools` decides what can be called at all; `require_approval` decides what needs a human first. Combine both for least privilege.",
+        "de": "`allowed_tools` entscheidet, was überhaupt aufgerufen werden kann; `require_approval` entscheidet, was zuerst einen Menschen braucht. Kombiniere beides für minimale Rechte."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-mcp-tools-07",
+      "type": "multi",
+      "domain": "D1",
+      "skill": "1.4.4",
+      "module": "mcp-tools",
+      "difficulty": 3,
+      "stem": {
+        "en": "Your security team requires rate limiting and IP filtering for the MCP servers that your Foundry agents call, without changing the MCP servers or the agent code. You plan to use the AI gateway integration (preview). Which TWO actions meet the requirement?",
+        "de": "Dein Security-Team verlangt Rate Limiting und IP-Filterung für die MCP-Server, die deine Foundry-Agents aufrufen, ohne die MCP-Server oder den Agent-Code zu ändern. Du planst die AI-Gateway-Integration (Preview). Welche ZWEI Maßnahmen erfüllen die Anforderung?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": { "en": "Connect an AI gateway (Azure API Management) to the Foundry resource, then create the MCP tools in the Foundry portal so that they're routed through it", "de": "Ein AI Gateway (Azure API Management) mit der Foundry-Ressource verbinden und danach die MCP-Tools im Foundry-Portal anlegen, damit sie darüber geroutet werden" },
+          "correct": true,
+          "why": { "en": "Governance is activated at the Foundry resource level, and only MCP tools created after the gateway is connected are routed through it.", "de": "Governance wird auf Ebene der Foundry-Ressource aktiviert, und nur MCP-Tools, die nach dem Verbinden des Gateways angelegt werden, laufen darüber." }
+        },
+        {
+          "id": "b",
+          "text": { "en": "Apply `rate-limit-by-key` and `ip-filter` policies to the gateway in API Management in the Azure portal", "de": "Richtlinien `rate-limit-by-key` und `ip-filter` im Azure-Portal in API Management auf das Gateway anwenden" },
+          "correct": true,
+          "why": { "en": "Gateway policies are applied through API Management in the Azure portal, not in the Foundry portal.", "de": "Gateway-Richtlinien werden über API Management im Azure-Portal angewendet, nicht im Foundry-Portal." }
+        },
+        {
+          "id": "c",
+          "text": { "en": "Describe the limits in each agent's instructions", "de": "Die Limits in den Anweisungen jedes Agents beschreiben" },
+          "correct": false,
+          "why": { "en": "Instructions influence the model; they can't enforce rate limits or IP rules.", "de": "Anweisungen beeinflussen das Modell; Rate Limits oder IP-Regeln können sie nicht durchsetzen." }
+        },
+        {
+          "id": "d",
+          "text": { "en": "Keep the existing MCP tools; they are routed through the gateway as soon as it is connected", "de": "Die bestehenden MCP-Tools behalten; sie laufen über das Gateway, sobald es verbunden ist" },
+          "correct": false,
+          "why": { "en": "Routing is applied only when a tool is created; existing tools must be re-created.", "de": "Das Routing wird nur beim Anlegen eines Tools angewendet; bestehende Tools müssen neu angelegt werden." }
+        },
+        {
+          "id": "e",
+          "text": { "en": "Route the OpenAPI and SharePoint tools through the same gateway", "de": "Die OpenAPI- und SharePoint-Tools über dasselbe Gateway routen" },
+          "correct": false,
+          "why": { "en": "AI gateways govern only MCP tools; OpenAPI tools and Foundry tools such as SharePoint aren't supported.", "de": "AI Gateways steuern nur MCP-Tools; OpenAPI-Tools und Foundry-Tools wie SharePoint werden nicht unterstützt." }
+        }
+      ],
+      "explanation": {
+        "en": "An AI gateway gives MCP traffic a governed entry point: connect it first, create the MCP tools afterwards, and enforce the policies in API Management.",
+        "de": "Ein AI Gateway gibt MCP-Traffic einen kontrollierten Eintrittspunkt: zuerst verbinden, danach die MCP-Tools anlegen und die Richtlinien in API Management durchsetzen."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/governance"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-mcp-tools-08",
+      "type": "match",
+      "domain": "D1",
+      "skill": "1.4.4",
+      "module": "mcp-tools",
+      "difficulty": 2,
+      "stem": {
+        "en": "Match each requirement for an MCP server connection to the recommended authentication method.",
+        "de": "Ordne jeder Anforderung an eine MCP-Server-Verbindung die empfohlene Authentifizierungsmethode zu."
+      },
+      "prompts": [
+        {
+          "id": "p1",
+          "prompt": { "en": "All users share one service account, and the server accepts only an API key", "de": "Alle Nutzer teilen ein Dienstkonto, und der Server akzeptiert nur einen API-Key" },
+          "answer": "t1",
+          "why": { "en": "Key-based authentication uses one shared identity; the key is stored in a project connection.", "de": "Key-basierte Authentifizierung nutzt eine geteilte Identität; der Key liegt in einer Projektverbindung." }
+        },
+        {
+          "id": "p2",
+          "prompt": { "en": "The server fronts an Azure service that supports Microsoft Entra ID, and you want no secrets to manage", "de": "Der Server steht vor einem Azure-Dienst mit Microsoft-Entra-ID-Unterstützung, und du willst keine Secrets verwalten" },
+          "answer": "t2",
+          "why": { "en": "Entra authentication with the agent identity or the project managed identity needs no secrets and rotates tokens automatically; assign roles on the underlying service.", "de": "Entra-Authentifizierung mit Agent-Identität oder Projekt-Managed-Identity braucht keine Secrets und rotiert Tokens automatisch; weise Rollen auf dem zugrunde liegenden Dienst zu." }
+        },
+        {
+          "id": "p3",
+          "prompt": { "en": "Each user must sign in to a third-party SaaS service so that the agent sees only that user's data", "de": "Jeder Nutzer muss sich bei einem SaaS-Dienst eines Drittanbieters anmelden, damit der Agent nur dessen Daten sieht" },
+          "answer": "t3",
+          "why": { "en": "OAuth identity passthrough asks each user to sign in and authorize access, so the user context persists.", "de": "OAuth-Identity-Passthrough lässt jeden Nutzer sich anmelden und den Zugriff autorisieren, sodass der Nutzerkontext erhalten bleibt." }
+        },
+        {
+          "id": "p4",
+          "prompt": { "en": "A public server that requires no authentication", "de": "Ein öffentlicher Server, der keine Authentifizierung verlangt" },
+          "answer": "t4",
+          "why": { "en": "Use unauthenticated access only when the server truly needs no credentials.", "de": "Zugriff ohne Authentifizierung nutzt du nur, wenn der Server wirklich keine Zugangsdaten braucht." }
+        }
+      ],
+      "targets": [
+        { "id": "t1", "text": { "en": "Key-based authentication stored in a project connection", "de": "Key-basierte Authentifizierung in einer Projektverbindung" } },
+        { "id": "t2", "text": { "en": "Microsoft Entra authentication with the agent identity or project managed identity", "de": "Microsoft-Entra-Authentifizierung mit Agent-Identität oder Projekt-Managed-Identity" } },
+        { "id": "t3", "text": { "en": "OAuth identity passthrough", "de": "OAuth-Identity-Passthrough" } },
+        { "id": "t4", "text": { "en": "Unauthenticated access", "de": "Zugriff ohne Authentifizierung" } },
+        { "id": "t5", "text": { "en": "A bearer token written into the agent instructions", "de": "Ein Bearer-Token in den Agent-Anweisungen" } }
+      ],
+      "explanation": {
+        "en": "Shared identity → key-based or Microsoft Entra (prefer Entra when the server supports it); per-user identity → OAuth identity passthrough or Entra user delegation. Credentials never go into instructions.",
+        "de": "Geteilte Identität → Key-basiert oder Microsoft Entra (Entra bevorzugen, wenn der Server es unterstützt); Identität pro Nutzer → OAuth-Identity-Passthrough oder Entra-Benutzerdelegierung. Zugangsdaten gehören nie in Anweisungen."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/mcp-authentication"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-mcp-tools-09",
+      "type": "multi",
+      "domain": "D1",
+      "skill": "1.4.3",
+      "module": "mcp-tools",
+      "difficulty": 2,
+      "stem": {
+        "en": "Compliance requires an audit record for every refund that your agent performs through its MCP tool: which tool and arguments were requested, who decided, and what the decision was. Which TWO actions provide this?",
+        "de": "Compliance verlangt für jede Erstattung, die dein Agent über sein MCP-Tool ausführt, einen Audit-Eintrag: welches Tool mit welchen Argumenten angefragt wurde, wer entschieden hat und wie. Welche ZWEI Maßnahmen liefern das?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": { "en": "Keep `issue_refund` under an `always` approval policy so that every refund produces an `mcp_approval_request`", "de": "`issue_refund` unter einer `always`-Freigaberichtlinie halten, damit jede Erstattung ein `mcp_approval_request` erzeugt" },
+          "correct": true,
+          "why": { "en": "Without an approval request there is no decision to record; the approval gate creates the auditable checkpoint.", "de": "Ohne Freigabeanfrage gibt es keine Entscheidung zu protokollieren; die Freigabe schafft den prüfbaren Kontrollpunkt." }
+        },
+        {
+          "id": "b",
+          "text": { "en": "In the approval handler, log the server label, tool name, arguments, the approver's identity and the decision before sending `mcp_approval_response`", "de": "Im Freigabe-Handler Server-Label, Tool-Name, Argumente, die Identität der freigebenden Person und die Entscheidung protokollieren, bevor `mcp_approval_response` gesendet wird" },
+          "correct": true,
+          "why": { "en": "The human decision happens in your app, so your app writes the audit record; the docs recommend logging approvals and tool calls.", "de": "Die menschliche Entscheidung fällt in deiner App, also schreibt deine App den Audit-Eintrag; die Doku empfiehlt, Freigaben und Tool-Aufrufe zu protokollieren." }
+        },
+        {
+          "id": "c",
+          "text": { "en": "Rely on the MCP server's request log", "de": "Sich auf das Anfrageprotokoll des MCP-Servers verlassen" },
+          "correct": false,
+          "why": { "en": "Denied calls never reach the server, and the server doesn't know who approved.", "de": "Abgelehnte Aufrufe erreichen den Server nie, und der Server weiß nicht, wer freigegeben hat." }
+        },
+        {
+          "id": "d",
+          "text": { "en": "Read the Microsoft Entra audit logs", "de": "Die Microsoft-Entra-Überwachungsprotokolle (Audit Logs) lesen" },
+          "correct": false,
+          "why": { "en": "They record the creation and deletion of agent identities and blueprints, not approval decisions.", "de": "Sie erfassen das Anlegen und Löschen von Agent-Identitäten und Blueprints, keine Freigabeentscheidungen." }
+        },
+        {
+          "id": "e",
+          "text": { "en": "Approve automatically in code whenever the arguments look valid", "de": "Im Code automatisch freigeben, sobald die Argumente gültig aussehen" },
+          "correct": false,
+          "why": { "en": "Automatic approval removes the human decision that the audit must prove.", "de": "Automatische Freigabe entfernt die menschliche Entscheidung, die das Audit nachweisen muss." }
+        }
+      ],
+      "explanation": {
+        "en": "Approvals are auditable only if they actually happen and are logged where the decision is made — in your approval handler.",
+        "de": "Freigaben sind nur prüfbar, wenn sie tatsächlich stattfinden und dort protokolliert werden, wo die Entscheidung fällt – in deinem Freigabe-Handler."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/model-context-protocol",
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-identity"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-mcp-tools-10",
+      "type": "single",
+      "domain": "D1",
+      "skill": "1.4.3",
+      "module": "mcp-tools",
+      "difficulty": 3,
+      "stem": {
+        "en": "Your hosted agent, built with Microsoft Agent Framework, consumes a Foundry toolbox. In the toolbox, the MCP tool `issue_refund` has `require_approval: \"always\"`. An audit finds refunds that ran without any approval. What is the cause?",
+        "de": "Dein Hosted Agent, gebaut mit Microsoft Agent Framework, nutzt eine Foundry-Toolbox. In der Toolbox hat das MCP-Tool `issue_refund` den Wert `require_approval: \"always\"`. Ein Audit findet Erstattungen, die ohne jede Freigabe liefen. Was ist die Ursache?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": { "en": "The toolbox only reports the approval setting in each tool's metadata from `tools/list`; it doesn't block `tools/call`, so the hosted agent's runtime must enforce the approval", "de": "Die Toolbox meldet die Freigabeeinstellung nur in den Metadaten jedes Tools aus `tools/list`; `tools/call` blockiert sie nicht, daher muss die Runtime des Hosted Agents die Freigabe durchsetzen" },
+          "correct": true,
+          "why": { "en": "Enforcement is entirely the agent runtime's responsibility: the hosted agent must pause and ask a human before it calls the tool.", "de": "Die Durchsetzung liegt ganz bei der Agent-Runtime: Der Hosted Agent muss pausieren und einen Menschen fragen, bevor er das Tool aufruft." }
+        },
+        {
+          "id": "b",
+          "text": { "en": "Toolboxes don't support `require_approval`", "de": "Toolboxes unterstützen `require_approval` nicht" },
+          "correct": false,
+          "why": { "en": "Toolbox versions support `require_approval` with `always` and `never`.", "de": "Toolbox-Versionen unterstützen `require_approval` mit `always` und `never`." }
+        },
+        {
+          "id": "c",
+          "text": { "en": "Approval settings work only for OpenAPI tools in a toolbox", "de": "Freigabeeinstellungen funktionieren in einer Toolbox nur für OpenAPI-Tools" },
+          "correct": false,
+          "why": { "en": "`require_approval` is configured on MCP tools; the cause is who enforces it, not the tool type.", "de": "`require_approval` wird an MCP-Tools konfiguriert; die Ursache ist, wer die Einstellung durchsetzt, nicht der Tool-Typ." }
+        },
+        {
+          "id": "d",
+          "text": { "en": "The toolbox version wasn't promoted to default, so its settings are ignored", "de": "Die Toolbox-Version wurde nicht zum Standard hochgestuft, daher werden ihre Einstellungen ignoriert" },
+          "correct": false,
+          "why": { "en": "Promotion only decides which version the endpoint serves; even the default version doesn't block calls by itself.", "de": "Die Hochstufung entscheidet nur, welche Version der Endpoint ausliefert; auch die Standardversion blockiert Aufrufe nicht von selbst." }
+        }
+      ],
+      "explanation": {
+        "en": "With toolboxes, `require_approval` is metadata for the consuming runtime. A hosted agent must implement the approval step itself, for example with Agent Framework's approval mode.",
+        "de": "Bei Toolboxes ist `require_approval` eine Metainformation für die nutzende Runtime. Ein Hosted Agent muss den Freigabeschritt selbst umsetzen, etwa mit dem Approval-Modus von Agent Framework."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/tools/toolbox",
+        "https://learn.microsoft.com/en-us/agent-framework/agents/tools/local-mcp-tools"
+      ],
+      "lastVerified": "2026-11-06"
+    }
+  ]
+}

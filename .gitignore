@@ -1,0 +1,5 @@
+node_modules/
+dist/
+audit-diagrams/
+.DS_Store
+*.log

@@ -1,0 +1,1438 @@
+{
+  "$schema": "../schema/question-file.schema.json",
+  "module": "agents-vscode",
+  "questions": [
+    {
+      "id": "q-agents-vscode-01",
+      "type": "single",
+      "domain": "D2",
+      "skill": "2.2.1",
+      "module": "agents-vscode",
+      "difficulty": 1,
+      "stem": {
+        "en": "You configure a prompt agent for a clinic's front desk. It must act as an appointment-scheduling assistant, never disclose medical records, and ask for missing details instead of guessing. Where should you define this role and these rules?",
+        "de": "Du konfigurierst einen Prompt Agent für die Rezeption einer Klinik. Er soll als Terminassistent agieren, niemals Krankenakten offenlegen und bei fehlenden Angaben nachfragen statt zu raten. Wo definierst du diese Rolle und diese Regeln?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": {
+            "en": "In the agent's `instructions`",
+            "de": "In den `instructions` des Agents"
+          },
+          "correct": true,
+          "why": {
+            "en": "`instructions` are the system (developer) message inserted into the model's context on every turn — the place for role, goals, boundaries and how to handle missing information.",
+            "de": "`instructions` sind die System-(Developer-)Nachricht, die in jeder Runde in den Kontext des Modells eingefügt wird – der Ort für Rolle, Ziele, Grenzen und den Umgang mit fehlenden Angaben."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "In the agent's `description` field",
+            "de": "Im Feld `description` des Agents"
+          },
+          "correct": false,
+          "why": {
+            "en": "The description tells team members what the agent is for; it isn't the system message that steers the model's behavior.",
+            "de": "Die Beschreibung erklärt dem Team, wofür der Agent da ist; sie ist nicht die Systemnachricht, die das Verhalten des Modells steuert."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "By setting `temperature` to 0",
+            "de": "Indem du `temperature` auf 0 setzt"
+          },
+          "correct": false,
+          "why": {
+            "en": "Temperature only makes token sampling more deterministic; it can't express a role or rules.",
+            "de": "Die Temperatur macht nur die Token-Auswahl deterministischer; eine Rolle oder Regeln kann sie nicht ausdrücken."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "In each user message that the front-desk app sends",
+            "de": "In jeder Nutzernachricht, die die Rezeptions-App sendet"
+          },
+          "correct": false,
+          "why": {
+            "en": "User input changes every turn and can be overridden; rules that must always apply belong in the agent definition.",
+            "de": "Nutzereingaben ändern sich jede Runde und lassen sich überschreiben; Regeln, die immer gelten müssen, gehören in die Agent-Definition."
+          }
+        }
+      ],
+      "explanation": {
+        "en": "Define an agent's role, goals and boundaries in its instructions; model parameters such as temperature tune style and randomness, not rules.",
+        "de": "Rolle, Ziele und Grenzen eines Agents definierst du in seinen Anweisungen; Modellparameter wie die Temperatur justieren Stil und Zufälligkeit, nicht Regeln."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/python/api/azure-ai-projects/azure.ai.projects.models.promptagentdefinition",
+        "https://learn.microsoft.com/en-us/training/modules/develop-ai-agents-azure-vs-code/6-configure-manage-agents"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-agents-vscode-02",
+      "type": "match",
+      "domain": "D2",
+      "skill": "2.2.1",
+      "module": "agents-vscode",
+      "difficulty": 2,
+      "stem": {
+        "en": "Match each requirement to the conversation-tracking approach you should use with a Foundry agent.",
+        "de": "Ordne jeder Anforderung den Ansatz zur Gesprächsverfolgung zu, den du mit einem Foundry-Agent nutzen solltest."
+      },
+      "prompts": [
+        {
+          "id": "p1",
+          "prompt": {
+            "en": "A customer returns the next day to continue the same support case; the service must keep every earlier message and tool call.",
+            "de": "Ein Kunde kommt am nächsten Tag zurück, um denselben Supportfall fortzusetzen; der Dienst muss jede frühere Nachricht und jeden Tool-Aufruf aufbewahren."
+          },
+          "answer": "t1",
+          "why": {
+            "en": "A conversation is a durable object that stores items across sessions and is reused with `conversation=<id>`.",
+            "de": "Eine Conversation ist ein dauerhaftes Objekt, das Items über Sitzungen hinweg speichert und mit `conversation=<id>` wiederverwendet wird."
+          }
+        },
+        {
+          "id": "p2",
+          "prompt": {
+            "en": "Your data policy forbids the service from persisting any response.",
+            "de": "Deine Datenrichtlinie verbietet, dass der Dienst irgendeine Antwort speichert."
+          },
+          "answer": "t2",
+          "why": {
+            "en": "With `store=False` the service persists nothing, so your app carries the earlier turns forward itself in `input`.",
+            "de": "Mit `store=False` speichert der Dienst nichts, daher trägt deine App die früheren Runden selbst in `input` weiter."
+          }
+        },
+        {
+          "id": "p3",
+          "prompt": {
+            "en": "A quick follow-up question should reuse the previous answer's context without creating a conversation object.",
+            "de": "Eine schnelle Folgefrage soll den Kontext der vorherigen Antwort nutzen, ohne ein Conversation-Objekt anzulegen."
+          },
+          "answer": "t3",
+          "why": {
+            "en": "`previous_response_id` chains a new response to an earlier stored response.",
+            "de": "`previous_response_id` verkettet eine neue Antwort mit einer früheren, gespeicherten Antwort."
+          }
+        }
+      ],
+      "targets": [
+        {
+          "id": "t1",
+          "text": {
+            "en": "Create a conversation and pass `conversation=<id>` on every call",
+            "de": "Eine Conversation anlegen und bei jedem Aufruf `conversation=<id>` übergeben"
+          }
+        },
+        {
+          "id": "t2",
+          "text": {
+            "en": "Set `store=False` and resend earlier turns in `input`",
+            "de": "`store=False` setzen und frühere Runden in `input` erneut senden"
+          }
+        },
+        {
+          "id": "t3",
+          "text": {
+            "en": "Pass `previous_response_id`",
+            "de": "`previous_response_id` übergeben"
+          }
+        },
+        {
+          "id": "t4",
+          "text": {
+            "en": "Create a new agent version for every turn",
+            "de": "Für jede Runde eine neue Agent Version anlegen"
+          }
+        }
+      ],
+      "explanation": {
+        "en": "Conversations keep durable server-side history, `previous_response_id` chains stored responses, and `store=False` keeps nothing on the service. Agent versions hold configuration, never chat history.",
+        "de": "Conversations halten dauerhaften serverseitigen Verlauf, `previous_response_id` verkettet gespeicherte Antworten, und `store=False` speichert nichts beim Dienst. Agent Versions enthalten Konfiguration, nie Chatverlauf."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/runtime-components"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-agents-vscode-03",
+      "type": "multi",
+      "domain": "D2",
+      "skill": "2.2.1",
+      "module": "agents-vscode",
+      "difficulty": 2,
+      "stem": {
+        "en": "Your agent has a file search tool over internal manuals and a web search tool. Users report that it often answers internal policy questions from the web. Which TWO actions are recommended to diagnose and fix this?",
+        "de": "Dein Agent hat ein File-Search-Tool über interne Handbücher und ein Websuche-Tool. Nutzer melden, dass er interne Richtlinienfragen oft aus dem Web beantwortet. Welche ZWEI Maßnahmen werden empfohlen, um das zu analysieren und zu beheben?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Add a decision rule to the instructions, such as “Use file search before web search for internal content”",
+            "de": "Eine Entscheidungsregel in die Anweisungen aufnehmen, etwa „Nutze File Search vor der Websuche für interne Inhalte“"
+          },
+          "correct": true,
+          "why": {
+            "en": "When tools overlap, the guidance is to tell the model what each tool is for and to add a decision rule.",
+            "de": "Überschneiden sich Tools, lautet die Empfehlung, dem Modell den Zweck jedes Tools zu nennen und eine Entscheidungsregel zu ergänzen."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Review traces to see which tool the model called and with which inputs",
+            "de": "Traces prüfen, um zu sehen, welches Tool das Modell mit welchen Eingaben aufgerufen hat"
+          },
+          "correct": true,
+          "why": {
+            "en": "Traces show whether and when the agent called each tool, with inputs and outputs — the documented way to validate tool behavior.",
+            "de": "Traces zeigen, ob und wann der Agent welches Tool mit welchen Ein- und Ausgaben aufgerufen hat – der dokumentierte Weg, das Tool-Verhalten zu prüfen."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Attach more search tools so the model has more choices",
+            "de": "Weitere Such-Tools anhängen, damit das Modell mehr Auswahl hat"
+          },
+          "correct": false,
+          "why": {
+            "en": "More overlapping tools make selection harder and add latency; add a tool only for a clear purpose.",
+            "de": "Mehr überlappende Tools erschweren die Auswahl und erhöhen die Latenz; füge ein Tool nur mit klarem Zweck hinzu."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Raise `temperature` so the model explores different tools",
+            "de": "`temperature` erhöhen, damit das Modell verschiedene Tools ausprobiert"
+          },
+          "correct": false,
+          "why": {
+            "en": "Higher temperature adds randomness; it doesn't teach the model which tool fits which content.",
+            "de": "Eine höhere Temperatur erhöht die Zufälligkeit; sie bringt dem Modell nicht bei, welches Tool zu welchem Inhalt passt."
+          }
+        },
+        {
+          "id": "e",
+          "text": {
+            "en": "Set `tool_choice` to `none`",
+            "de": "`tool_choice` auf `none` setzen"
+          },
+          "correct": false,
+          "why": {
+            "en": "`none` stops all tool calls, including the file search the agent needs.",
+            "de": "`none` unterbindet alle Tool-Aufrufe, auch die benötigte File Search."
+          }
+        }
+      ],
+      "explanation": {
+        "en": "Steer tool selection with specific instructions and decision rules, and verify the effect in traces; use `tool_choice` only when you need deterministic control.",
+        "de": "Steuere die Tool-Auswahl mit konkreten Anweisungen und Entscheidungsregeln und prüfe die Wirkung in Traces; `tool_choice` nutzt du nur, wenn du deterministische Kontrolle brauchst."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/tool-best-practice",
+        "https://learn.microsoft.com/en-us/training/modules/develop-ai-agents-azure-vs-code/7-extend-agent-capabilities"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-agents-vscode-04",
+      "type": "single",
+      "domain": "D2",
+      "skill": "2.2.6",
+      "module": "agents-vscode",
+      "difficulty": 1,
+      "stem": {
+        "en": "A prompt agent runs in production, and Application Insights is connected to its Foundry project. A product manager wants one view that shows token usage, latency, run success rate and evaluation scores over time. What should you open?",
+        "de": "Ein Prompt Agent läuft in Produktion, und Application Insights ist mit seinem Foundry-Projekt verbunden. Eine Produktmanagerin möchte eine Ansicht mit Token-Verbrauch, Latenz, Erfolgsquote der Läufe und Evaluierungs-Scores im Zeitverlauf. Was öffnest du?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": {
+            "en": "The agent's **Monitor** tab (Agent Monitoring Dashboard)",
+            "de": "Den **Monitor**-Tab des Agents (Agent Monitoring Dashboard)"
+          },
+          "correct": true,
+          "why": {
+            "en": "The dashboard shows summary cards and charts for token usage, latency, run success rate, evaluation metrics and red-team results.",
+            "de": "Das Dashboard zeigt Übersichtskarten und Diagramme zu Token-Verbrauch, Latenz, Erfolgsquote, Evaluierungsmetriken und Red-Team-Ergebnissen."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "The agent playground",
+            "de": "Den Agent-Playground"
+          },
+          "correct": false,
+          "why": {
+            "en": "The playground is for interactively testing single conversations, not for aggregated production metrics.",
+            "de": "Der Playground dient zum interaktiven Testen einzelner Gespräche, nicht für aggregierte Produktionsmetriken."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "The evaluator catalog",
+            "de": "Den Evaluator-Katalog"
+          },
+          "correct": false,
+          "why": {
+            "en": "The catalog lists the evaluators you can use; it doesn't chart your agent's runs.",
+            "de": "Der Katalog listet die nutzbaren Evaluatoren auf; er visualisiert keine Läufe deines Agents."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "The model deployment's details page",
+            "de": "Die Detailseite des Modell-Deployments"
+          },
+          "correct": false,
+          "why": {
+            "en": "A deployment is shared by many callers; agent run success rates and evaluation scores are shown per agent on its Monitor tab.",
+            "de": "Ein Deployment wird von vielen Aufrufern genutzt; Erfolgsquoten und Evaluierungs-Scores eines Agents zeigt dessen Monitor-Tab."
+          }
+        }
+      ],
+      "explanation": {
+        "en": "Use the Monitor tab for the agent's overall health; it reads its telemetry from the Application Insights resource connected to the project.",
+        "de": "Für den Gesamtzustand des Agents nutzt du den Monitor-Tab; er liest seine Telemetrie aus der mit dem Projekt verbundenen Application-Insights-Ressource."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/how-to-monitor-agents-dashboard"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-agents-vscode-05",
+      "type": "code",
+      "domain": "D2",
+      "skill": "2.2.6",
+      "module": "agents-vscode",
+      "difficulty": 2,
+      "stem": {
+        "en": "Complete the code so that evaluators automatically score live responses of `support-agent` as they complete, with at most 50 evaluation runs per hour.",
+        "de": "Vervollständige den Code so, dass Evaluatoren Live-Antworten von `support-agent` automatisch bewerten, sobald sie abgeschlossen sind – mit höchstens 50 Evaluierungsläufen pro Stunde."
+      },
+      "template": "from azure.ai.projects.models import (\n    ContinuousEvaluationRuleAction, EvaluationRule,\n    EvaluationRuleEventType, EvaluationRuleFilter,\n)\n\nrule = project.{{b1}}.create_or_update(\n    id=\"support-live-quality\",\n    evaluation_rule=EvaluationRule(\n        display_name=\"Support agent live quality\",\n        action=ContinuousEvaluationRuleAction(eval_id=evaluation.id, {{b2}}=50),\n        event_type=EvaluationRuleEventType.{{b3}},\n        filter=EvaluationRuleFilter(agent_name=\"support-agent\"),\n        enabled=True,\n    ),\n)",
+      "blanks": [
+        {
+          "id": "b1",
+          "options": [
+            {
+              "id": "a",
+              "code": "evaluation_rules",
+              "correct": true,
+              "why": {
+                "en": "The evaluation rules operations create continuous evaluation rules that fire on agent events.",
+                "de": "Die Evaluation-Rules-Operationen legen Regeln für kontinuierliche Evaluierung an, die bei Agent-Ereignissen auslösen."
+              }
+            },
+            {
+              "id": "b",
+              "code": "beta.schedules",
+              "correct": false,
+              "why": {
+                "en": "Schedules run evaluations on a fixed timetable (scheduled evaluation), not as each response completes.",
+                "de": "Schedules führen Evaluierungen nach festem Zeitplan aus (geplante Evaluierung), nicht beim Abschluss jeder Antwort."
+              }
+            },
+            {
+              "id": "c",
+              "code": "evaluators",
+              "correct": false,
+              "why": {
+                "en": "These operations manage evaluator definitions, such as generated rubric evaluators; they don't attach evaluations to live traffic.",
+                "de": "Diese Operationen verwalten Evaluator-Definitionen, etwa generierte Rubrik-Evaluatoren; an Live-Traffic hängen sie keine Evaluierungen."
+              }
+            }
+          ]
+        },
+        {
+          "id": "b2",
+          "options": [
+            {
+              "id": "a",
+              "code": "max_hourly_runs",
+              "correct": true,
+              "why": {
+                "en": "Caps how many evaluation runs the rule may start per hour (the default limit is 100).",
+                "de": "Begrenzt, wie viele Evaluierungsläufe die Regel pro Stunde starten darf (Standardlimit 100)."
+              }
+            },
+            {
+              "id": "b",
+              "code": "max_samples",
+              "correct": false,
+              "why": {
+                "en": "`max_samples` caps rows when you generate a dataset from traces; it isn't a setting of the rule action.",
+                "de": "`max_samples` begrenzt Zeilen beim Erzeugen eines Datasets aus Traces; es ist keine Einstellung der Regelaktion."
+              }
+            },
+            {
+              "id": "c",
+              "code": "max_traces",
+              "correct": false,
+              "why": {
+                "en": "`max_traces` limits the trace source of a scheduled trace evaluation, not the runs of a continuous rule.",
+                "de": "`max_traces` begrenzt die Trace-Quelle einer geplanten Trace-Evaluierung, nicht die Läufe einer kontinuierlichen Regel."
+              }
+            }
+          ]
+        },
+        {
+          "id": "b3",
+          "options": [
+            {
+              "id": "a",
+              "code": "RESPONSE_COMPLETED",
+              "correct": true,
+              "why": {
+                "en": "Fires when an agent response completes — the event that continuous evaluation reacts to.",
+                "de": "Löst aus, wenn eine Agent-Antwort abgeschlossen ist – das Ereignis, auf das kontinuierliche Evaluierung reagiert."
+              }
+            },
+            {
+              "id": "b",
+              "code": "MANUAL",
+              "correct": false,
+              "why": {
+                "en": "`MANUAL` is the enum's other value; it doesn't react to completed responses.",
+                "de": "`MANUAL` ist der andere Wert der Enumeration; auf abgeschlossene Antworten reagiert er nicht."
+              }
+            },
+            {
+              "id": "c",
+              "code": "CONVERSATION_CREATED",
+              "correct": false,
+              "why": {
+                "en": "No such member exists — `EvaluationRuleEventType` defines only `RESPONSE_COMPLETED` and `MANUAL`.",
+                "de": "Diesen Wert gibt es nicht – `EvaluationRuleEventType` definiert nur `RESPONSE_COMPLETED` und `MANUAL`."
+              }
+            }
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "Continuous evaluation is an evaluation rule on `RESPONSE_COMPLETED` events with a `ContinuousEvaluationRuleAction`. For the rule to run, the project's managed identity needs the Foundry User role.",
+        "de": "Kontinuierliche Evaluierung ist eine Evaluation Rule auf `RESPONSE_COMPLETED`-Ereignisse mit einer `ContinuousEvaluationRuleAction`. Damit die Regel läuft, braucht die Managed Identity des Projekts die Rolle Foundry User."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/how-to-monitor-agents-dashboard",
+        "https://learn.microsoft.com/en-us/python/api/azure-ai-projects/azure.ai.projects.models.evaluationruleeventtype"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-agents-vscode-06",
+      "type": "match",
+      "domain": "D2",
+      "skill": "2.2.6",
+      "module": "agents-vscode",
+      "difficulty": 1,
+      "stem": {
+        "en": "Match each question about your agent to the built-in agent evaluator that answers it.",
+        "de": "Ordne jede Frage zu deinem Agent dem integrierten Agent-Evaluator zu, der sie beantwortet."
+      },
+      "prompts": [
+        {
+          "id": "p1",
+          "prompt": {
+            "en": "Did the agent call the right tools with correct parameters and without redundant calls?",
+            "de": "Hat der Agent die richtigen Tools mit korrekten Parametern und ohne überflüssige Aufrufe aufgerufen?"
+          },
+          "answer": "t1",
+          "why": {
+            "en": "Tool Call Accuracy is the process evaluator for overall tool-call quality, including parameters and efficiency.",
+            "de": "Tool Call Accuracy ist der Prozess-Evaluator für die Gesamtqualität der Tool-Aufrufe, inklusive Parametern und Effizienz."
+          }
+        },
+        {
+          "id": "p2",
+          "prompt": {
+            "en": "Did the agent follow the rules and constraints in its system instructions?",
+            "de": "Hat der Agent die Regeln und Einschränkungen seiner Systemanweisungen befolgt?"
+          },
+          "answer": "t2",
+          "why": {
+            "en": "Task Adherence checks whether the agent's actions follow its assigned task, rules and policy constraints.",
+            "de": "Task Adherence prüft, ob die Aktionen des Agents seiner Aufgabe, seinen Regeln und Richtlinien folgen."
+          }
+        },
+        {
+          "id": "p3",
+          "prompt": {
+            "en": "Did the agent correctly understand what the user wanted?",
+            "de": "Hat der Agent richtig verstanden, was der Nutzer wollte?"
+          },
+          "answer": "t3",
+          "why": {
+            "en": "Intent Resolution measures whether the agent correctly identifies and addresses the user's intent.",
+            "de": "Intent Resolution misst, ob der Agent die Absicht des Nutzers richtig erkennt und bedient."
+          }
+        },
+        {
+          "id": "p4",
+          "prompt": {
+            "en": "Did a tool call fail with a technical error or a timeout?",
+            "de": "Ist ein Tool-Aufruf mit einem technischen Fehler oder Timeout gescheitert?"
+          },
+          "answer": "t4",
+          "why": {
+            "en": "Tool Call Success flags tool calls that ended in technical errors or exceptions.",
+            "de": "Tool Call Success markiert Tool-Aufrufe, die mit technischen Fehlern oder Ausnahmen endeten."
+          }
+        }
+      ],
+      "targets": [
+        {
+          "id": "t1",
+          "text": {
+            "en": "Tool Call Accuracy",
+            "de": "Tool Call Accuracy"
+          }
+        },
+        {
+          "id": "t2",
+          "text": {
+            "en": "Task Adherence",
+            "de": "Task Adherence"
+          }
+        },
+        {
+          "id": "t3",
+          "text": {
+            "en": "Intent Resolution",
+            "de": "Intent Resolution"
+          }
+        },
+        {
+          "id": "t4",
+          "text": {
+            "en": "Tool Call Success",
+            "de": "Tool Call Success"
+          }
+        },
+        {
+          "id": "t5",
+          "text": {
+            "en": "Fluency",
+            "de": "Fluency"
+          }
+        }
+      ],
+      "explanation": {
+        "en": "System evaluators judge the outcome (Task Completion, Task Adherence, Intent Resolution); process evaluators judge each tool step (Tool Call Accuracy, Tool Selection, Tool Input Accuracy, Tool Output Utilization, Tool Call Success). Fluency rates readability only.",
+        "de": "System-Evaluatoren bewerten das Ergebnis (Task Completion, Task Adherence, Intent Resolution); Prozess-Evaluatoren bewerten jeden Tool-Schritt (Tool Call Accuracy, Tool Selection, Tool Input Accuracy, Tool Output Utilization, Tool Call Success). Fluency bewertet nur die Lesbarkeit."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/concepts/evaluation-evaluators/agent-evaluators"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-agents-vscode-07",
+      "type": "single",
+      "domain": "D2",
+      "skill": "2.2.6",
+      "module": "agents-vscode",
+      "difficulty": 1,
+      "stem": {
+        "en": "Three evaluation runs of your support agent show that about a third of the rows failed. You want the failures grouped into recurring problem types, each with a generated description and recommended next steps, without writing code. What should you do?",
+        "de": "Drei Evaluierungsläufe deines Support-Agents zeigen, dass etwa ein Drittel der Zeilen fehlgeschlagen ist. Du möchtest die Fehler nach wiederkehrenden Problemtypen gruppiert sehen, jeweils mit generierter Beschreibung und empfohlenen nächsten Schritten, ohne Code zu schreiben. Was tust du?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Select the completed runs and generate a cluster analysis",
+            "de": "Die abgeschlossenen Läufe auswählen und eine Cluster-Analyse erzeugen"
+          },
+          "correct": true,
+          "why": {
+            "en": "Cluster analysis (preview) groups samples with similar problems and shows a description and recommendations for each cluster.",
+            "de": "Die Cluster-Analyse (Preview) gruppiert Stichproben mit ähnlichen Problemen und zeigt für jeden Cluster eine Beschreibung und Empfehlungen."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Schedule a red team scan",
+            "de": "Einen Red-Team-Scan planen"
+          },
+          "correct": false,
+          "why": {
+            "en": "Red teaming probes the agent with adversarial inputs; it doesn't group existing evaluation failures.",
+            "de": "Red Teaming testet den Agent mit gezielt bösartigen Eingaben; bestehende Evaluierungsfehler gruppiert es nicht."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Create an alert on the run success rate",
+            "de": "Einen Alert auf die Erfolgsquote der Läufe einrichten"
+          },
+          "correct": false,
+          "why": {
+            "en": "An alert tells you that a metric degraded; it doesn't explain or group the failures.",
+            "de": "Ein Alert meldet, dass sich eine Metrik verschlechtert hat; die Fehler erklärt oder gruppiert er nicht."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Raise `max_hourly_runs` on the continuous evaluation rule",
+            "de": "`max_hourly_runs` der Regel für kontinuierliche Evaluierung erhöhen"
+          },
+          "correct": false,
+          "why": {
+            "en": "That only allows more evaluation runs per hour; it adds no analysis.",
+            "de": "Das erlaubt nur mehr Evaluierungsläufe pro Stunde und liefert keine Analyse."
+          }
+        }
+      ],
+      "explanation": {
+        "en": "Cluster analysis turns many failing rows into a few named failure patterns with suggested fixes. The result isn't stored, so download it as CSV before you leave the page.",
+        "de": "Die Cluster-Analyse macht aus vielen fehlgeschlagenen Zeilen wenige benannte Fehlermuster mit Lösungsvorschlägen. Das Ergebnis wird nicht gespeichert, also lade es als CSV herunter, bevor du die Seite verlässt."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cluster-analysis"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-agents-vscode-08",
+      "type": "order",
+      "domain": "D2",
+      "skill": "2.2.6",
+      "module": "agents-vscode",
+      "difficulty": 2,
+      "stem": {
+        "en": "You want to evaluate a candidate version of your agent against realistic questions taken from production. Put the steps in order.",
+        "de": "Du willst eine Kandidaten-Version deines Agents mit realistischen Fragen aus der Produktion evaluieren. Bringe die Schritte in die richtige Reihenfolge."
+      },
+      "items": [
+        {
+          "id": "s1",
+          "text": {
+            "en": "Connect Application Insights to the project so that the production agent's requests are recorded as traces",
+            "de": "Application Insights mit dem Projekt verbinden, damit die Anfragen des produktiven Agents als Traces aufgezeichnet werden"
+          },
+          "why": {
+            "en": "A dataset built from traces needs traces from the deployed agent first.",
+            "de": "Ein Dataset aus Traces braucht zuerst Traces des bereitgestellten Agents."
+          }
+        },
+        {
+          "id": "s2",
+          "text": {
+            "en": "Generate an evaluation dataset from those traces, pinning `agent_version` and setting `max_samples`",
+            "de": "Aus diesen Traces ein Evaluierungs-Dataset erzeugen, dabei `agent_version` festlegen und `max_samples` setzen"
+          },
+          "why": {
+            "en": "Intelligent sampling picks a representative, deduplicated subset; pinning the version avoids mixing the behavior of several versions.",
+            "de": "Intelligentes Sampling wählt eine repräsentative, deduplizierte Teilmenge; die feste Version verhindert, dass Verhalten mehrerer Versionen vermischt wird."
+          }
+        },
+        {
+          "id": "s3",
+          "text": {
+            "en": "Run an evaluation that sends the dataset's queries to the candidate agent version and scores the answers with evaluators such as `builtin.task_adherence`",
+            "de": "Eine Evaluierung ausführen, die die Fragen des Datasets an die Kandidaten-Version sendet und die Antworten mit Evaluatoren wie `builtin.task_adherence` bewertet"
+          },
+          "why": {
+            "en": "An `azure_ai_target_completions` run with an `azure_ai_agent` target can only start once the dataset exists.",
+            "de": "Ein `azure_ai_target_completions`-Lauf mit einem `azure_ai_agent`-Ziel kann erst starten, wenn das Dataset existiert."
+          }
+        },
+        {
+          "id": "s4",
+          "text": {
+            "en": "Generate a cluster analysis on the completed run to group the failures",
+            "de": "Für den abgeschlossenen Lauf eine Cluster-Analyse erzeugen, um die Fehler zu gruppieren"
+          },
+          "why": {
+            "en": "Cluster analysis needs one or more completed evaluation runs.",
+            "de": "Die Cluster-Analyse braucht einen oder mehrere abgeschlossene Evaluierungsläufe."
+          }
+        }
+      ],
+      "explanation": {
+        "en": "Traces → dataset → evaluation run against the target version → analysis. Production traces make the test set realistic; a pinned version keeps the signal clean.",
+        "de": "Traces → Dataset → Evaluierungslauf gegen die Zielversion → Analyse. Produktions-Traces machen das Testset realistisch; eine feste Version hält das Signal sauber."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/traces-to-dataset",
+        "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/evaluate-agent",
+        "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/cluster-analysis"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-agents-vscode-09",
+      "type": "order",
+      "domain": "D2",
+      "skill": "2.3.3",
+      "module": "agents-vscode",
+      "difficulty": 1,
+      "stem": {
+        "en": "You want to inspect the spans of a prompt agent's requests without changing any code. Put the steps in order.",
+        "de": "Du willst die Spans der Anfragen eines Prompt Agents ansehen, ohne Code zu ändern. Bringe die Schritte in die richtige Reihenfolge."
+      },
+      "items": [
+        {
+          "id": "s1",
+          "text": {
+            "en": "Connect an Application Insights resource to the Foundry project",
+            "de": "Eine Application-Insights-Ressource mit dem Foundry-Projekt verbinden"
+          },
+          "why": {
+            "en": "Server-side tracing starts only after Application Insights is connected.",
+            "de": "Serverseitiges Tracing beginnt erst, wenn Application Insights verbunden ist."
+          }
+        },
+        {
+          "id": "s2",
+          "text": {
+            "en": "Run the agent, for example in the playground",
+            "de": "Den Agent ausführen, zum Beispiel im Playground"
+          },
+          "why": {
+            "en": "Traces exist only for runs that happen after tracing is enabled.",
+            "de": "Traces gibt es nur für Läufe nach der Aktivierung des Tracings."
+          }
+        },
+        {
+          "id": "s3",
+          "text": {
+            "en": "Wait a few minutes for ingestion, then open the Traces view",
+            "de": "Einige Minuten auf die Erfassung warten und dann die Traces-Ansicht öffnen"
+          },
+          "why": {
+            "en": "Telemetry needs time to be ingested before it is listed.",
+            "de": "Telemetrie braucht Zeit zur Erfassung, bevor sie gelistet wird."
+          }
+        },
+        {
+          "id": "s4",
+          "text": {
+            "en": "Select the trace and step through its spans",
+            "de": "Den Trace auswählen und seine Spans durchgehen"
+          },
+          "why": {
+            "en": "Inspecting individual spans is the final debugging step.",
+            "de": "Einzelne Spans zu prüfen ist der letzte Debugging-Schritt."
+          }
+        }
+      ],
+      "explanation": {
+        "en": "Connect → generate traffic → wait for ingestion → inspect. To view traces you also need the Log Analytics Reader role on the connected resource.",
+        "de": "Verbinden → Traffic erzeugen → Erfassung abwarten → prüfen. Zum Ansehen brauchst du außerdem die Rolle Log Analytics Reader auf der verbundenen Ressource."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/trace-agent-setup"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-agents-vscode-10",
+      "type": "code",
+      "domain": "D2",
+      "skill": "2.3.3",
+      "module": "agents-vscode",
+      "difficulty": 2,
+      "stem": {
+        "en": "Complete the code so that the app sends its agent spans to the Application Insights resource that is connected to the Foundry project.",
+        "de": "Vervollständige den Code so, dass die App ihre Agent-Spans an die Application-Insights-Ressource sendet, die mit dem Foundry-Projekt verbunden ist."
+      },
+      "template": "import os\nos.environ[\"{{b1}}\"] = \"true\"\n\nfrom azure.ai.projects import AIProjectClient\nfrom azure.identity import DefaultAzureCredential\nfrom azure.monitor.opentelemetry import configure_azure_monitor\n\nproject = AIProjectClient(endpoint=os.environ[\"FOUNDRY_PROJECT_ENDPOINT\"],\n                          credential=DefaultAzureCredential(), allow_preview=True)\nconn = project.telemetry.{{b2}}()\n{{b3}}(connection_string=conn)\n\nopenai = project.get_openai_client(agent_name=\"support-agent\")\nprint(openai.responses.create(input=\"Status of FAB-1042?\").output_text)",
+      "blanks": [
+        {
+          "id": "b1",
+          "options": [
+            {
+              "id": "a",
+              "code": "AZURE_EXPERIMENTAL_ENABLE_GENAI_TRACING",
+              "correct": true,
+              "why": {
+                "en": "GenAI tracing is an opt-in preview; this variable must be `true` before instrumentation starts.",
+                "de": "GenAI-Tracing ist eine Opt-in-Preview; diese Variable muss vor dem Start der Instrumentierung `true` sein."
+              }
+            },
+            {
+              "id": "b",
+              "code": "OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT",
+              "correct": false,
+              "why": {
+                "en": "This only adds message content to spans that tracing already produces; it doesn't enable tracing.",
+                "de": "Das ergänzt nur Nachrichteninhalte in Spans, die das Tracing ohnehin erzeugt; Tracing aktiviert es nicht."
+              }
+            },
+            {
+              "id": "c",
+              "code": "AZURE_TRACING_GEN_AI_INSTRUMENT_RESPONSES_API",
+              "correct": false,
+              "why": {
+                "en": "This toggles auto-instrumentation of Responses and Conversations calls (default `true`); it doesn't opt in to tracing.",
+                "de": "Das schaltet die automatische Instrumentierung von Responses- und Conversations-Aufrufen um (Standard `true`); für das Tracing selbst ist es kein Opt-in."
+              }
+            }
+          ]
+        },
+        {
+          "id": "b2",
+          "options": [
+            {
+              "id": "a",
+              "code": "get_application_insights_connection_string",
+              "correct": true,
+              "why": {
+                "en": "Returns the connection string of the Application Insights resource connected to the project.",
+                "de": "Liefert den Connection String der mit dem Projekt verbundenen Application-Insights-Ressource."
+              }
+            },
+            {
+              "id": "b",
+              "code": "get_openai_client",
+              "correct": false,
+              "why": {
+                "en": "That method belongs to the project client and returns an inference client, not a connection string.",
+                "de": "Diese Methode gehört zum Projekt-Client und liefert einen Inferenz-Client, keinen Connection String."
+              }
+            },
+            {
+              "id": "c",
+              "code": "get_token",
+              "correct": false,
+              "why": {
+                "en": "`get_token` is a credential method that returns an access token, not the Application Insights connection string.",
+                "de": "`get_token` ist eine Methode von Credentials und liefert ein Zugriffstoken, nicht den Application-Insights-Connection-String."
+              }
+            }
+          ]
+        },
+        {
+          "id": "b3",
+          "options": [
+            {
+              "id": "a",
+              "code": "configure_azure_monitor",
+              "correct": true,
+              "why": {
+                "en": "Sets up the OpenTelemetry pipeline that exports spans to Azure Monitor Application Insights.",
+                "de": "Richtet die OpenTelemetry-Pipeline ein, die Spans nach Azure Monitor Application Insights exportiert."
+              }
+            },
+            {
+              "id": "b",
+              "code": "AIProjectInstrumentor",
+              "correct": false,
+              "why": {
+                "en": "The instrumentor enables GenAI instrumentation through `.instrument()`; exporting spans is the job of an exporter such as `configure_azure_monitor`.",
+                "de": "Der Instrumentor aktiviert die GenAI-Instrumentierung über `.instrument()`; das Exportieren der Spans erledigt ein Exporter wie `configure_azure_monitor`."
+              }
+            },
+            {
+              "id": "c",
+              "code": "ConsoleSpanExporter",
+              "correct": false,
+              "why": {
+                "en": "It prints spans to standard output for local debugging instead of sending them to Application Insights.",
+                "de": "Er gibt Spans für lokales Debugging auf der Konsole aus, statt sie an Application Insights zu senden."
+              }
+            }
+          ]
+        }
+      ],
+      "explanation": {
+        "en": "Client-side tracing: opt in with `AZURE_EXPERIMENTAL_ENABLE_GENAI_TRACING`, then export with `configure_azure_monitor` and the project's Application Insights connection string.",
+        "de": "Clientseitiges Tracing: mit `AZURE_EXPERIMENTAL_ENABLE_GENAI_TRACING` aktivieren und dann mit `configure_azure_monitor` und dem Application-Insights-Connection-String des Projekts exportieren."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/trace-agent-client-side"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-agents-vscode-11",
+      "type": "single",
+      "domain": "D2",
+      "skill": "2.3.3",
+      "module": "agents-vscode",
+      "difficulty": 2,
+      "stem": {
+        "en": "Users report that some answers from your agent take about 15 seconds, and the Monitor tab confirms the high latency. You need to find out whether the time is spent in the model call or in a specific MCP tool call. What should you do?",
+        "de": "Nutzer melden, dass manche Antworten deines Agents etwa 15 Sekunden dauern, und der Monitor-Tab bestätigt die hohe Latenz. Du musst herausfinden, ob die Zeit im Modellaufruf oder in einem bestimmten MCP-Tool-Aufruf steckt. Was tust du?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Open a slow trace and compare the durations of its model-call and tool-call spans",
+            "de": "Einen langsamen Trace öffnen und die Dauern seiner Modell- und Tool-Aufruf-Spans vergleichen"
+          },
+          "correct": true,
+          "why": {
+            "en": "Each span records its start and end time, so a trace breaks the total latency down step by step.",
+            "de": "Jeder Span erfasst Start- und Endzeit, daher schlüsselt ein Trace die Gesamtlatenz Schritt für Schritt auf."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Check the run success rate on the Monitor tab",
+            "de": "Die Erfolgsquote der Läufe im Monitor-Tab prüfen"
+          },
+          "correct": false,
+          "why": {
+            "en": "The success rate counts failed runs; it says nothing about where time is spent.",
+            "de": "Die Erfolgsquote zählt fehlgeschlagene Läufe; wo die Zeit verbraucht wird, verrät sie nicht."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Lower the agent's `temperature`",
+            "de": "Die `temperature` des Agents senken"
+          },
+          "correct": false,
+          "why": {
+            "en": "Temperature controls randomness, not latency, and it diagnoses nothing.",
+            "de": "Die Temperatur steuert die Zufälligkeit, nicht die Latenz, und diagnostiziert nichts."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Run a Task Adherence evaluation",
+            "de": "Eine Task-Adherence-Evaluierung ausführen"
+          },
+          "correct": false,
+          "why": {
+            "en": "Task Adherence scores whether the agent followed its instructions, not how long each step took.",
+            "de": "Task Adherence bewertet, ob der Agent seine Anweisungen befolgt hat, nicht wie lange jeder Schritt dauerte."
+          }
+        }
+      ],
+      "explanation": {
+        "en": "Aggregated metrics tell you that latency is high; span durations in a trace tell you where the time goes.",
+        "de": "Aggregierte Metriken zeigen, dass die Latenz hoch ist; Span-Dauern in einem Trace zeigen, wohin die Zeit geht."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/observability/concepts/trace-agent-concept",
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/development-lifecycle"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-agents-vscode-12",
+      "type": "multi",
+      "domain": "D2",
+      "skill": "2.3.3",
+      "module": "agents-vscode",
+      "difficulty": 3,
+      "stem": {
+        "en": "Your production agent must raise an alert when token consumption spikes or when evaluation scores for violent content degrade on live traffic. You don't want to evaluate every single response. Which TWO configurations meet the requirement?",
+        "de": "Dein produktiver Agent soll einen Alert auslösen, wenn der Token-Verbrauch sprunghaft steigt oder die Evaluierungs-Scores für gewalthaltige Inhalte auf Live-Traffic schlechter werden. Du willst nicht jede einzelne Antwort evaluieren. Welche ZWEI Konfigurationen erfüllen die Anforderung?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": {
+            "en": "A continuous evaluation rule with `builtin.violence`, capped by `max_hourly_runs` or a sampling rate",
+            "de": "Eine Regel für kontinuierliche Evaluierung mit `builtin.violence`, begrenzt durch `max_hourly_runs` oder eine Sampling-Rate"
+          },
+          "correct": true,
+          "why": {
+            "en": "Continuous evaluation scores completed live responses; the hourly cap or sampling rate keeps volume and cost down.",
+            "de": "Kontinuierliche Evaluierung bewertet abgeschlossene Live-Antworten; Stundenlimit oder Sampling-Rate halten Menge und Kosten niedrig."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Alerts (preview) in the agent's Monitor settings for token usage and evaluation scores",
+            "de": "Alerts (Preview) in den Monitor-Einstellungen des Agents für Token-Verbrauch und Evaluierungs-Scores"
+          },
+          "correct": true,
+          "why": {
+            "en": "Monitor alerts detect anomalies in latency, token usage, evaluation scores or red-team findings.",
+            "de": "Monitor-Alerts erkennen Auffälligkeiten bei Latenz, Token-Verbrauch, Evaluierungs-Scores oder Red-Team-Befunden."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Set `OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT` to `true` in production",
+            "de": "`OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT` in Produktion auf `true` setzen"
+          },
+          "correct": false,
+          "why": {
+            "en": "Content recording only adds message text to spans and raises privacy risk; it creates no alert.",
+            "de": "Content Recording ergänzt nur Nachrichtentext in Spans und erhöht das Datenschutzrisiko; einen Alert erzeugt es nicht."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Run the `microsoft/ai-agent-evals` GitHub Action on every commit",
+            "de": "Die GitHub Action `microsoft/ai-agent-evals` bei jedem Commit ausführen"
+          },
+          "correct": false,
+          "why": {
+            "en": "The action evaluates test datasets before release, not live traffic, and running it on every commit adds cost.",
+            "de": "Die Action evaluiert Test-Datasets vor dem Release, nicht Live-Traffic, und jeder Commit erhöht die Kosten."
+          }
+        },
+        {
+          "id": "e",
+          "text": {
+            "en": "Schedule a red team scan",
+            "de": "Einen Red-Team-Scan planen"
+          },
+          "correct": false,
+          "why": {
+            "en": "Red teaming probes for risks with adversarial inputs; it measures neither live responses nor token usage.",
+            "de": "Red Teaming sucht mit gezielt bösartigen Eingaben nach Risiken; weder Live-Antworten noch Token-Verbrauch misst es."
+          }
+        }
+      ],
+      "explanation": {
+        "en": "Production safety signals come from evaluators running on sampled live traffic; alerts on the Monitor tab turn anomalies in tokens or scores into notifications.",
+        "de": "Sicherheitssignale in der Produktion stammen von Evaluatoren auf gesampeltem Live-Traffic; Alerts im Monitor-Tab machen aus Auffälligkeiten bei Tokens oder Scores Benachrichtigungen."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/how-to-monitor-agents-dashboard",
+        "https://learn.microsoft.com/en-us/python/api/azure-ai-projects/azure.ai.projects.models.continuousevaluationruleaction"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-agents-vscode-13",
+      "type": "match",
+      "domain": "D2",
+      "skill": "2.3.3",
+      "module": "agents-vscode",
+      "difficulty": 1,
+      "stem": {
+        "en": "Match each observability need to the tool that serves it.",
+        "de": "Ordne jedem Observability-Bedarf das passende Werkzeug zu."
+      },
+      "prompts": [
+        {
+          "id": "p1",
+          "prompt": {
+            "en": "Step through a local agent run live, inspecting streamed tool calls and hitting breakpoints",
+            "de": "Einen lokalen Agent-Lauf live durchgehen, gestreamte Tool-Aufrufe prüfen und Breakpoints nutzen"
+          },
+          "answer": "t1",
+          "why": {
+            "en": "Agent Inspector in the Foundry Toolkit debugs local agents with live requests, tool events and breakpoints.",
+            "de": "Agent Inspector im Foundry Toolkit debuggt lokale Agents mit Live-Anfragen, Tool-Ereignissen und Breakpoints."
+          }
+        },
+        {
+          "id": "p2",
+          "prompt": {
+            "en": "Collect OpenTelemetry spans on your laptop without any Application Insights resource",
+            "de": "OpenTelemetry-Spans auf dem Laptop sammeln, ganz ohne Application-Insights-Ressource"
+          },
+          "answer": "t2",
+          "why": {
+            "en": "The Foundry Toolkit receives spans in a local OTLP-compatible collector; local collection doesn't need Application Insights.",
+            "de": "Das Foundry Toolkit empfängt Spans in einem lokalen OTLP-kompatiblen Collector; lokale Erfassung braucht kein Application Insights."
+          }
+        },
+        {
+          "id": "p3",
+          "prompt": {
+            "en": "Step through a production trace and its conversation results in the Foundry portal, without writing queries",
+            "de": "Einen Produktions-Trace samt Conversation-Ergebnissen im Foundry-Portal durchgehen, ohne Abfragen zu schreiben"
+          },
+          "answer": "t3",
+          "why": {
+            "en": "On the Traces tab you select a trace to step through each span and review its conversation results — no query needed.",
+            "de": "Im Tab Traces wählst du einen Trace, gehst jeden Span durch und prüfst die Conversation-Ergebnisse – ganz ohne Abfrage."
+          }
+        },
+        {
+          "id": "p4",
+          "prompt": {
+            "en": "Query the raw spans together with your application's other telemetry",
+            "de": "Die Roh-Spans zusammen mit der übrigen Telemetrie deiner Anwendung abfragen"
+          },
+          "answer": "t4",
+          "why": {
+            "en": "Foundry sends traces to Application Insights, where you can query them like any other telemetry.",
+            "de": "Foundry sendet Traces an Application Insights, wo du sie wie jede andere Telemetrie abfragen kannst."
+          }
+        }
+      ],
+      "targets": [
+        {
+          "id": "t1",
+          "text": {
+            "en": "Agent Inspector (Foundry Toolkit)",
+            "de": "Agent Inspector (Foundry Toolkit)"
+          }
+        },
+        {
+          "id": "t2",
+          "text": {
+            "en": "Foundry Toolkit tracing with a local OTLP collector",
+            "de": "Foundry-Toolkit-Tracing mit lokalem OTLP-Collector"
+          }
+        },
+        {
+          "id": "t3",
+          "text": {
+            "en": "Traces view in the Foundry portal",
+            "de": "Traces-Ansicht im Foundry-Portal"
+          }
+        },
+        {
+          "id": "t4",
+          "text": {
+            "en": "Azure Monitor Application Insights",
+            "de": "Azure Monitor Application Insights"
+          }
+        },
+        {
+          "id": "t5",
+          "text": {
+            "en": "Model Playground",
+            "de": "Model Playground"
+          }
+        }
+      ],
+      "explanation": {
+        "en": "Agent Inspector = live local debugging; Toolkit tracing = stored spans on your machine; portal Traces view = production traces; Application Insights = raw telemetry for your own queries.",
+        "de": "Agent Inspector = Live-Debugging lokal; Toolkit-Tracing = gespeicherte Spans auf deinem Rechner; Traces-Ansicht im Portal = Produktions-Traces; Application Insights = Roh-Telemetrie für eigene Abfragen."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/trace-agent-setup",
+        "https://learn.microsoft.com/en-us/azure/foundry/how-to/develop/get-started-projects-visual-studio-code"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-agents-vscode-14",
+      "type": "single",
+      "domain": "D1",
+      "skill": "1.2.3",
+      "module": "agents-vscode",
+      "difficulty": 2,
+      "stem": {
+        "en": "`support-agent` is published to Microsoft Teams. Developers save new versions several times a day while they iterate. Teams users must keep getting version 7 until the quality team approves a newer version. What should you configure?",
+        "de": "`support-agent` ist in Microsoft Teams veröffentlicht. Entwickler speichern beim Iterieren mehrmals täglich neue Versionen. Teams-Nutzer sollen Version 7 erhalten, bis das Qualitätsteam eine neuere Version freigibt. Was konfigurierst du?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Set the agent endpoint's `version_selector` to a `FixedRatio` rule that sends 100 % of traffic to version 7",
+            "de": "Den `version_selector` des Agent-Endpoints auf eine `FixedRatio`-Regel setzen, die 100 % des Traffics an Version 7 leitet"
+          },
+          "correct": true,
+          "why": {
+            "en": "Pinning makes version 7 the active version; newly saved versions don't change what is served until you update the selector.",
+            "de": "Durch das Festlegen wird Version 7 zur aktiven Version; neu gespeicherte Versionen ändern das Ausgelieferte erst, wenn du den Selector anpasst."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Keep the default **Always use latest** routing and ask developers to save less often",
+            "de": "Das Standard-Routing **Always use latest** beibehalten und Entwickler bitten, seltener zu speichern"
+          },
+          "correct": false,
+          "why": {
+            "en": "With Always use latest, every newly saved version is served immediately — in Teams too.",
+            "de": "Bei Always use latest wird jede neu gespeicherte Version sofort ausgeliefert – auch in Teams."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Create a new agent for each release and publish it to Teams again",
+            "de": "Für jedes Release einen neuen Agent anlegen und erneut in Teams veröffentlichen"
+          },
+          "correct": false,
+          "why": {
+            "en": "A new agent gets a new endpoint and a new identity, so consumers and role assignments would change with every release.",
+            "de": "Ein neuer Agent erhält einen neuen Endpoint und eine neue Identität, sodass sich Nutzer und Rollenzuweisungen mit jedem Release ändern würden."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Edit version 7 in place whenever a fix is approved",
+            "de": "Version 7 direkt bearbeiten, sobald eine Korrektur freigegeben ist"
+          },
+          "correct": false,
+          "why": {
+            "en": "Agent versions are immutable; any change creates a new version.",
+            "de": "Agent Versions sind unveränderlich; jede Änderung erzeugt eine neue Version."
+          }
+        }
+      ],
+      "explanation": {
+        "en": "The stable endpoint serves exactly one active version: the latest by default, or a pinned version when production needs stability.",
+        "de": "Der stabile Endpoint liefert genau eine aktive Version aus: standardmäßig die neueste, oder eine festgelegte, wenn die Produktion Stabilität braucht."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/configure-agent",
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/development-lifecycle"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-agents-vscode-15",
+      "type": "multi",
+      "domain": "D1",
+      "skill": "1.2.4",
+      "module": "agents-vscode",
+      "difficulty": 3,
+      "stem": {
+        "en": "Each push to `main` must evaluate the candidate `support-agent:9` against the production version `support-agent:7`, report whether score differences are statistically significant, and sign in to Azure without storing secrets. Which TWO steps should you add to the GitHub Actions workflow?",
+        "de": "Jeder Push auf `main` soll die Kandidatin `support-agent:9` gegen die Produktionsversion `support-agent:7` evaluieren, melden, ob Score-Unterschiede statistisch signifikant sind, und sich ohne gespeicherte Secrets bei Azure anmelden. Welche ZWEI Schritte fügst du dem GitHub-Actions-Workflow hinzu?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Run `microsoft/ai-agent-evals` with `agent-ids: support-agent:7,support-agent:9`, `baseline-agent-id: support-agent:7` and a data file that lists evaluators and test queries",
+            "de": "`microsoft/ai-agent-evals` mit `agent-ids: support-agent:7,support-agent:9`, `baseline-agent-id: support-agent:7` und einer Datendatei mit Evaluatoren und Testfragen ausführen"
+          },
+          "correct": true,
+          "why": {
+            "en": "The action invokes both versions with the test queries, applies the evaluators and reports confidence intervals with a pairwise significance test against the baseline.",
+            "de": "Die Action ruft beide Versionen mit den Testfragen auf, wendet die Evaluatoren an und meldet Konfidenzintervalle mit einem paarweisen Signifikanztest gegen die Baseline."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Sign in with `azure/login` by using OpenID Connect federated credentials and grant the workflow `id-token: write`",
+            "de": "Mit `azure/login` über OpenID-Connect-Verbundanmeldeinformationen anmelden und dem Workflow `id-token: write` gewähren"
+          },
+          "correct": true,
+          "why": {
+            "en": "OIDC federation gives the workflow a Microsoft Entra token without a stored client secret — the recommended authentication.",
+            "de": "Die OIDC-Föderation gibt dem Workflow ein Microsoft-Entra-Token ohne gespeichertes Client-Secret – die empfohlene Authentifizierung."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Store a Foundry API key as a repository secret and send it to the agent endpoint",
+            "de": "Einen Foundry-API-Key als Repository-Secret speichern und an den Agent-Endpoint senden"
+          },
+          "correct": false,
+          "why": {
+            "en": "Agent endpoints don't support API-key authentication, and a stored key violates the no-secrets requirement.",
+            "de": "Agent-Endpoints unterstützen keine API-Key-Authentifizierung, und ein gespeicherter Key verletzt die Vorgabe ohne Secrets."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Invoke the candidate once with `azd ai agent invoke` and treat any non-empty reply as a pass",
+            "de": "Die Kandidatin einmal mit `azd ai agent invoke` aufrufen und jede nicht leere Antwort als bestanden werten"
+          },
+          "correct": false,
+          "why": {
+            "en": "That is a smoke test: it measures no quality and gives no statistical comparison.",
+            "de": "Das ist ein Smoke-Test: Er misst keine Qualität und liefert keinen statistischen Vergleich."
+          }
+        },
+        {
+          "id": "e",
+          "text": {
+            "en": "Ask a reviewer to compare both versions in the portal playground before each merge",
+            "de": "Vor jedem Merge eine Person beide Versionen im Portal-Playground vergleichen lassen"
+          },
+          "correct": false,
+          "why": {
+            "en": "A manual check isn't an automated, repeatable CI gate and produces no statistics.",
+            "de": "Eine manuelle Prüfung ist kein automatisiertes, wiederholbares CI-Gate und liefert keine Statistik."
+          }
+        }
+      ],
+      "explanation": {
+        "en": "Gate releases with the agent evaluation GitHub Action and keyless OIDC sign-in. Agents are addressed as `name:version`; to control cost, trigger the evaluation on meaningful changes rather than every trivial commit.",
+        "de": "Sichere Releases mit der GitHub Action zur Agent-Evaluierung und schlüsselloser OIDC-Anmeldung ab. Agents werden als `name:version` adressiert; um Kosten zu sparen, löst du die Evaluierung bei relevanten Änderungen aus statt bei jedem kleinen Commit."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/how-to/evaluation-github-action",
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/how-to/configure-agent"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-agents-vscode-16",
+      "type": "single",
+      "domain": "D1",
+      "skill": "1.4.3",
+      "module": "agents-vscode",
+      "difficulty": 3,
+      "caseId": "case-fabrikam-support",
+      "stem": {
+        "en": "Refer to the Fabrikam case study. Tracing is already enabled for the support agent. How should you meet requirement 4 for the trace data?",
+        "de": "Beziehe dich auf die Fallstudie Fabrikam. Für den Support-Agent ist Tracing bereits aktiviert. Wie erfüllst du Anforderung 4 für die Trace-Daten?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Set the `AppGenAIContent` table to **Protected** and grant **Privileged Monitoring Data Reader** on the Application Insights resource only to the compliance team; developers keep **Log Analytics Reader**",
+            "de": "Die Tabelle `AppGenAIContent` auf **Protected** setzen und **Privileged Monitoring Data Reader** auf der Application-Insights-Ressource nur dem Compliance-Team geben; Entwickler behalten **Log Analytics Reader**"
+          },
+          "correct": true,
+          "why": {
+            "en": "Prompts, instructions and tool-call arguments and results are stored in `AppGenAIContent`. Once it is protected, only Privileged Monitoring Data Reader can read them, while standard readers still see timing and token data.",
+            "de": "Prompts, Anweisungen sowie Tool-Argumente und -Ergebnisse liegen in `AppGenAIContent`. Ist die Tabelle geschützt, kann nur Privileged Monitoring Data Reader sie lesen, während normale Leser weiterhin Zeiten und Token-Daten sehen."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Set `OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT` to `true` and give developers Log Analytics Reader",
+            "de": "`OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT` auf `true` setzen und Entwicklern Log Analytics Reader geben"
+          },
+          "correct": false,
+          "why": {
+            "en": "That records even more message content and lets every developer read it — the opposite of the requirement.",
+            "de": "Das zeichnet noch mehr Nachrichteninhalte auf und lässt jeden Entwickler sie lesen – das Gegenteil der Anforderung."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Disconnect Application Insights and review conversations in the playground instead",
+            "de": "Application Insights trennen und Gespräche stattdessen im Playground prüfen"
+          },
+          "correct": false,
+          "why": {
+            "en": "Without Application Insights there are no traces, so developers lose latency and token data as well.",
+            "de": "Ohne Application Insights gibt es keine Traces, sodass Entwickler auch Latenz- und Token-Daten verlieren."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Assign the compliance team the Foundry Owner role on the project",
+            "de": "Dem Compliance-Team die Rolle Foundry Owner auf dem Projekt zuweisen"
+          },
+          "correct": false,
+          "why": {
+            "en": "Foundry roles govern the Foundry resource and project; they don't grant read access to a protected Log Analytics table.",
+            "de": "Foundry-Rollen steuern die Foundry-Ressource und das Projekt; Lesezugriff auf eine geschützte Log-Analytics-Tabelle gewähren sie nicht."
+          }
+        }
+      ],
+      "explanation": {
+        "en": "Separate sensitive GenAI content from the rest of the trace: protect `AppGenAIContent` (preview guidance) and grant Privileged Monitoring Data Reader only to the people who must read prompts and tool arguments.",
+        "de": "Trenne sensible GenAI-Inhalte vom Rest des Traces: Schütze `AppGenAIContent` (Preview-Anleitung) und gib Privileged Monitoring Data Reader nur den Personen, die Prompts und Tool-Argumente lesen müssen."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/traces-sensitive-content",
+        "https://learn.microsoft.com/en-us/azure/foundry/observability/how-to/trace-agent-setup"
+      ],
+      "lastVerified": "2026-11-06"
+    },
+    {
+      "id": "q-agents-vscode-17",
+      "type": "multi",
+      "domain": "D1",
+      "skill": "1.4.3",
+      "module": "agents-vscode",
+      "difficulty": 2,
+      "stem": {
+        "en": "Security auditors must answer two questions about `support-agent`: for which downstream resources did its agent identity obtain tokens, including on behalf of which user, and which arguments did it send to its tools? Which TWO sources should they use?",
+        "de": "Security-Auditoren müssen zwei Fragen zu `support-agent` beantworten: Für welche nachgelagerten Ressourcen hat seine Agent-Identität Tokens erhalten, auch im Auftrag welches Nutzers, und welche Argumente hat er an seine Tools gesendet? Welche ZWEI Quellen nutzen sie?"
+      },
+      "options": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Microsoft Entra sign-in logs filtered by agent type",
+            "de": "Microsoft-Entra-Anmeldeprotokolle, gefiltert nach Agent-Typ"
+          },
+          "correct": true,
+          "why": {
+            "en": "Agent sign-in logs show which agent identity obtained a token for which resource, including the user for delegated access.",
+            "de": "Agent-Anmeldeprotokolle zeigen, welche Agent-Identität ein Token für welche Ressource erhalten hat, inklusive des Nutzers bei delegiertem Zugriff."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Foundry tracing in the connected Application Insights resource",
+            "de": "Foundry-Tracing in der verbundenen Application-Insights-Ressource"
+          },
+          "correct": true,
+          "why": {
+            "en": "Traces record each tool call per agent, with its arguments and results.",
+            "de": "Traces erfassen jeden Tool-Aufruf je Agent mit Argumenten und Ergebnissen."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Microsoft Entra audit logs",
+            "de": "Microsoft-Entra-Überwachungsprotokolle (Audit Logs)"
+          },
+          "correct": false,
+          "why": {
+            "en": "Audit logs record the creation and deletion of agent blueprints and identities, not token issuance.",
+            "de": "Audit Logs erfassen das Anlegen und Löschen von Agent-Blueprints und -Identitäten, nicht die Token-Ausstellung."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "The agent's definition file in the Git repository",
+            "de": "Die Definitionsdatei des Agents im Git-Repository"
+          },
+          "correct": false,
+          "why": {
+            "en": "A definition describes configuration, not what the agent actually did.",
+            "de": "Eine Definition beschreibt die Konfiguration, nicht was der Agent tatsächlich getan hat."
+          }
+        },
+        {
+          "id": "e",
+          "text": {
+            "en": "Conversations in the agent playground",
+            "de": "Gespräche im Agent-Playground"
+          },
+          "correct": false,
+          "why": {
+            "en": "Playground chats are test sessions; they show neither production activity nor token issuance.",
+            "de": "Playground-Chats sind Testsitzungen; sie zeigen weder Produktionsaktivität noch Token-Ausstellung."
+          }
+        }
+      ],
+      "explanation": {
+        "en": "Identity activity → Microsoft Entra sign-in logs (lifecycle events → audit logs); tool activity → Foundry tracing. Together they form the agent's audit trail.",
+        "de": "Identitätsaktivität → Microsoft-Entra-Anmeldeprotokolle (Lebenszyklusereignisse → Audit Logs); Tool-Aktivität → Foundry-Tracing. Zusammen bilden sie den Audit-Trail des Agents."
+      },
+      "sources": [
+        "https://learn.microsoft.com/en-us/azure/foundry/agents/concepts/agent-identity"
+      ],
+      "lastVerified": "2026-11-06"
+    }
+  ]
+}

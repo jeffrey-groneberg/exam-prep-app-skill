@@ -1,0 +1,1036 @@
+{
+  "$schema": "../schema/card-file.schema.json",
+  "module": "custom-tools",
+  "cards": [
+    {
+      "id": "z-custom-tools-concept-1",
+      "source": { "kind": "concept", "index": 0 },
+      "front": {
+        "en": "What does a `FunctionTool` contain, what does the model see of it, and how do you change function definitions?",
+        "de": "Was enthält ein `FunctionTool`, was sieht das Modell davon, und womit änderst du Funktionsdefinitionen?"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "A Python callable plus its docstring and type hints; the model reads that code, and you change it by redeploying your whole app",
+            "de": "Eine Python-Funktion samt Docstring und Typannotationen; das Modell liest diesen Code, und du änderst sie, indem du deine ganze App neu bereitstellst"
+          },
+          "correct": false,
+          "why": {
+            "en": "No: a `FunctionTool` is a JSON-schema description — the model never sees your code, and definitions change through the SDK or REST API.",
+            "de": "Nein: Ein `FunctionTool` ist eine JSON-Schema-Beschreibung – das Modell sieht deinen Code nie, und Definitionen änderst du per SDK oder REST API."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "`name`, `description`, `parameters` and `strict`; the model sees only this schema; you edit it in the Foundry portal",
+            "de": "`name`, `description`, `parameters` und `strict`; das Modell sieht nur dieses Schema; du bearbeitest es im Foundry-Portal"
+          },
+          "correct": false,
+          "why": {
+            "en": "Close, but the portal can’t add or edit function definitions — use the SDK or REST API for that.",
+            "de": "Fast: Das Portal kann Funktionsdefinitionen weder hinzufügen noch bearbeiten – nutze dafür SDK oder REST API."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "`name`, `description`, `parameters` and `strict`; the model sees only this schema; you change it with the SDK or REST API",
+            "de": "`name`, `description`, `parameters` und `strict`; das Modell sieht nur dieses Schema; du änderst es per SDK oder REST API"
+          },
+          "correct": true,
+          "why": {
+            "en": "Right: the schema is all the model gets, so describe the purpose and every parameter precisely; the portal can’t edit definitions.",
+            "de": "Richtig: Das Schema ist alles, was das Modell bekommt – beschreibe Zweck und jeden Parameter präzise; das Portal kann Definitionen nicht bearbeiten."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "`name`, `description`, `parameters` and `strict`; the model sees this schema plus your code; you change it with the SDK or REST API",
+            "de": "`name`, `description`, `parameters` und `strict`; das Modell sieht dieses Schema plus deinen Code; du änderst es per SDK oder REST API"
+          },
+          "correct": false,
+          "why": {
+            "en": "Your code stays in your app and never reaches the model — it decides only from the name, description and parameter schema.",
+            "de": "Dein Code bleibt in deiner App und erreicht das Modell nie – es entscheidet nur anhand von Name, Beschreibung und Parameterschema."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-custom-tools-concept-2",
+      "source": { "kind": "concept", "index": 1 },
+      "front": {
+        "en": "What does `strict=True` enforce, and how must you write the schema for it, including optional fields?",
+        "de": "Was erzwingt `strict=True`, und wie musst du das Schema dafür schreiben, auch für optionale Felder?"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Arguments must match the schema exactly: every property in `required`, optional ones as a `null` union, `additionalProperties` set to `false`",
+            "de": "Die Argumente müssen exakt zum Schema passen: jede Eigenschaft in `required`, optionale als Union mit `null`, `additionalProperties` auf `false`"
+          },
+          "correct": true,
+          "why": {
+            "en": "Correct: optional fields stay in `required` but accept `null`, e.g. `\"type\": [\"string\", \"null\"]`, and every object forbids extra properties.",
+            "de": "Richtig: Optionale Felder bleiben in `required`, erlauben aber `null`, etwa `\"type\": [\"string\", \"null\"]`, und jedes Objekt verbietet zusätzliche Eigenschaften."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Arguments must match the schema exactly: optional properties left out of `required`, `additionalProperties` set to `true`",
+            "de": "Die Argumente müssen exakt zum Schema passen: optionale Eigenschaften nicht in `required`, `additionalProperties` auf `true`"
+          },
+          "correct": false,
+          "why": {
+            "en": "Strict mode needs the opposite: every property in `required` (optional ones as a `null` union) and `additionalProperties` set to `false`.",
+            "de": "Strict Mode verlangt das Gegenteil: jede Eigenschaft in `required` (optionale als Union mit `null`) und `additionalProperties` auf `false`."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Arguments must match the schema exactly: every property in `required`, optional ones marked `\"optional\": true`, `additionalProperties` set to `false`",
+            "de": "Die Argumente müssen exakt zum Schema passen: jede Eigenschaft in `required`, optionale mit `\"optional\": true` markiert, `additionalProperties` auf `false`"
+          },
+          "correct": false,
+          "why": {
+            "en": "Strict mode makes a field optional through a `null` union such as `\"type\": [\"string\", \"null\"]`, not through an `optional` flag.",
+            "de": "Strict Mode macht ein Feld über eine Union mit `null` optional, etwa `\"type\": [\"string\", \"null\"]`, nicht über ein `optional`-Flag."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "The model must call the function on every turn: list only the mandatory fields in `required` and leave out `additionalProperties`",
+            "de": "Das Modell muss die Funktion in jeder Runde aufrufen: nur die Pflichtfelder in `required` aufführen und `additionalProperties` weglassen"
+          },
+          "correct": false,
+          "why": {
+            "en": "`strict` governs the shape of the arguments, not whether a tool is called (that’s `tool_choice`), and it needs every property in `required`.",
+            "de": "`strict` regelt die Form der Argumente, nicht ob ein Tool aufgerufen wird (das macht `tool_choice`), und es braucht jede Eigenschaft in `required`."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-custom-tools-concept-3",
+      "source": { "kind": "concept", "index": 2 },
+      "front": {
+        "en": "What does the model send when it needs your function, and how does your app return the result?",
+        "de": "Was schickt das Modell, wenn es deine Funktion braucht, und wie gibt deine App das Ergebnis zurück?"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "A `function_call` item (`name`, JSON-string `arguments`, `call_id`); you return a `function_call_output` with a new `call_id` in a new conversation",
+            "de": "Ein `function_call`-Item (`name`, `arguments` als JSON-String, `call_id`); du gibst ein `function_call_output` mit neuer `call_id` in einer neuen Conversation zurück"
+          },
+          "correct": false,
+          "why": {
+            "en": "The output must carry the same `call_id` and go into the same conversation — otherwise there’s no pending call for it to answer.",
+            "de": "Der Output muss dieselbe `call_id` tragen und in dieselbe Conversation gehen – sonst gibt es keinen offenen Aufruf, den er beantwortet."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "A `function_call` item (`name`, JSON-string `arguments`, `call_id`); you return a `function_call_output` with the same `call_id` in the same conversation",
+            "de": "Ein `function_call`-Item (`name`, `arguments` als JSON-String, `call_id`); du gibst ein `function_call_output` mit derselben `call_id` in derselben Conversation zurück"
+          },
+          "correct": true,
+          "why": {
+            "en": "Right: the matching `call_id` links result and call, and you keep looping, because the next response may contain another `function_call`.",
+            "de": "Richtig: Die passende `call_id` verknüpft Ergebnis und Aufruf, und du wiederholst die Schleife, weil die nächste Antwort ein weiteres `function_call` enthalten kann."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "An HTTPS request to your API as described in a spec; your API answers it, and the service hands the result to the model",
+            "de": "Eine HTTPS-Anfrage an deine API laut Spec; deine API beantwortet sie, und der Dienst gibt das Ergebnis ans Modell weiter"
+          },
+          "correct": false,
+          "why": {
+            "en": "That’s the OpenAPI tool, where the service calls your API itself; with function calling your app runs the code and returns the output.",
+            "de": "Das ist das OpenAPI-Tool, bei dem der Dienst deine API selbst aufruft; beim Function Calling führt deine App den Code aus und gibt den Output zurück."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "A queue message with `function_args` and a `CorrelationId`; your app replies on an output queue with the same `CorrelationId`",
+            "de": "Eine Queue-Nachricht mit `function_args` und einer `CorrelationId`; deine App antwortet über eine Ausgabe-Queue mit derselben `CorrelationId`"
+          },
+          "correct": false,
+          "why": {
+            "en": "That’s the queue contract of the Azure Functions tool; a function tool hands your app a `function_call` item in the response output.",
+            "de": "Das ist der Queue-Vertrag des Azure-Functions-Tools; ein Function Tool übergibt deiner App ein `function_call`-Item im Response-Output."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-custom-tools-concept-4",
+      "source": { "kind": "concept", "index": 3 },
+      "front": {
+        "en": "Who calls the API with the OpenAPI tool, what must the spec contain, and where does the secret live?",
+        "de": "Wer ruft beim OpenAPI-Tool die API auf, was muss die Spec enthalten, und wo liegt das Secret?"
+      },
+      "back": {
+        "en": "Connects the agent to an HTTP API described by an OpenAPI 3.0 or 3.1 spec; the service calls the API itself. Every operation needs an `operationId` (letters, `-` and `_` only). The secret lives only in a project connection (anonymous, API key or project managed identity); for an API key the spec just declares how it is sent — `components.securitySchemes` plus a top-level `security` entry. The tool takes the connection’s full resource ID, `project.connections.get(name).id`.",
+        "de": "Verbindet den Agent mit einer HTTP-API, die eine OpenAPI-3.0- oder -3.1-Spec beschreibt; der Dienst ruft die API selbst auf. Jede Operation braucht eine `operationId` (nur Buchstaben, `-` und `_`). Das Secret liegt nur in einer Projektverbindung (anonym, API-Key oder Projekt-Managed-Identity); bei einem API-Key legt die Spec nur fest, wie er gesendet wird – `components.securitySchemes` plus ein `security`-Eintrag auf oberster Ebene. Das Tool erwartet die vollständige Ressourcen-ID der Verbindung, `project.connections.get(name).id`."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Your app, after each `function_call`; every operation needs an `operationId`; the key sits in the spec’s `securitySchemes`",
+            "de": "Deine App, nach jedem `function_call`; jede Operation braucht eine `operationId`; der Key steht in den `securitySchemes` der Spec"
+          },
+          "correct": false,
+          "why": {
+            "en": "Wrong twice: the service calls your API itself (no client loop), and the spec only declares how the key is sent — the key lives in the project connection.",
+            "de": "Gleich doppelt falsch: Der Dienst ruft deine API selbst auf (keine Client-Schleife), und die Spec legt nur fest, wie der Key gesendet wird – er liegt in der Projektverbindung."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "The service; every operation needs an `operationId`; the API key itself is stored in the spec’s `securitySchemes`",
+            "de": "Der Dienst; jede Operation braucht eine `operationId`; der API-Key selbst steht in den `securitySchemes` der Spec"
+          },
+          "correct": false,
+          "why": {
+            "en": "The spec only declares how the key is sent (`securitySchemes` plus `security`); the key itself lives in the project connection.",
+            "de": "Die Spec legt nur fest, wie der Key gesendet wird (`securitySchemes` plus `security`); der Key selbst liegt in der Projektverbindung."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "The service; a Swagger 2.0 spec with one `operationId` per API is enough; the secret lives only in a project connection",
+            "de": "Der Dienst; eine Swagger-2.0-Spec mit einer `operationId` pro API genügt; das Secret liegt nur in einer Projektverbindung"
+          },
+          "correct": false,
+          "why": {
+            "en": "The tool needs an OpenAPI 3.0 or 3.1 spec in which every single operation has its own `operationId`.",
+            "de": "Das Tool braucht eine OpenAPI-3.0- oder -3.1-Spec, in der jede einzelne Operation ihre eigene `operationId` hat."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "The service; every operation in the OpenAPI 3.0/3.1 spec needs an `operationId`; the secret lives only in a project connection",
+            "de": "Der Dienst; jede Operation in der OpenAPI-3.0/3.1-Spec braucht eine `operationId`; das Secret liegt nur in einer Projektverbindung"
+          },
+          "correct": true,
+          "why": {
+            "en": "Correct: the tool takes the connection’s full resource ID, and for an API key the spec only declares how the key is sent.",
+            "de": "Richtig: Das Tool erwartet die vollständige Ressourcen-ID der Verbindung, und bei einem API-Key legt die Spec nur fest, wie er gesendet wird."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-custom-tools-concept-5",
+      "source": { "kind": "concept", "index": 4 },
+      "front": {
+        "en": "How does `AzureFunctionTool` exchange data with your function, and which agent setup does it require?",
+        "de": "Wie tauscht `AzureFunctionTool` Daten mit deiner Function aus, und welches Agent-Setup braucht es?"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Through Storage queues: `function_args` and a `CorrelationId` in, a reply with that ID out; it also works in the basic agent setup",
+            "de": "Über Storage-Queues: `function_args` und `CorrelationId` hinein, eine Antwort mit dieser ID heraus; es funktioniert auch im Basic-Agent-Setup"
+          },
+          "correct": false,
+          "why": {
+            "en": "The basic setup doesn’t support it: the tool needs the standard agent setup for its queue resources and managed network integration.",
+            "de": "Das Basic-Setup unterstützt es nicht: Das Tool braucht das Standard-Agent-Setup wegen dessen Queue-Ressourcen und verwalteter Netzwerkintegration."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Through Storage queues: `function_args` and a `CorrelationId` in, a reply with that ID out; it needs the standard agent setup",
+            "de": "Über Storage-Queues: `function_args` und `CorrelationId` hinein, eine Antwort mit dieser ID heraus; es braucht das Standard-Agent-Setup"
+          },
+          "correct": true,
+          "why": {
+            "en": "Right: the agent writes to an input queue, a queue trigger runs your function, and the agent matches the output-queue reply by `CorrelationId`.",
+            "de": "Richtig: Der Agent schreibt in eine Eingabe-Queue, ein Queue-Trigger startet deine Function, und der Agent ordnet die Antwort aus der Ausgabe-Queue per `CorrelationId` zu."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Through a synchronous HTTP trigger that returns the result directly in the response body; it also works in the basic agent setup",
+            "de": "Über einen synchronen HTTP-Trigger, der das Ergebnis direkt im HTTP-Response-Body zurückliefert; es funktioniert auch im Basic-Agent-Setup"
+          },
+          "correct": false,
+          "why": {
+            "en": "Wrong twice: the tool exchanges data through Storage queues and needs the standard setup; a synchronous HTTP-triggered function goes through the OpenAPI tool.",
+            "de": "Gleich doppelt falsch: Das Tool tauscht Daten über Storage-Queues aus und braucht das Standard-Setup; eine synchrone HTTP-getriggerte Function bindest du über das OpenAPI-Tool an."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Through a synchronous HTTP trigger that returns the result directly in the response body; it needs the standard agent setup",
+            "de": "Über einen synchronen HTTP-Trigger, der das Ergebnis direkt im HTTP-Response-Body zurückliefert; es braucht das Standard-Agent-Setup"
+          },
+          "correct": false,
+          "why": {
+            "en": "The setup is right, the mechanism isn’t: `AzureFunctionTool` is queue-based — for a synchronous call, expose an HTTP-triggered function through the OpenAPI tool.",
+            "de": "Das Setup stimmt, der Mechanismus nicht: `AzureFunctionTool` ist Queue-basiert – für einen synchronen Aufruf stellst du eine HTTP-getriggerte Function über das OpenAPI-Tool bereit."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-custom-tools-concept-6",
+      "source": { "kind": "concept", "index": 5 },
+      "front": {
+        "en": "How does the file search tool give an agent RAG, and what do you save by using it?",
+        "de": "Wie verschafft das File-Search-Tool einem Agent RAG, und was sparst du dir damit?"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "It sends each question to Bing and cites matching public web pages, so you need no index or store for your own uploaded documents",
+            "de": "Es schickt jede Frage an Bing und zitiert passende öffentliche Webseiten, also brauchst du weder Index noch Store für deine hochgeladenen Dokumente"
+          },
+          "correct": false,
+          "why": {
+            "en": "That’s web search, which uses Grounding with Bing; file search retrieves chunks from your uploaded documents in a vector store.",
+            "de": "Das ist Web Search, die Grounding with Bing nutzt; File Search ruft Abschnitte aus deinen hochgeladenen Dokumenten in einem Vector Store ab."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "It puts every uploaded document in full into the prompt on each turn, so you need neither chunks nor embeddings nor a vector store",
+            "de": "Es packt jedes hochgeladene Dokument in jeder Runde vollständig in den Prompt, also brauchst du weder Abschnitte noch Embeddings noch einen Vector Store"
+          },
+          "correct": false,
+          "why": {
+            "en": "File search indexes the documents in a vector store and retrieves only the relevant chunks at answer time.",
+            "de": "File Search indexiert die Dokumente in einem Vector Store und ruft beim Antworten nur die passenden Abschnitte ab."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "It indexes uploaded documents in a vector store and retrieves relevant chunks at answer time, so you build no search pipeline",
+            "de": "Es indexiert hochgeladene Dokumente in einem Vector Store und ruft beim Antworten passende Abschnitte ab – du baust keine eigene Such-Pipeline"
+          },
+          "correct": true,
+          "why": {
+            "en": "Right: it’s managed RAG — the vector store chunks and embeds the files, and file search finds the best chunks for each question.",
+            "de": "Richtig: Das ist verwaltetes RAG – der Vector Store zerlegt und bettet die Dateien ein, und File Search findet pro Frage die besten Abschnitte."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "It lets the model write and run Python in a sandboxed container to scan the uploaded files, so you need no embeddings or index at all",
+            "de": "Es lässt das Modell in einem Sandbox-Container Python schreiben und ausführen, um die hochgeladenen Dateien zu durchsuchen, also brauchst du weder Embeddings noch Index"
+          },
+          "correct": false,
+          "why": {
+            "en": "Running Python over files is code interpreter; file search relies on a vector store that embeds the documents for retrieval.",
+            "de": "Python über Dateien laufen zu lassen ist Code Interpreter; File Search nutzt einen Vector Store, der die Dokumente für den Abruf einbettet."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-custom-tools-concept-7",
+      "source": { "kind": "concept", "index": 6 },
+      "front": {
+        "en": "What does a conversation remember, and what does a memory store add for returning users?",
+        "de": "Was hält eine Conversation fest, und was ergänzt ein Memory Store für wiederkehrende Nutzer?"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "One session’s turn-by-turn history; a memory store extracts facts such as preferences and offers them in future sessions",
+            "de": "Den Verlauf einer Sitzung Runde für Runde; ein Memory Store extrahiert Fakten wie Präferenzen und stellt sie in künftigen Sitzungen bereit"
+          },
+          "correct": true,
+          "why": {
+            "en": "Correct: the conversation is short-term memory for one session, while the memory store (preview) adds long-term memory across sessions.",
+            "de": "Richtig: Die Conversation ist das Kurzzeitgedächtnis einer Sitzung, der Memory Store (Preview) ergänzt ein Langzeitgedächtnis über Sitzungen hinweg."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Every session a user ever had; a memory store only caches the last response to cut latency",
+            "de": "Jede Sitzung, die ein Nutzer je hatte; ein Memory Store speichert nur die letzte Antwort zwischen, um Latenz zu sparen"
+          },
+          "correct": false,
+          "why": {
+            "en": "A conversation holds one session’s history, and the memory store extracts facts such as user preferences for future sessions.",
+            "de": "Eine Conversation hält den Verlauf einer Sitzung, und der Memory Store extrahiert Fakten wie Nutzerpräferenzen für künftige Sitzungen."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "One session’s turn-by-turn history; a memory store keeps the user’s uploaded documents in a vector store for later search",
+            "de": "Den Verlauf einer Sitzung Runde für Runde; ein Memory Store legt die hochgeladenen Dokumente des Nutzers für spätere Suchen in einem Vector Store ab"
+          },
+          "correct": false,
+          "why": {
+            "en": "Documents in a vector store are file search; a memory store holds facts learned about the user, not uploaded files.",
+            "de": "Dokumente in einem Vector Store sind File Search; ein Memory Store hält Fakten, die über den Nutzer gelernt wurden, keine hochgeladenen Dateien."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Nothing between turns, so your app resends the full history each time; a memory store makes each session keep its own turns",
+            "de": "Nichts zwischen den Runden, deine App schickt jedes Mal den ganzen Verlauf neu; ein Memory Store lässt jede Sitzung ihre eigenen Runden behalten"
+          },
+          "correct": false,
+          "why": {
+            "en": "Keeping a session’s turns is exactly what a conversation does; the memory store adds what should carry over to future sessions.",
+            "de": "Die Runden einer Sitzung zu halten ist genau die Aufgabe der Conversation; der Memory Store ergänzt, was in künftige Sitzungen mitgehen soll."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-custom-tools-trap-1",
+      "source": { "kind": "trap", "index": 0 },
+      "front": {
+        "en": "Your agent skips or misuses a function tool — what is the likely cause, and what do you fix first?",
+        "de": "Dein Agent ruft ein Function Tool nicht oder falsch auf – woran liegt das vermutlich, und was verbesserst du zuerst?"
+      },
+      "back": {
+        "en": "The model can’t read your code. Vague names or descriptions cause missed or wrong calls — improve the schema text before blaming the model.",
+        "de": "Das Modell kann deinen Code nicht lesen. Vage Namen oder Beschreibungen führen zu ausgelassenen oder falschen Aufrufen – verbessere den Schema-Text, bevor du dem Modell die Schuld gibst."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "A bug in the function body — the model reads your code, so fix and test the implementation first",
+            "de": "Ein Fehler im Funktionsrumpf – das Modell liest deinen Code, also korrigierst und testest du zuerst die Implementierung"
+          },
+          "correct": false,
+          "why": {
+            "en": "The model can’t read your code; it decides from the tool’s name, description and parameter schema alone.",
+            "de": "Das Modell kann deinen Code nicht lesen; es entscheidet allein anhand von Name, Beschreibung und Parameterschema des Tools."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "A model that is too weak — switch to a larger model deployment before you even touch the tool definition",
+            "de": "Ein zu schwaches Modell – wechsle zu einem größeren Modell-Deployment, bevor du die Tool-Definition überhaupt anfasst"
+          },
+          "correct": false,
+          "why": {
+            "en": "Improve the schema text before blaming the model: vague names and descriptions are the usual cause of missed or wrong calls.",
+            "de": "Verbessere den Schema-Text, bevor du dem Modell die Schuld gibst: Vage Namen und Beschreibungen sind die übliche Ursache ausgelassener oder falscher Aufrufe."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "A missing `call_id` — add a fixed `call_id` to the function definition first",
+            "de": "Eine fehlende `call_id` – ergänze zuerst eine feste `call_id` in der Funktionsdefinition"
+          },
+          "correct": false,
+          "why": {
+            "en": "A `call_id` is generated per call to link an output to its request; it doesn’t belong in the definition and doesn’t guide the model.",
+            "de": "Eine `call_id` entsteht pro Aufruf und verknüpft einen Output mit seiner Anfrage; sie gehört nicht in die Definition und lenkt das Modell nicht."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Vague names or descriptions — the model sees only the schema, so improve the schema text first",
+            "de": "Vage Namen oder Beschreibungen – das Modell sieht nur das Schema, also verbesserst du zuerst den Schema-Text"
+          },
+          "correct": true,
+          "why": {
+            "en": "Right: the model can’t read your code, so a precise schema text is what makes it call the tool at the right time with the right arguments.",
+            "de": "Richtig: Das Modell kann deinen Code nicht lesen – ein präziser Schema-Text sorgt dafür, dass es das Tool zur richtigen Zeit mit den richtigen Argumenten aufruft."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-custom-tools-trap-2",
+      "source": { "kind": "trap", "index": 1 },
+      "front": {
+        "en": "What happens if your app never returns a `function_call_output`, and how do you handle slow work?",
+        "de": "Was passiert, wenn deine App nie ein `function_call_output` zurückgibt, und wie gehst du mit langsamer Arbeit um?"
+      },
+      "back": {
+        "en": "Function tools need your app in the loop: without a `function_call_output` there is no final answer, and the run expires 10 minutes after it was created. For slow work, return a status immediately and let the user poll.",
+        "de": "Function Tools brauchen deine App in der Schleife: Ohne `function_call_output` gibt es keine finale Antwort, und der Lauf verfällt 10 Minuten nach seiner Erstellung. Für langsame Arbeit gibst du sofort einen Status zurück und lässt den Nutzer nachfragen."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "No final answer, and the run expires 10 minutes after creation; for slow work, return a status at once and let the user poll",
+            "de": "Keine finale Antwort, der Lauf verfällt 10 Minuten nach Erstellung; bei langsamer Arbeit gibst du sofort einen Status zurück, der Nutzer fragt nach"
+          },
+          "correct": true,
+          "why": {
+            "en": "Correct: the model waits for your output, so answer at once with a status, such as a ticket number, and let the user check back later.",
+            "de": "Richtig: Das Modell wartet auf deinen Output – antworte also sofort mit einem Status, etwa einer Ticketnummer, und lass den Nutzer später nachfragen."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "The model answers without the result after a timeout; for slow work, raise the run timeout to 60 minutes",
+            "de": "Das Modell antwortet nach einem Timeout ohne das Ergebnis; bei langsamer Arbeit erhöhst du den Lauf-Timeout einfach auf 60 Minuten"
+          },
+          "correct": false,
+          "why": {
+            "en": "Without your output there’s no final answer, and runs expire 10 minutes after creation — return a status quickly instead of waiting.",
+            "de": "Ohne deinen Output gibt es keine finale Antwort, und Läufe verfallen 10 Minuten nach der Erstellung – gib lieber schnell einen Status zurück, statt zu warten."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "The service runs your function itself after 10 minutes; for slow work, simply wait until it has finished",
+            "de": "Der Dienst führt deine Funktion nach 10 Minuten selbst aus; bei langsamer Arbeit wartest du einfach, bis sie fertig ist"
+          },
+          "correct": false,
+          "why": {
+            "en": "The service never executes function tools — your app does; after 10 minutes the run expires instead.",
+            "de": "Der Dienst führt Function Tools nie aus – das tut deine App; nach 10 Minuten verfällt der Lauf stattdessen."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "There’s no final answer, and the run waits for your output indefinitely; for slow work, submit the output whenever it is ready",
+            "de": "Keine finale Antwort, und der Lauf wartet beliebig lange auf deinen Output; bei langsamer Arbeit reichst du ihn einfach später nach, sobald er fertig ist"
+          },
+          "correct": false,
+          "why": {
+            "en": "The first half is right, but runs expire 10 minutes after creation, so a late output arrives too late.",
+            "de": "Die erste Hälfte stimmt, aber Läufe verfallen 10 Minuten nach der Erstellung – ein später Output kommt zu spät."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-custom-tools-trap-3",
+      "source": { "kind": "trap", "index": 2 },
+      "front": {
+        "en": "What can’t the Foundry portal do with function tools, and where do you configure and test function calling?",
+        "de": "Was kann das Foundry-Portal bei Function Tools nicht, und wo konfigurierst und testest du Function Calling?"
+      },
+      "back": {
+        "en": "The Foundry portal shows agents with function tools but can’t add or edit function definitions and doesn’t execute your functions — configure and test function calling with the SDK or REST API.",
+        "de": "Das Foundry-Portal zeigt Agents mit Function Tools an, kann aber keine Funktionsdefinitionen hinzufügen oder bearbeiten und führt deine Funktionen nicht aus – konfiguriere und teste Function Calling per SDK oder REST API."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "It can’t show agents that have function tools; you configure them in the portal playground after uploading your function code",
+            "de": "Es kann Agents mit Function Tools nicht anzeigen; du konfigurierst sie im Playground des Portals, nachdem du deinen Funktionscode hochgeladen hast"
+          },
+          "correct": false,
+          "why": {
+            "en": "The portal does show such agents, but it never runs your function code and can’t edit definitions — that’s SDK or REST API work.",
+            "de": "Das Portal zeigt solche Agents sehr wohl an, führt deinen Funktionscode aber nie aus und kann keine Definitionen bearbeiten – das erledigst du per SDK oder REST API."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "It can add function definitions but not execute them; you test function calling in the portal with mock outputs",
+            "de": "Es kann Funktionsdefinitionen hinzufügen, aber nicht ausführen; Function Calling testest du im Portal mit Mock-Outputs"
+          },
+          "correct": false,
+          "why": {
+            "en": "The portal can’t add, remove or update function definitions; configure and test function calling with the SDK or REST API.",
+            "de": "Das Portal kann Funktionsdefinitionen weder hinzufügen noch entfernen oder ändern; konfiguriere und teste Function Calling per SDK oder REST API."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "It can’t add or edit function definitions or run your function code; configure and test with the SDK or REST API",
+            "de": "Es kann Funktionsdefinitionen weder anlegen noch bearbeiten und führt deinen Code nicht aus; konfiguriere und teste per SDK oder REST API"
+          },
+          "correct": true,
+          "why": {
+            "en": "Right: the portal shows such agents, but definitions and the round trip with your own code go through the SDK or REST API.",
+            "de": "Richtig: Das Portal zeigt solche Agents an, aber Definitionen und der Hin- und Rückweg mit deinem eigenen Code laufen über SDK oder REST API."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "It can’t run functions longer than 10 minutes; configure them in the portal and use the SDK only for long jobs",
+            "de": "Es kann keine Funktionen ausführen, die länger als 10 Minuten laufen; konfiguriere sie im Portal und nutze das SDK nur für lange Jobs"
+          },
+          "correct": false,
+          "why": {
+            "en": "The 10-minute limit is the run expiry, not a portal rule — and the portal can’t add or edit function definitions at all.",
+            "de": "Die 10 Minuten sind der Verfall des Laufs, keine Portalregel – und das Portal kann Funktionsdefinitionen überhaupt nicht hinzufügen oder bearbeiten."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-custom-tools-trap-4",
+      "source": { "kind": "trap", "index": 3 },
+      "front": {
+        "en": "Your API key isn’t sent — what does the OpenAPI spec need, and how many API-key schemes fit in one tool?",
+        "de": "Dein API-Key wird nicht gesendet – was braucht die OpenAPI-Spec, und wie viele API-Key-Schemas passen in ein Tool?"
+      },
+      "back": {
+        "en": "The OpenAPI spec needs both `components.securitySchemes` and a top-level `security` section, and only one API-key scheme fits in one OpenAPI tool.",
+        "de": "Die OpenAPI-Spec braucht sowohl `components.securitySchemes` als auch einen `security`-Abschnitt auf oberster Ebene, und pro OpenAPI-Tool passt nur ein API-Key-Schema."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Only `components.securitySchemes`; only one API-key scheme fits in one OpenAPI tool",
+            "de": "Nur `components.securitySchemes`; pro OpenAPI-Tool passt nur ein API-Key-Schema"
+          },
+          "correct": false,
+          "why": {
+            "en": "The scheme count is right, but without a top-level `security` section the key isn’t sent — the spec needs both parts.",
+            "de": "Die Anzahl stimmt, aber ohne `security`-Abschnitt auf oberster Ebene wird der Key nicht gesendet – die Spec braucht beide Teile."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Both `components.securitySchemes` and a top-level `security` section; only one API-key scheme fits in one OpenAPI tool",
+            "de": "Sowohl `components.securitySchemes` als auch einen `security`-Abschnitt auf oberster Ebene; pro OpenAPI-Tool passt nur ein API-Key-Schema"
+          },
+          "correct": true,
+          "why": {
+            "en": "Correct: the scheme declares how the key is sent, `security` applies it, and the key itself comes from the project connection.",
+            "de": "Richtig: Das Schema legt fest, wie der Key gesendet wird, `security` wendet es an, und der Key selbst kommt aus der Projektverbindung."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Both `components.securitySchemes` and a top-level `security` section; any number of API-key schemes fit in one OpenAPI tool",
+            "de": "Sowohl `components.securitySchemes` als auch einen `security`-Abschnitt auf oberster Ebene; beliebig viele API-Key-Schemas passen in ein OpenAPI-Tool"
+          },
+          "correct": false,
+          "why": {
+            "en": "The spec part is right, but one OpenAPI tool fits only one API-key scheme.",
+            "de": "Der Teil zur Spec stimmt, aber in ein OpenAPI-Tool passt nur ein API-Key-Schema."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Only `components.securitySchemes`; any number of API-key schemes fit in one OpenAPI tool",
+            "de": "Nur `components.securitySchemes`; beliebig viele API-Key-Schemas passen in ein OpenAPI-Tool"
+          },
+          "correct": false,
+          "why": {
+            "en": "Wrong twice: the spec needs a top-level `security` section next to `components.securitySchemes`, and one OpenAPI tool fits only one API-key scheme.",
+            "de": "Gleich doppelt falsch: Die Spec braucht neben `components.securitySchemes` einen `security`-Abschnitt auf oberster Ebene, und in ein OpenAPI-Tool passt nur ein API-Key-Schema."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-custom-tools-trap-5",
+      "source": { "kind": "trap", "index": 4 },
+      "front": {
+        "en": "Which agent setup doesn’t support the Azure Functions tool, and why must a reply carry the original `CorrelationId`?",
+        "de": "Welches Agent-Setup unterstützt das Azure-Functions-Tool nicht, und wozu braucht die Antwort die `CorrelationId`?"
+      },
+      "back": {
+        "en": "The queue-based Azure Functions tool isn’t supported in the basic agent setup, and a reply without the original `CorrelationId` can’t be matched to its tool call.",
+        "de": "Das Queue-basierte Azure-Functions-Tool wird im Basic-Agent-Setup nicht unterstützt, und eine Antwort ohne die ursprüngliche `CorrelationId` lässt sich keinem Tool-Aufruf zuordnen."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "The standard setup; the `CorrelationId` authenticates the function app to the Storage queue",
+            "de": "Das Standard-Setup; die `CorrelationId` authentifiziert die Function App an der Storage-Queue"
+          },
+          "correct": false,
+          "why": {
+            "en": "It’s the basic setup that lacks support, and queue access runs on managed identities with Storage Queue Data Contributor, not on the `CorrelationId`.",
+            "de": "Nicht unterstützt wird es im Basic-Setup, und der Queue-Zugriff läuft über Managed Identities mit Storage Queue Data Contributor, nicht über die `CorrelationId`."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "The basic setup; the `CorrelationId` tells the queue trigger which function to start",
+            "de": "Das Basic-Setup; die `CorrelationId` sagt dem Queue-Trigger, welche Function er starten soll"
+          },
+          "correct": false,
+          "why": {
+            "en": "The setup is right, but the ID doesn’t route the trigger — the agent uses it to match the reply on the output queue to its call.",
+            "de": "Das Setup stimmt, aber die ID steuert nicht den Trigger – der Agent ordnet damit die Antwort aus der Ausgabe-Queue seinem Aufruf zu."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "The standard setup; without the `CorrelationId` the run expires after just 10 minutes",
+            "de": "Das Standard-Setup; ohne die `CorrelationId` verfällt der Lauf schon nach 10 Minuten"
+          },
+          "correct": false,
+          "why": {
+            "en": "The standard setup is exactly what the tool requires, and the `CorrelationId` exists so that the agent can match the reply to its tool call.",
+            "de": "Das Standard-Setup ist genau das, was das Tool voraussetzt, und die `CorrelationId` dient dazu, dass der Agent die Antwort ihrem Tool-Aufruf zuordnen kann."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "The basic setup; without it, the agent can’t match the reply to its tool call",
+            "de": "Das Basic-Setup; ohne sie kann der Agent die Antwort keinem Tool-Aufruf zuordnen"
+          },
+          "correct": true,
+          "why": {
+            "en": "Right: the queue-based tool needs the standard agent setup, and a reply without the original ID can’t be matched to its call.",
+            "de": "Richtig: Das Queue-basierte Tool braucht das Standard-Agent-Setup, und eine Antwort ohne die ursprüngliche ID lässt sich keinem Aufruf zuordnen."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-custom-tools-takeaway-1",
+      "source": { "kind": "takeaway", "index": 0 },
+      "front": {
+        "en": "Which tool fits code in your process, a REST API with a spec, asynchronous queue work and a shared tool server?",
+        "de": "Welches Tool passt zu Code im eigenen Prozess, REST-API mit Spec, asynchroner Queue-Arbeit und geteiltem Tool-Server?"
+      },
+      "back": {
+        "en": "Must run in your process → function calling; existing REST API with a spec → OpenAPI tool; asynchronous queue work → Azure Functions tool; shared tool server → MCP.",
+        "de": "Muss in deinem Prozess laufen → Function Calling; bestehende REST-API mit Spec → OpenAPI-Tool; asynchrone Queue-Arbeit → Azure-Functions-Tool; geteilter Tool-Server → MCP."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "In-process → function calling; REST API + spec → OpenAPI tool; queue work → Azure Functions tool; shared server → MCP tool",
+            "de": "Im eigenen Prozess → Function Calling; REST-API + Spec → OpenAPI-Tool; Queue-Arbeit → Azure-Functions-Tool; geteilter Server → MCP-Tool"
+          },
+          "correct": true,
+          "why": {
+            "en": "Correct: the options differ in who runs the code — your app, the service via HTTPS, a function app via queues or a remote MCP server.",
+            "de": "Richtig: Die Optionen unterscheiden sich darin, wer den Code ausführt – deine App, der Dienst per HTTPS, eine Function App über Queues oder ein Remote-MCP-Server."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "In-process → OpenAPI tool; REST API + spec → function calling; queue work → Azure Functions tool; shared server → MCP tool",
+            "de": "Im eigenen Prozess → OpenAPI-Tool; REST-API + Spec → Function Calling; Queue-Arbeit → Azure-Functions-Tool; geteilter Server → MCP-Tool"
+          },
+          "correct": false,
+          "why": {
+            "en": "The first two are swapped: logic that must stay in your process means function calling, an existing API with a spec means the OpenAPI tool.",
+            "de": "Die ersten beiden sind vertauscht: Logik, die in deinem Prozess bleiben muss, heißt Function Calling, eine bestehende API mit Spec das OpenAPI-Tool."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "In-process → function calling; REST API + spec → OpenAPI tool; queue work → MCP tool; shared server → Azure Functions tool",
+            "de": "Im eigenen Prozess → Function Calling; REST-API + Spec → OpenAPI-Tool; Queue-Arbeit → MCP-Tool; geteilter Server → Azure-Functions-Tool"
+          },
+          "correct": false,
+          "why": {
+            "en": "The last two are swapped: asynchronous queue work fits the Azure Functions tool, while tools shared by many agents or frameworks belong on an MCP server.",
+            "de": "Die letzten beiden sind vertauscht: Asynchrone Queue-Arbeit passt zum Azure-Functions-Tool, Tools für viele Agents oder Frameworks gehören auf einen MCP-Server."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "In-process → OpenAPI tool; REST API + spec → function calling; queue work → MCP tool; shared server → Azure Functions tool",
+            "de": "Im eigenen Prozess → OpenAPI-Tool; REST-API + Spec → Function Calling; Queue-Arbeit → MCP-Tool; geteilter Server → Azure-Functions-Tool"
+          },
+          "correct": false,
+          "why": {
+            "en": "Both pairs are swapped: in-process logic means function calling, a spec-described API the OpenAPI tool, queue work the Azure Functions tool and a shared server MCP.",
+            "de": "Beide Paare sind vertauscht: Logik im eigenen Prozess heißt Function Calling, eine API mit Spec OpenAPI-Tool, Queue-Arbeit Azure-Functions-Tool und ein geteilter Server MCP."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-custom-tools-takeaway-2",
+      "source": { "kind": "takeaway", "index": 1 },
+      "front": {
+        "en": "Which two rules must a strict function schema follow?",
+        "de": "Welche zwei Regeln muss ein striktes Funktionsschema erfüllen?"
+      },
+      "back": {
+        "en": "Strict schemas list every property in `required` and set `additionalProperties: false`.",
+        "de": "Strikte Schemas führen jede Eigenschaft in `required` auf und setzen `additionalProperties: false`."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "List only the mandatory properties in `required` and set `additionalProperties: false`",
+            "de": "Nur die Pflichteigenschaften in `required` aufführen und `additionalProperties: false` setzen"
+          },
+          "correct": false,
+          "why": {
+            "en": "Strict mode needs every property in `required`; optional ones stay listed and accept `null` through a union type.",
+            "de": "Strict Mode braucht jede Eigenschaft in `required`; optionale bleiben aufgeführt und erlauben `null` über einen Union-Typ."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "List every property in `required` and set `additionalProperties: true`",
+            "de": "Jede Eigenschaft in `required` aufführen und `additionalProperties: true` setzen"
+          },
+          "correct": false,
+          "why": {
+            "en": "Partly right: `additionalProperties` must be `false` in every object, so that no unexpected arguments appear.",
+            "de": "Teilweise richtig: `additionalProperties` muss in jedem Objekt `false` sein, damit keine unerwarteten Argumente auftauchen."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "List every property in `required` and set `additionalProperties: false`",
+            "de": "Jede Eigenschaft in `required` aufführen und `additionalProperties: false` setzen"
+          },
+          "correct": true,
+          "why": {
+            "en": "Right: with both rules the generated arguments match the schema exactly; optional fields use a `null` union.",
+            "de": "Richtig: Mit beiden Regeln passen die erzeugten Argumente exakt zum Schema; optionale Felder nutzen eine Union mit `null`."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "List only the mandatory properties in `required` and set `additionalProperties: true`",
+            "de": "Nur die Pflichteigenschaften in `required` aufführen und `additionalProperties: true` setzen"
+          },
+          "correct": false,
+          "why": {
+            "en": "Both rules are flipped: strict mode needs every property in `required` and `additionalProperties: false` in every object.",
+            "de": "Beide Regeln sind umgedreht: Strict Mode braucht jede Eigenschaft in `required` und `additionalProperties: false` in jedem Objekt."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-custom-tools-takeaway-3",
+      "source": { "kind": "takeaway", "index": 2 },
+      "front": {
+        "en": "How do you answer a `function_call` so that your result is linked to the right call?",
+        "de": "Wie beantwortest du ein `function_call`, damit dein Ergebnis dem richtigen Aufruf zugeordnet wird?"
+      },
+      "back": {
+        "en": "Answer each `function_call` with a `function_call_output` carrying the same `call_id`, in the same conversation.",
+        "de": "Beantworte jedes `function_call` mit einem `function_call_output` mit derselben `call_id` in derselben Conversation."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "With a `function_call_output` carrying the same `call_id`, sent in a new, separate conversation",
+            "de": "Mit einem `function_call_output` mit derselben `call_id`, gesendet in einer neuen, separaten Conversation"
+          },
+          "correct": false,
+          "why": {
+            "en": "A new conversation has no pending call to answer; send the output in the same conversation.",
+            "de": "Eine neue Conversation hat keinen offenen Aufruf, den der Output beantworten könnte; schick ihn in derselben Conversation."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "With a `function_call_output` that repeats the function `name`, sent in the same conversation",
+            "de": "Mit einem `function_call_output`, das den Funktionsnamen (`name`) wiederholt, gesendet in derselben Conversation"
+          },
+          "correct": false,
+          "why": {
+            "en": "The `call_id`, not the function name, links an output to its call; one response can contain several `function_call` items.",
+            "de": "Die `call_id`, nicht der Funktionsname, verknüpft einen Output mit seinem Aufruf; eine Antwort kann mehrere `function_call`-Items enthalten."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "With a `function_call_output` that repeats the function `name`, sent in a new, separate conversation",
+            "de": "Mit einem `function_call_output`, das den Funktionsnamen (`name`) wiederholt, gesendet in einer neuen, separaten Conversation"
+          },
+          "correct": false,
+          "why": {
+            "en": "Wrong twice: the `call_id`, not the function name, links an output to its call, and the output must go back in the same conversation.",
+            "de": "Gleich doppelt falsch: Die `call_id`, nicht der Funktionsname, verknüpft einen Output mit seinem Aufruf, und der Output muss in dieselbe Conversation zurück."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "With a `function_call_output` carrying the same `call_id`, sent in the same conversation",
+            "de": "Mit einem `function_call_output` mit derselben `call_id`, gesendet in derselben Conversation"
+          },
+          "correct": true,
+          "why": {
+            "en": "Right: the matching `call_id` ties each output to its call, and all outputs of one response go back together.",
+            "de": "Richtig: Die passende `call_id` verknüpft jeden Output mit seinem Aufruf, und alle Outputs einer Antwort gehen gemeinsam zurück."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-custom-tools-takeaway-4",
+      "source": { "kind": "takeaway", "index": 3 },
+      "front": {
+        "en": "Where do secrets for custom tools belong, and where must they never appear?",
+        "de": "Wohin gehören Secrets für Custom Tools, und wo dürfen sie nie stehen?"
+      },
+      "back": {
+        "en": "Secrets live in project connections — never in specs, prompts or code.",
+        "de": "Secrets gehören in Projektverbindungen – nie in Specs, Prompts oder Code."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "In the OpenAPI spec’s `securitySchemes` — never in project connections",
+            "de": "In den `securitySchemes` der OpenAPI-Spec – nie in Projektverbindungen"
+          },
+          "correct": false,
+          "why": {
+            "en": "Reversed: the spec only declares how a key is sent, and the secret itself lives in a project connection.",
+            "de": "Umgekehrt: Die Spec legt nur fest, wie ein Key gesendet wird; das Secret selbst liegt in einer Projektverbindung."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "In project connections — never in specs, prompts or code",
+            "de": "In Projektverbindungen – nie in Specs, Prompts oder Code"
+          },
+          "correct": true,
+          "why": {
+            "en": "Right: tools reference a connection that stores endpoint and credential, so no secret has to appear anywhere else.",
+            "de": "Richtig: Tools verweisen auf eine Verbindung, die Endpoint und Credential speichert, sodass nirgends sonst ein Secret stehen muss."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "In the agent instructions, so the model can add them — never in code",
+            "de": "In den Agent-Anweisungen, damit das Modell sie ergänzt – nie im Code"
+          },
+          "correct": false,
+          "why": {
+            "en": "Secrets never belong in prompts or instructions; tools get them from a project connection.",
+            "de": "Secrets gehören nie in Prompts oder Anweisungen; Tools beziehen sie aus einer Projektverbindung."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "In constants in your app’s code — never in project connections",
+            "de": "In Konstanten im Code deiner App – nie in Projektverbindungen"
+          },
+          "correct": false,
+          "why": {
+            "en": "Reversed: code must never hold secrets — tools reference a project connection that stores the credential.",
+            "de": "Umgekehrt: Code darf nie Secrets enthalten – Tools verweisen auf eine Projektverbindung, die das Credential speichert."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-custom-tools-takeaway-5",
+      "source": { "kind": "takeaway", "index": 4 },
+      "front": {
+        "en": "Which one remembers things for a user’s next session — a conversation or a memory store — and why?",
+        "de": "Was merkt sich Dinge für die nächste Sitzung eines Nutzers – eine Conversation oder ein Memory Store –, und warum?"
+      },
+      "back": {
+        "en": "A memory store (preview) holds what to remember next time; a conversation holds this session’s history.",
+        "de": "Ein Memory Store (Preview) hält fest, was beim nächsten Mal erinnert werden soll; eine Conversation hält den Verlauf dieser Sitzung."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "A conversation — it keeps every session of a user, while a memory store holds only the current turn",
+            "de": "Eine Conversation – sie hält jede Sitzung eines Nutzers, ein Memory Store nur die aktuelle Runde"
+          },
+          "correct": false,
+          "why": {
+            "en": "Reversed: a conversation holds one session’s history, and the memory store carries facts into future sessions.",
+            "de": "Umgekehrt: Eine Conversation hält den Verlauf einer Sitzung, der Memory Store trägt Fakten in künftige Sitzungen."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "A conversation — `previous_response_id` links it to the user’s earlier sessions automatically",
+            "de": "Eine Conversation – `previous_response_id` verknüpft sie automatisch mit früheren Sitzungen des Nutzers"
+          },
+          "correct": false,
+          "why": {
+            "en": "`previous_response_id` only chains responses for quick follow-ups; long-term memory across sessions is the memory store’s job.",
+            "de": "`previous_response_id` verkettet nur Antworten für schnelle Folgefragen; Langzeitgedächtnis über Sitzungen hinweg ist Aufgabe des Memory Store."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "A memory store (preview) — it keeps facts for next time; a conversation holds only one session’s history",
+            "de": "Ein Memory Store (Preview) – er merkt sich Fakten fürs nächste Mal; eine Conversation hält nur eine Sitzung"
+          },
+          "correct": true,
+          "why": {
+            "en": "Right: the memory store extracts facts such as preferences from conversations and provides them in future sessions.",
+            "de": "Richtig: Der Memory Store extrahiert Fakten wie Präferenzen aus Gesprächen und stellt sie in künftigen Sitzungen bereit."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "A memory store (preview) — it’s the vector store that file search uses for the user’s uploaded documents",
+            "de": "Ein Memory Store (Preview) – er ist der Vector Store, den File Search für hochgeladene Nutzerdokumente nutzt"
+          },
+          "correct": false,
+          "why": {
+            "en": "The pick is right, the reason isn’t: a memory store holds learned user facts, while file search uses a vector store for documents.",
+            "de": "Die Wahl stimmt, die Begründung nicht: Ein Memory Store hält gelernte Fakten über den Nutzer, File Search nutzt einen Vector Store für Dokumente."
+          }
+        }
+      ]
+    }
+  ]
+}

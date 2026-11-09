@@ -1,0 +1,1094 @@
+{
+  "$schema": "../schema/card-file.schema.json",
+  "module": "agents-vscode",
+  "cards": [
+    {
+      "id": "z-agents-vscode-concept-1",
+      "source": { "kind": "concept", "index": 0 },
+      "front": {
+        "en": "Which three agent types does Foundry Agent Service offer, and when do you pick a hosted agent or the Responses API?",
+        "de": "Welche drei Agent-Typen bietet Foundry Agent Service, und wann wählst du einen Hosted Agent oder die Responses API?"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Prompt, workflow and hosted agents; a hosted agent for YAML multi-agent flows, the Responses API when you need the Copilot harness",
+            "de": "Prompt, Workflow und Hosted Agents; ein Hosted Agent für YAML-Multi-Agent-Abläufe, die Responses API, wenn du den Copilot harness brauchst"
+          },
+          "correct": false,
+          "why": {
+            "en": "The three types are prompt, voice-based prompt and hosted; a hosted agent runs your own code such as Agent Framework or LangGraph, and a direct Responses API call can't use the Copilot harness.",
+            "de": "Die drei Typen sind Prompt, Voice-based Prompt und Hosted; ein Hosted Agent führt deinen eigenen Code aus, etwa Agent Framework oder LangGraph, und ein direkter Responses-API-Aufruf kann den Copilot harness nicht nutzen."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Prompt, voice-based prompt and hosted agents; a hosted agent when you want no code or containers, the Responses API to save the agent as a new version",
+            "de": "Prompt, Voice-based Prompt und Hosted Agents; ein Hosted Agent, wenn du ohne Code und Container auskommen willst, die Responses API, um den Agent als neue Version zu speichern"
+          },
+          "correct": false,
+          "why": {
+            "en": "Swapped: the prompt agent is the one that runs without code or containers, and calling the Responses API directly saves no agent at all.",
+            "de": "Vertauscht: Ohne Code und Container läuft der Prompt Agent, und ein direkter Aufruf der Responses API speichert gar keinen Agent."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Prompt, voice-based prompt and hosted agents; a hosted agent for your own framework or code, the Responses API when the definition lives in app code",
+            "de": "Prompt, Voice-based Prompt und Hosted Agents; ein Hosted Agent für dein eigenes Framework oder deinen Code, die Responses API, wenn die Definition im App-Code liegt"
+          },
+          "correct": true,
+          "why": {
+            "en": "Right: a prompt agent is pure configuration, a hosted agent runs your own code in a container, and a direct Responses API call is an ephemeral agent with no saved definition.",
+            "de": "Richtig: Ein Prompt Agent ist reine Konfiguration, ein Hosted Agent führt deinen eigenen Code im Container aus, und ein direkter Responses-API-Aufruf ist ein ephemeral agent ohne gespeicherte Definition."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Prompt, Copilot harness and hosted agents; a hosted agent for stateful work or webhooks, the Responses API for real-time voice",
+            "de": "Prompt, Copilot harness und Hosted Agents; ein Hosted Agent für zustandsbehaftete Arbeit oder Webhooks, die Responses API für Sprache in Echtzeit"
+          },
+          "correct": false,
+          "why": {
+            "en": "The Copilot harness is a runtime you can pick for a prompt agent, which stays a prompt agent; real-time voice is the voice-based prompt agent through Voice Live.",
+            "de": "Der Copilot harness ist eine Laufzeit, die du für einen Prompt Agent wählen kannst – er bleibt ein Prompt Agent; Sprache in Echtzeit ist der Voice-based Prompt Agent über Voice Live."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-agents-vscode-concept-2",
+      "source": { "kind": "concept", "index": 1 },
+      "front": {
+        "en": "What is an agent version, and how do you address one exact version instead of the one the endpoint serves?",
+        "de": "Was ist eine Agent-Version, und wie sprichst du genau eine Version an statt der, die der Endpoint ausliefert?"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "An editable draft that only becomes final when you publish it; call `get_openai_client(agent_name=…)`",
+            "de": "Ein bearbeitbarer Entwurf, der erst beim Veröffentlichen final wird; ruf `get_openai_client(agent_name=…)` auf"
+          },
+          "correct": false,
+          "why": {
+            "en": "Versions are immutable and there's no publish step; `get_openai_client(agent_name=…)` gets whatever version the endpoint's `version_selector` serves.",
+            "de": "Versionen sind unveränderlich, und einen Veröffentlichungsschritt gibt es nicht; `get_openai_client(agent_name=…)` erhält die Version, die der `version_selector` des Endpoints ausliefert."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "An immutable snapshot that every saved change creates; use `<agent_name>:<version>`",
+            "de": "Ein unveränderlicher Schnappschuss, den jedes Speichern erzeugt; nutze `<agent_name>:<version>`"
+          },
+          "correct": true,
+          "why": {
+            "en": "Correct: even a one-word change creates a new version once saved, and tools such as the `microsoft/ai-agent-evals` GitHub Action take `<agent_name>:<version>`.",
+            "de": "Korrekt: Schon ein geändertes Wort ergibt nach dem Speichern eine neue Version, und Tools wie die GitHub Action `microsoft/ai-agent-evals` erwarten `<agent_name>:<version>`."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "An immutable snapshot that every saved change creates; call `get_openai_client(agent_name=…)`",
+            "de": "Ein unveränderlicher Schnappschuss, den jedes Speichern erzeugt; ruf `get_openai_client(agent_name=…)` auf"
+          },
+          "correct": false,
+          "why": {
+            "en": "The snapshot part is right, but `get_openai_client(agent_name=…)` gets whatever version the endpoint's `version_selector` serves — not one exact version.",
+            "de": "Der Schnappschuss stimmt, aber `get_openai_client(agent_name=…)` erhält die Version, die der `version_selector` des Endpoints ausliefert – nicht genau eine bestimmte."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "An editable draft that only becomes final when you publish it; use `<agent_name>:<version>`",
+            "de": "Ein bearbeitbarer Entwurf, der erst beim Veröffentlichen final wird; nutze `<agent_name>:<version>`"
+          },
+          "correct": false,
+          "why": {
+            "en": "Addressing it as `<agent_name>:<version>` is right, but a version is immutable and needs no publish step — every saved change creates one.",
+            "de": "`<agent_name>:<version>` stimmt, aber eine Version ist unveränderlich und braucht keinen Veröffentlichungsschritt – jede gespeicherte Änderung erzeugt eine."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-agents-vscode-concept-3",
+      "source": { "kind": "concept", "index": 2 },
+      "front": {
+        "en": "Which three ways carry context across turns, and when should you use each one?",
+        "de": "Mit welchen drei Wegen trägst du Kontext über mehrere Runden weiter, und wann nutzt du welchen?"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "A conversation when no data may stay on the service, `previous_response_id` for multi-turn chats, `store=False` for quick follow-ups",
+            "de": "Eine Conversation, wenn keine Daten im Dienst bleiben dürfen, `previous_response_id` für Chats über mehrere Runden, `store=False` für schnelle Folgefragen"
+          },
+          "correct": false,
+          "why": {
+            "en": "Reversed: a conversation keeps every item durably on the service, so the option without stored data is `store=False`, where your app resends the history.",
+            "de": "Umgekehrt: Eine Conversation speichert jedes Item dauerhaft im Dienst – ohne gespeicherte Daten kommst du nur mit `store=False` aus, wo deine App den Verlauf mitschickt."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "A conversation for multi-turn chats, `previous_response_id` when no data may stay on the service, `store=False` for quick follow-ups",
+            "de": "Eine Conversation für Chats über mehrere Runden, `previous_response_id`, wenn keine Daten im Dienst bleiben dürfen, `store=False` für schnelle Folgefragen"
+          },
+          "correct": false,
+          "why": {
+            "en": "With `previous_response_id`, Foundry stores each response, so data stays on the service; only `store=False` keeps nothing there.",
+            "de": "Bei `previous_response_id` speichert Foundry jede Antwort, also bleiben Daten im Dienst; nur bei `store=False` bleibt dort nichts."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "A conversation for multi-turn chats, `previous_response_id` for quick follow-ups, memory when no data may stay on the service",
+            "de": "Eine Conversation für Chats über mehrere Runden, `previous_response_id` für schnelle Folgefragen, Memory, wenn keine Daten im Dienst bleiben dürfen"
+          },
+          "correct": false,
+          "why": {
+            "en": "Memory keeps long-term user facts in a memory store on the service, the opposite of keeping no data; the no-storage option is `store=False`.",
+            "de": "Memory legt langfristige Nutzerfakten in einem Memory Store im Dienst ab – das Gegenteil von keinen Daten; ohne Speicherung kommst du nur mit `store=False` aus."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "A conversation for multi-turn chats, `previous_response_id` for quick follow-ups, `store=False` when no data may stay on the service",
+            "de": "Eine Conversation für Chats über mehrere Runden, `previous_response_id` für schnelle Folgefragen, `store=False`, wenn keine Daten im Dienst bleiben dürfen"
+          },
+          "correct": true,
+          "why": {
+            "en": "Right: a conversation stores every item durably, `previous_response_id` chains responses that Foundry stored, and with `store=False` your app resends the history.",
+            "de": "Richtig: Eine Conversation speichert jedes Item dauerhaft, `previous_response_id` verkettet von Foundry gespeicherte Antworten, und bei `store=False` schickt deine App den Verlauf mit."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-agents-vscode-concept-4",
+      "source": { "kind": "concept", "index": 3 },
+      "front": {
+        "en": "Which steps build a prompt agent in the Microsoft Foundry Toolkit, and what debugs hosted agents locally?",
+        "de": "Mit welchen Schritten baust du im Microsoft Foundry Toolkit einen Prompt Agent, und was debuggt Hosted Agents lokal?"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Create Agent in Agent Builder, Save to Foundry, test in Playground, add tools and save again, View Code; Agent Inspector debugs hosted agents",
+            "de": "Create Agent im Agent Builder, Save to Foundry, im Playground testen, Tools hinzufügen und erneut speichern, View Code; Agent Inspector debuggt Hosted Agents"
+          },
+          "correct": true,
+          "why": {
+            "en": "Correct: Agent Builder sets name, model and instructions, each save creates a version, View Code targets a saved version, and Agent Inspector debugs local runs with breakpoints.",
+            "de": "Korrekt: Im Agent Builder setzt du Name, Modell und Anweisungen, jedes Speichern erzeugt eine Version, View Code zielt auf eine gespeicherte Version, und Agent Inspector debuggt lokale Läufe mit Breakpoints."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Create Agent in Agent Builder, Save to Foundry, test in Playground, add tools and save again, View Code; the Tool Catalog debugs hosted agents locally with breakpoints",
+            "de": "Create Agent im Agent Builder, Save to Foundry, im Playground testen, Tools hinzufügen und erneut speichern, View Code; der Tool Catalog debuggt Hosted Agents lokal mit Breakpoints"
+          },
+          "correct": false,
+          "why": {
+            "en": "In the Tool Catalog you set up shared tool connections; local runs of hosted agents are debugged with breakpoints in Agent Inspector.",
+            "de": "Im Tool Catalog richtest du geteilte Tool-Verbindungen ein; lokale Läufe von Hosted Agents debuggst du mit Breakpoints im Agent Inspector."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Create Agent in Agent Builder, View Code to build its container image, push it to the registry and deploy it, then test in Playground; the Tool Catalog debugs hosted agents locally with breakpoints",
+            "de": "Create Agent im Agent Builder, mit View Code das Container-Image bauen, es in die Registry pushen und deployen, dann im Playground testen; der Tool Catalog debuggt Hosted Agents lokal mit Breakpoints"
+          },
+          "correct": false,
+          "why": {
+            "en": "A prompt agent is configuration only, so View Code generates a client instead of a container image — and local hosted-agent runs are debugged in Agent Inspector, not the Tool Catalog.",
+            "de": "Ein Prompt Agent ist reine Konfiguration, View Code erzeugt also einen Client statt eines Container-Images – und lokale Läufe von Hosted Agents debuggst du im Agent Inspector, nicht im Tool Catalog."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Create Agent in Agent Builder, View Code to build its container image, push it to the registry and deploy it, then test in Playground; Agent Inspector debugs hosted agents",
+            "de": "Create Agent im Agent Builder, mit View Code das Container-Image bauen, es in die Registry pushen und deployen, dann im Playground testen; Agent Inspector debuggt Hosted Agents"
+          },
+          "correct": false,
+          "why": {
+            "en": "The debugger is right, but a prompt agent is configuration only, with no container image; View Code generates a client for a saved version.",
+            "de": "Der Debugger stimmt, aber ein Prompt Agent ist reine Konfiguration ohne Container-Image; View Code erzeugt einen Client für eine gespeicherte Version."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-agents-vscode-concept-5",
+      "source": { "kind": "concept", "index": 4 },
+      "front": {
+        "en": "Where does `version_selector` send an agent's traffic, and which authentication and role do callers need?",
+        "de": "Wohin leitet `version_selector` den Traffic eines Agents, und welche Authentifizierung und Rolle brauchen Aufrufer?"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Split by percentage across several versions, such as 90/10 between old and new; callers use Microsoft Entra ID and need Foundry Agent Consumer",
+            "de": "Prozentual auf mehrere Versionen verteilt, etwa 90/10 zwischen alt und neu; Aufrufer nutzen Microsoft Entra ID und brauchen Foundry Agent Consumer"
+          },
+          "correct": false,
+          "why": {
+            "en": "Percentage-based routing across versions isn't supported — the selector sets one default version, the latest or a pinned one.",
+            "de": "Prozentuales Routing auf mehrere Versionen wird nicht unterstützt – der Selector legt eine Standardversion fest, die neueste oder eine festgelegte."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "To the latest version (default) or one pinned version; callers send an API key in a header and need no role",
+            "de": "An die neueste Version (Standard) oder eine festgelegte Version; Aufrufer schicken einen API-Key im Header und brauchen keine Rolle"
+          },
+          "correct": false,
+          "why": {
+            "en": "API keys aren't supported on the agent endpoint; callers sign in with Microsoft Entra ID and need a role with the endpoint permission.",
+            "de": "API-Keys werden am Agent-Endpoint nicht unterstützt; Aufrufer melden sich mit Microsoft Entra ID an und brauchen eine Rolle mit der Endpoint-Berechtigung."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "To the latest version (default) or one pinned version; callers use Microsoft Entra ID and need Foundry Agent Consumer",
+            "de": "An die neueste Version (Standard) oder eine festgelegte Version; Aufrufer nutzen Microsoft Entra ID und brauchen Foundry Agent Consumer"
+          },
+          "correct": true,
+          "why": {
+            "en": "Right: `version_selector` routes every request without a version override to one version, the latest by default, and Foundry Agent Consumer is the least-privilege role for Entra ID callers.",
+            "de": "Richtig: `version_selector` leitet jede Anfrage ohne Versions-Override an eine Version, standardmäßig die neueste, und Foundry Agent Consumer ist die Rolle mit den geringsten Rechten für Entra-ID-Aufrufer."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Split by percentage across several versions, such as 90/10 between old and new; callers send an API key in a header and need no role",
+            "de": "Prozentual auf mehrere Versionen verteilt, etwa 90/10 zwischen alt und neu; Aufrufer schicken einen API-Key im Header und brauchen keine Rolle"
+          },
+          "correct": false,
+          "why": {
+            "en": "Percentage-based routing across versions isn't supported, and the agent endpoint takes no API keys — callers use Microsoft Entra ID with a role such as Foundry Agent Consumer.",
+            "de": "Prozentuales Routing auf mehrere Versionen wird nicht unterstützt, und der Agent-Endpoint nimmt keine API-Keys – Aufrufer nutzen Microsoft Entra ID mit einer Rolle wie Foundry Agent Consumer."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-agents-vscode-concept-6",
+      "source": { "kind": "concept", "index": 5 },
+      "front": {
+        "en": "What decides which identity a downstream service sees from an agent's tool, and who gets the roles?",
+        "de": "Was entscheidet, welche Identität ein nachgelagerter Dienst vom Tool eines Agents sieht, und wer bekommt die Rollen?"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Always the agent identity, which inherits the project identity's roles, so the tool works without new role assignments",
+            "de": "Immer die Agent-Identität, die die Rollen der Projektidentität erbt – das Tool funktioniert also ohne neue Rollenzuweisungen"
+          },
+          "correct": false,
+          "why": {
+            "en": "A new agent identity starts without permissions, and roles of the project identity don't transfer to it.",
+            "de": "Eine neue Agent-Identität startet ohne Berechtigungen, und Rollen der Projektidentität werden nicht auf sie übertragen."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "The authentication type of the tool's project connection — agent identity or project managed identity; that one gets the roles",
+            "de": "Der Authentifizierungstyp der Projektverbindung des Tools – Agent-Identität oder Projekt-Managed-Identity; diese bekommt die Rollen"
+          },
+          "correct": true,
+          "why": {
+            "en": "Correct: the connection's authentication type decides which identity the target service sees, so you grant roles to exactly that identity.",
+            "de": "Korrekt: Der Authentifizierungstyp der Verbindung bestimmt, welche Identität der Zieldienst sieht – genau dieser Identität gibst du die Rollen."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Always the project managed identity; the agent identity only needs roles to pull container images from the registry",
+            "de": "Immer die Managed Identity des Projekts; die Agent-Identität braucht nur Rollen, um Container-Images aus der Registry zu ziehen"
+          },
+          "correct": false,
+          "why": {
+            "en": "It isn't always the project identity, and pulling a hosted agent's image is the project managed identity's job, not the agent identity's.",
+            "de": "Es ist nicht immer die Projektidentität, und das Image eines Hosted Agents zieht die Managed Identity des Projekts, nicht die Agent-Identität."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "The caller's role on the agent endpoint, such as Foundry Agent Consumer, passed through to the downstream service",
+            "de": "Die Rolle des Aufrufers auf dem Agent-Endpoint, etwa Foundry Agent Consumer, durchgereicht bis zum nachgelagerten Dienst"
+          },
+          "correct": false,
+          "why": {
+            "en": "Foundry Agent Consumer is the role for calling the agent endpoint; the downstream service sees the identity that the tool's project connection authenticates as.",
+            "de": "Foundry Agent Consumer ist die Rolle zum Aufrufen des Agent-Endpoints; der nachgelagerte Dienst sieht die Identität, mit der sich die Projektverbindung des Tools anmeldet."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-agents-vscode-concept-7",
+      "source": { "kind": "concept", "index": 6 },
+      "front": {
+        "en": "Where does Foundry store traces, what do they contain, and what does client-side tracing add?",
+        "de": "Wo speichert Foundry Traces, was enthalten sie, und was ergänzt clientseitiges Tracing?"
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "In the agent's conversation: items with model and tool calls, their tokens and durations; client-side tracing adds the user's raw prompts",
+            "de": "In der Conversation des Agents: Items mit Modell- und Tool-Aufrufen, ihren Tokens und Dauern; clientseitiges Tracing ergänzt die rohen Prompts der Nutzer"
+          },
+          "correct": false,
+          "why": {
+            "en": "A conversation stores messages and tool items for the next turn; traces with token counts and durations live in Application Insights.",
+            "de": "Eine Conversation speichert Nachrichten und Tool-Items für die nächste Runde; Traces mit Token-Zahlen und Dauern liegen in Application Insights."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "In the connected Application Insights: only token counts, latency and run success rates; client-side tracing then adds the tool arguments and results",
+            "de": "Im verbundenen Application Insights: nur Token-Zahlen, Latenz und Erfolgsquoten der Läufe; clientseitiges Tracing ergänzt erst die Tool-Argumente und -Ergebnisse"
+          },
+          "correct": false,
+          "why": {
+            "en": "Server-side spans already include tool calls with arguments and results; client-side tracing adds spans for your own app code.",
+            "de": "Serverseitige Spans enthalten bereits Tool-Aufrufe mit Argumenten und Ergebnissen; clientseitiges Tracing ergänzt Spans für deinen eigenen App-Code."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "In the agent's conversation: spans of model and tool calls; nothing is recorded until you add client-side tracing",
+            "de": "In der Conversation des Agents: Spans von Modell- und Tool-Aufrufen; aufgezeichnet wird erst mit clientseitigem Tracing"
+          },
+          "correct": false,
+          "why": {
+            "en": "A conversation holds messages and tool items for the next turn, not spans; traces go to Application Insights, and server-side tracing needs no code.",
+            "de": "Eine Conversation hält Nachrichten und Tool-Items für die nächste Runde, keine Spans; Traces landen in Application Insights, und serverseitiges Tracing braucht keinen Code."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "In Application Insights: model and tool calls with arguments, results, tokens and durations; client-side adds your app's spans",
+            "de": "In Application Insights: Modell- und Tool-Aufrufe mit Argumenten, Ergebnissen, Tokens und Dauern; clientseitig kommen die Spans deiner App dazu"
+          },
+          "correct": true,
+          "why": {
+            "en": "Right: Foundry writes OpenTelemetry spans to the project's Application Insights without code, and client-side tracing adds spans for your own code.",
+            "de": "Richtig: Foundry schreibt OpenTelemetry-Spans ohne Code in das Application Insights des Projekts, und clientseitiges Tracing ergänzt Spans für deinen eigenen Code."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-agents-vscode-trap-1",
+      "source": { "kind": "trap", "index": 0 },
+      "front": {
+        "en": "What can't you do with unsaved playground edits, and what must you do first?",
+        "de": "Was geht mit ungespeicherten Änderungen im Playground nicht, und was musst du zuerst tun?"
+      },
+      "back": {
+        "en": "Unsaved playground edits are not a version. To compare versions, keep conversation history, monitor or run full evaluations, save first.",
+        "de": "Ungespeicherte Änderungen im Playground sind keine Version. Um Versionen zu vergleichen, Verlauf zu behalten, zu überwachen oder vollständig zu evaluieren, musst du zuerst speichern."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Compare versions, keep conversation history, monitor or fully evaluate — save first, as only a saved change is a version",
+            "de": "Versionen vergleichen, Verlauf behalten, überwachen oder voll evaluieren – zuerst speichern, denn nur Gespeichertes ist eine Version"
+          },
+          "correct": true,
+          "why": {
+            "en": "Correct: playground edits stay a draft until you save, and only a saved version gets conversation history, monitoring and full evaluations.",
+            "de": "Korrekt: Änderungen im Playground bleiben ein Entwurf, bis du speicherst, und nur eine gespeicherte Version bekommt Verlauf, Monitoring und vollständige Evaluierungen."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Try them in the playground at all — publish the agent to its endpoint first, since the playground only runs published agents",
+            "de": "Sie überhaupt im Playground testen – zuerst den Agent auf seinem Endpoint veröffentlichen, denn der Playground führt nur veröffentlichte Agents aus"
+          },
+          "correct": false,
+          "why": {
+            "en": "You can try unsaved edits in the playground, and there's no separate publish step — the endpoint exists from the moment you create the agent.",
+            "de": "Ungespeicherte Änderungen kannst du im Playground testen, und einen separaten Veröffentlichungsschritt gibt es nicht – der Endpoint existiert ab der Erstellung des Agents."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Compare versions, keep conversation history or run full evaluations — debug the edits locally in Agent Inspector first",
+            "de": "Versionen vergleichen, Verlauf behalten oder vollständig evaluieren – zuerst die Änderungen lokal im Agent Inspector debuggen"
+          },
+          "correct": false,
+          "why": {
+            "en": "Agent Inspector debugs local runs of hosted agents; it doesn't turn playground edits into a version — only saving does.",
+            "de": "Agent Inspector debuggt lokale Läufe von Hosted Agents; aus Playground-Änderungen macht er keine Version – das tut nur das Speichern."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Edit the instructions or model again — create a new agent first, since a saved agent can't be changed anymore",
+            "de": "Anweisungen oder Modell erneut ändern – zuerst einen neuen Agent anlegen, denn ein gespeicherter Agent lässt sich nicht mehr ändern"
+          },
+          "correct": false,
+          "why": {
+            "en": "You can keep editing: each saved change simply becomes a new immutable version of the same agent.",
+            "de": "Du kannst weiter ändern: Jede gespeicherte Änderung wird einfach zu einer neuen, unveränderlichen Version desselben Agents."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-agents-vscode-trap-2",
+      "source": { "kind": "trap", "index": 1 },
+      "front": {
+        "en": "What happens when you save a new version under the default routing, and how do you protect production?",
+        "de": "Was passiert, wenn du beim Standard-Routing eine neue Version speicherst, und wie schützt du die Produktion?"
+      },
+      "back": {
+        "en": "The default routing **Always use latest** serves the newly saved version immediately — even in Teams. Pin the `version_selector` in production; splitting traffic between versions isn't supported.",
+        "de": "Das Standard-Routing **Always use latest** liefert die neu gespeicherte Version sofort aus – auch in Teams. Lege den `version_selector` in der Produktion fest; Traffic auf mehrere Versionen aufzuteilen wird nicht unterstützt."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "It goes live everywhere except Teams, which still keeps its published version — send 10 % of the traffic to it first with a traffic split",
+            "de": "Sie geht überall live außer in Teams, das weiter seine veröffentlichte Version behält – schick ihr zuerst per Traffic-Split 10 % des Traffics"
+          },
+          "correct": false,
+          "why": {
+            "en": "Teams is no exception — it gets the new version at once too — and percentage-based routing across versions isn't supported.",
+            "de": "Teams ist keine Ausnahme – auch dort kommt die neue Version sofort an –, und prozentuales Routing auf mehrere Versionen wird nicht unterstützt."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Always use latest serves it at once, even in Teams — send 10 % of the traffic to it first with a traffic split",
+            "de": "Always use latest liefert sie sofort aus, auch in Teams – schick ihr zuerst per Traffic-Split 10 % des Traffics"
+          },
+          "correct": false,
+          "why": {
+            "en": "Splitting traffic isn't supported: the selector sets one default version, not percentage-based routing across versions.",
+            "de": "Traffic aufzuteilen wird nicht unterstützt: Der Selector legt eine Standardversion fest, kein prozentuales Routing auf mehrere Versionen."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Always use latest serves it at once, even in Teams — pin the `version_selector` to a tested version in production",
+            "de": "Always use latest liefert sie sofort aus, auch in Teams – leg den `version_selector` in der Produktion auf eine getestete Version fest"
+          },
+          "correct": true,
+          "why": {
+            "en": "Right: under the default Always use latest, requests go to the newest saved version as soon as you save — Teams included — so production needs a pinned `version_selector`.",
+            "de": "Richtig: Beim Standard-Routing Always use latest gehen Anfragen sofort nach dem Speichern an die neueste Version – auch in Teams –, deshalb braucht die Produktion einen festgelegten `version_selector`."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "It goes live everywhere except Teams, which still keeps its published version — pin the `version_selector` to a tested version in production",
+            "de": "Sie geht überall live außer in Teams, das weiter seine veröffentlichte Version behält – leg den `version_selector` in der Produktion auf eine getestete Version fest"
+          },
+          "correct": false,
+          "why": {
+            "en": "Pinning is the right protection, but Teams is no exception — under Always use latest it gets the new version immediately as well.",
+            "de": "Festlegen ist der richtige Schutz, aber Teams ist keine Ausnahme – bei Always use latest bekommt es die neue Version ebenfalls sofort."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-agents-vscode-trap-3",
+      "source": { "kind": "trap", "index": 2 },
+      "front": {
+        "en": "Why can tool calls of a new agent fail with authorization errors, and what fixes it?",
+        "de": "Warum können Tool-Aufrufe eines neuen Agents mit Autorisierungsfehlern scheitern, und was behebt das?"
+      },
+      "back": {
+        "en": "A new agent identity has no permissions. Tool calls whose project connection authenticates as the agent identity fail until you grant that identity roles on the target service.",
+        "de": "Eine neue Agent-Identität hat keine Berechtigungen. Tool-Aufrufe, deren Projektverbindung sich als Agent-Identität authentifiziert, scheitern, bis du dieser Identität Rollen auf dem Zieldienst gibst."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Its callers lack Foundry Agent Consumer — assign that role to every user and app that calls the agent",
+            "de": "Den Aufrufern fehlt Foundry Agent Consumer – weise diese Rolle jedem Nutzer und jeder App zu, die den Agent aufruft"
+          },
+          "correct": false,
+          "why": {
+            "en": "Foundry Agent Consumer lets callers use the agent endpoint; the tool's target service checks the identity its project connection authenticates as.",
+            "de": "Mit Foundry Agent Consumer dürfen Aufrufer den Agent-Endpoint nutzen; der Zieldienst des Tools prüft die Identität, mit der sich dessen Projektverbindung anmeldet."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Agent identities can't hold roles — grant the roles to the project managed identity instead",
+            "de": "Agent-Identitäten können keine Rollen haben – gib die Rollen stattdessen der Managed Identity des Projekts"
+          },
+          "correct": false,
+          "why": {
+            "en": "Agent identities do take role assignments — that's the fix; roles granted to the project identity don't transfer to the agent identity.",
+            "de": "Agent-Identitäten bekommen sehr wohl Rollen – genau das ist die Lösung; Rollen der Projektidentität gehen nicht auf die Agent-Identität über."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "A pinned `version_selector` blocks tool calls — switch the routing back to Always use latest",
+            "de": "Ein festgelegter `version_selector` blockiert Tool-Aufrufe – stell das Routing zurück auf Always use latest"
+          },
+          "correct": false,
+          "why": {
+            "en": "Routing only decides which version answers requests by default; it has nothing to do with the tool's authorization.",
+            "de": "Das Routing entscheidet nur, welche Version Anfragen standardmäßig beantwortet; mit der Autorisierung des Tools hat es nichts zu tun."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Its new agent identity starts with no roles — grant it roles on the target service",
+            "de": "Seine neue Agent-Identität startet ohne Rollen – gib ihr Rollen auf dem Zieldienst"
+          },
+          "correct": true,
+          "why": {
+            "en": "Correct: each new agent gets its own Entra agent identity with no roles, so connections that authenticate as it fail until you assign roles.",
+            "de": "Korrekt: Jeder neue Agent bekommt eine eigene Entra-Agent-Identität ohne Rollen, daher scheitern Verbindungen, die sich als sie anmelden, bis du Rollen zuweist."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-agents-vscode-trap-4",
+      "source": { "kind": "trap", "index": 3 },
+      "front": {
+        "en": "No traces show up — what do you connect first, and which roles do viewers need?",
+        "de": "Es erscheinen keine Traces – was verbindest du zuerst, und welche Rollen brauchen Betrachter?"
+      },
+      "back": {
+        "en": "Connect Application Insights to the project first, and give viewers **Log Analytics Reader** (plus **Privileged Monitoring Data Reader** for protected tables).",
+        "de": "Verbinde zuerst Application Insights mit dem Projekt und gib Betrachtern **Log Analytics Reader** (plus **Privileged Monitoring Data Reader** für geschützte Tabellen)."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Application Insights to the project; viewers need Foundry Agent Consumer on the agent endpoint",
+            "de": "Application Insights mit dem Projekt; Betrachter brauchen Foundry Agent Consumer auf dem Agent-Endpoint"
+          },
+          "correct": false,
+          "why": {
+            "en": "Foundry Agent Consumer lets callers use the agent endpoint; reading traces needs Log Analytics Reader on the Application Insights resource.",
+            "de": "Foundry Agent Consumer erlaubt Aufrufe des Agent-Endpoints; zum Lesen von Traces braucht es Log Analytics Reader auf der Application-Insights-Ressource."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Application Insights to the project; viewers need Log Analytics Reader, plus Privileged Monitoring Data Reader for protected tables",
+            "de": "Application Insights mit dem Projekt; Betrachter brauchen Log Analytics Reader, plus Privileged Monitoring Data Reader für geschützte Tabellen"
+          },
+          "correct": true,
+          "why": {
+            "en": "Right: traces land in the project's connected Application Insights, and reading them needs Log Analytics Reader — protected tables also Privileged Monitoring Data Reader.",
+            "de": "Richtig: Traces landen im verbundenen Application Insights des Projekts, und zum Lesen braucht es Log Analytics Reader – für geschützte Tabellen zusätzlich Privileged Monitoring Data Reader."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Nothing — just set `OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT` to `true`; viewers need Foundry Agent Consumer on the agent endpoint",
+            "de": "Nichts – setz nur `OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT` auf `true`; Betrachter brauchen Foundry Agent Consumer auf dem Agent-Endpoint"
+          },
+          "correct": false,
+          "why": {
+            "en": "Without a connected Application Insights resource, that variable records nothing, and Foundry Agent Consumer is for calling the agent, not for reading traces.",
+            "de": "Ohne verbundene Application-Insights-Ressource zeichnet diese Variable nichts auf, und Foundry Agent Consumer dient zum Aufrufen des Agents, nicht zum Lesen von Traces."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Nothing — just set `OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT` to `true`; viewers need Log Analytics Reader, plus Privileged Monitoring Data Reader for protected tables",
+            "de": "Nichts – setz nur `OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT` auf `true`; Betrachter brauchen Log Analytics Reader, plus Privileged Monitoring Data Reader für geschützte Tabellen"
+          },
+          "correct": false,
+          "why": {
+            "en": "The roles are right, but that variable only decides whether prompts and outputs are recorded in client-side spans — without a connected Application Insights resource, no traces are stored.",
+            "de": "Die Rollen stimmen, aber diese Variable entscheidet nur, ob Prompts und Ausgaben in clientseitigen Spans landen – ohne verbundene Application-Insights-Ressource werden keine Traces gespeichert."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-agents-vscode-trap-5",
+      "source": { "kind": "trap", "index": 4 },
+      "front": {
+        "en": "Why shouldn't you build new orchestration as YAML workflow agents, and what do you use instead?",
+        "de": "Warum baust du neue Orchestrierung nicht als YAML-Workflow-Agents, und was nutzt du stattdessen?"
+      },
+      "back": {
+        "en": "Declarative workflows in Foundry retire on December 1, 2026, even though the training module still lists YAML workflow agents. Use Microsoft Agent Framework for new orchestration.",
+        "de": "Deklarative Workflows in Foundry werden am 1. Dezember 2026 eingestellt, auch wenn das Trainingsmodul noch YAML-Workflow-Agents nennt. Nutze Microsoft Agent Framework für neue Orchestrierung."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Declarative workflows in Foundry retire on December 1, 2026 — use Microsoft Agent Framework for new orchestration",
+            "de": "Deklarative Workflows in Foundry werden am 1. Dezember 2026 eingestellt – nutze Microsoft Agent Framework für neue Orchestrierung"
+          },
+          "correct": true,
+          "why": {
+            "en": "Correct: Foundry's declarative workflows retire on December 1, 2026, even though the training module still lists YAML workflow agents.",
+            "de": "Korrekt: Die deklarativen Workflows in Foundry werden am 1. Dezember 2026 eingestellt, auch wenn das Trainingsmodul noch YAML-Workflow-Agents nennt."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Declarative workflows in Foundry retire only on March 31, 2029 — keep using the portal designer until then",
+            "de": "Deklarative Workflows in Foundry werden erst am 31. März 2029 eingestellt – nutze den Portal-Designer bis dahin weiter"
+          },
+          "correct": false,
+          "why": {
+            "en": "March 31, 2029 is the retirement date of sentiment analysis, key phrases and summarization in Azure Language; Foundry's declarative workflows retire on December 1, 2026.",
+            "de": "Der 31. März 2029 ist das Einstellungsdatum von Stimmungsanalyse, Schlüsselwortextraktion und Zusammenfassung in Azure Language; deklarative Workflows in Foundry enden am 1. Dezember 2026."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Their YAML can't express conditions or loops — build new orchestration in the portal workflow designer instead",
+            "de": "Ihr YAML kann keine Bedingungen oder Schleifen abbilden – baue neue Orchestrierung stattdessen im Workflow-Designer des Portals"
+          },
+          "correct": false,
+          "why": {
+            "en": "Workflow YAML does handle conditions and loops, and the portal designer retires together with declarative workflows on December 1, 2026.",
+            "de": "Workflow-YAML kann Bedingungen und Schleifen sehr wohl abbilden, und der Portal-Designer wird zusammen mit den deklarativen Workflows am 1. Dezember 2026 eingestellt."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "YAML workflow agents can't be versioned or exported, so Microsoft Agent Framework replaces them",
+            "de": "YAML-Workflow-Agents lassen sich weder versionieren noch exportieren, daher ersetzt Microsoft Agent Framework sie"
+          },
+          "correct": false,
+          "why": {
+            "en": "Each Save freezes a new workflow version and the YAML can be exported for migration; the real reason is the retirement on December 1, 2026.",
+            "de": "Jedes Save friert eine neue Workflow-Version ein, und das YAML lässt sich für die Migration exportieren; der eigentliche Grund ist die Einstellung am 1. Dezember 2026."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-agents-vscode-trap-6",
+      "source": { "kind": "trap", "index": 5 },
+      "front": {
+        "en": "Which identity pulls a hosted agent's image from Azure Container Registry, and which one calls services at run time?",
+        "de": "Welche Identität zieht beim Hosted Agent das Image aus der Container Registry, und welche ruft zur Laufzeit Dienste auf?"
+      },
+      "back": {
+        "en": "The **project managed identity** pulls the image, so it needs Container Registry Repository Reader (or AcrPull) on the Azure Container Registry. The **agent identity**, created at deploy time, is what your code uses at run time to call models, tools and other Azure services, so roles on downstream services such as Storage go to it.",
+        "de": "Die **Managed Identity des Projekts** zieht das Image und braucht daher Container Registry Repository Reader (oder AcrPull) auf der Azure Container Registry. Die beim Deployment erzeugte **Agent-Identität** nutzt dein Code zur Laufzeit, um Modelle, Tools und andere Azure-Dienste aufzurufen, also bekommt sie die Rollen auf nachgelagerten Diensten wie Storage."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "The agent identity pulls the image, and your code also runs as the agent identity when it calls services",
+            "de": "Die Agent-Identität zieht das Image, und dein Code läuft auch beim Aufrufen von Diensten als Agent-Identität"
+          },
+          "correct": false,
+          "why": {
+            "en": "The agent identity doesn't pull the image — the project managed identity does, so it needs Container Registry Repository Reader or AcrPull.",
+            "de": "Das Image zieht nicht die Agent-Identität, sondern die Managed Identity des Projekts – sie braucht daher Container Registry Repository Reader oder AcrPull."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "The agent identity pulls the image; your code runs as the project managed identity when it calls services",
+            "de": "Die Agent-Identität zieht das Image; dein Code läuft beim Aufrufen von Diensten als Managed Identity des Projekts"
+          },
+          "correct": false,
+          "why": {
+            "en": "Reversed: the project managed identity pulls the image, and the agent identity created at deploy time is what your code uses at run time.",
+            "de": "Umgekehrt: Die Managed Identity des Projekts zieht das Image, und die beim Deployment erzeugte Agent-Identität nutzt dein Code zur Laufzeit."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "The project managed identity pulls the image; your code runs as the agent identity when it calls services",
+            "de": "Die Managed Identity des Projekts zieht das Image; dein Code läuft beim Aufrufen von Diensten als Agent-Identität"
+          },
+          "correct": true,
+          "why": {
+            "en": "Correct: the project managed identity needs Container Registry Repository Reader or AcrPull for the pull, while run-time roles such as on Storage go to the agent identity.",
+            "de": "Korrekt: Die Managed Identity des Projekts braucht zum Ziehen Container Registry Repository Reader oder AcrPull; Rollen für die Laufzeit, etwa auf Storage, bekommt die Agent-Identität."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "The project managed identity pulls the image, and your code runs as that same identity when it calls services",
+            "de": "Die Managed Identity des Projekts zieht das Image, und dein Code läuft beim Aufrufen von Diensten als dieselbe Identität"
+          },
+          "correct": false,
+          "why": {
+            "en": "The pull part is right, but at run time your code uses the agent identity, so roles on services such as Storage go to it.",
+            "de": "Das Ziehen stimmt, aber zur Laufzeit nutzt dein Code die Agent-Identität – Rollen auf Diensten wie Storage bekommt also sie."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-agents-vscode-takeaway-1",
+      "source": { "kind": "takeaway", "index": 0 },
+      "front": {
+        "en": "How would you sum up a prompt agent versus a hosted agent in one line?",
+        "de": "Wie fasst du Prompt Agent und Hosted Agent in einer Zeile zusammen?"
+      },
+      "back": {
+        "en": "Prompt agent = configuration; hosted agent = your code in a Foundry-managed container.",
+        "de": "Prompt Agent = Konfiguration; Hosted Agent = dein Code in einem von Foundry verwalteten Container."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Prompt agent = your code in a container; hosted agent = configuration that Foundry hosts",
+            "de": "Prompt Agent = dein Code in einem Container; Hosted Agent = Konfiguration, die Foundry hostet"
+          },
+          "correct": false,
+          "why": {
+            "en": "Reversed: the prompt agent is pure configuration, while the hosted agent is your own code in a container.",
+            "de": "Umgekehrt: Der Prompt Agent ist reine Konfiguration, der Hosted Agent dein eigener Code in einem Container."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Prompt agent = configuration; hosted agent = your own code in a container that Foundry manages",
+            "de": "Prompt Agent = Konfiguration; Hosted Agent = dein eigener Code in einem Container, den Foundry verwaltet"
+          },
+          "correct": true,
+          "why": {
+            "en": "Right: a prompt agent is model, instructions and tools that Foundry runs without code, and a hosted agent ships your code as a container image or .zip.",
+            "de": "Richtig: Ein Prompt Agent besteht aus Modell, Anweisungen und Tools, die Foundry ohne Code ausführt, und ein Hosted Agent liefert deinen Code als Container-Image oder .zip."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Prompt agent = configuration; hosted agent = your own code running on your servers, entirely outside Foundry",
+            "de": "Prompt Agent = Konfiguration; Hosted Agent = dein eigener Code auf deinen Servern, ganz außerhalb von Foundry"
+          },
+          "correct": false,
+          "why": {
+            "en": "Foundry runs hosted agents itself, with a managed endpoint, scaling and identity — not on your own servers.",
+            "de": "Hosted Agents betreibt Foundry selbst, mit verwaltetem Endpoint, Skalierung und Identität – nicht auf deinen eigenen Servern."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Prompt agent = a Responses API call with no saved agent; hosted agent = configuration saved as versions",
+            "de": "Prompt Agent = ein Responses-API-Aufruf ohne gespeicherten Agent; Hosted Agent = als Versionen gespeicherte Konfiguration"
+          },
+          "correct": false,
+          "why": {
+            "en": "A prompt agent is saved and versioned in Foundry; calling the Responses API directly without a saved agent is the ephemeral option.",
+            "de": "Ein Prompt Agent wird in Foundry gespeichert und versioniert; ein direkter Responses-API-Aufruf ohne gespeicherten Agent ist die ephemere Variante."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-agents-vscode-takeaway-2",
+      "source": { "kind": "takeaway", "index": 1 },
+      "front": {
+        "en": "What does every saved change create, and how do you keep the endpoint on the version you trust?",
+        "de": "Was entsteht bei jeder gespeicherten Änderung, und wie hältst du den Endpoint auf der Version, der du vertraust?"
+      },
+      "back": {
+        "en": "Every saved change is a new immutable version — pin the endpoint to the version you trust.",
+        "de": "Jede gespeicherte Änderung ist eine neue, unveränderliche Version – binde den Endpoint an die Version, der du vertraust."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "An update to the current version — keep the default Always use latest routing for production",
+            "de": "Ein Update der aktuellen Version – behalte für die Produktion das Standard-Routing Always use latest"
+          },
+          "correct": false,
+          "why": {
+            "en": "Saving creates a new version instead of changing one, and Always use latest would route requests to it right away.",
+            "de": "Speichern erzeugt eine neue Version, statt eine zu ändern, und Always use latest würde Anfragen sofort an sie leiten."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "A new immutable version — split the traffic so most of it stays on the tested version",
+            "de": "Eine neue, unveränderliche Version – teile den Traffic auf, damit der Großteil auf der getesteten Version bleibt"
+          },
+          "correct": false,
+          "why": {
+            "en": "Traffic splitting isn't supported — `version_selector` sets one default version, not percentage-based routing across versions.",
+            "de": "Traffic aufzuteilen wird nicht unterstützt – `version_selector` legt eine Standardversion fest, kein prozentuales Routing auf mehrere Versionen."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "A new draft that waits until you publish it — then publish only the tested version",
+            "de": "Ein neuer Entwurf, der bis zur Veröffentlichung wartet – veröffentliche dann nur die getestete Version"
+          },
+          "correct": false,
+          "why": {
+            "en": "There's no draft or publish step: a saved change is a version at once, and the endpoint exists from creation.",
+            "de": "Es gibt keinen Entwurfs- oder Veröffentlichungsschritt: Eine gespeicherte Änderung ist sofort eine Version, und der Endpoint existiert ab der Erstellung."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "A new immutable version — pin the `version_selector` to the tested version",
+            "de": "Eine neue, unveränderliche Version – leg den `version_selector` auf die getestete Version fest"
+          },
+          "correct": true,
+          "why": {
+            "en": "Correct: saving never overwrites a version, and a pinned `version_selector` keeps new saves away from production.",
+            "de": "Korrekt: Speichern überschreibt nie eine Version, und ein festgelegter `version_selector` hält neue Speicherstände von der Produktion fern."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-agents-vscode-takeaway-3",
+      "source": { "kind": "takeaway", "index": 2 },
+      "front": {
+        "en": "Who keeps the history with a conversation, with `previous_response_id` and with `store=False`?",
+        "de": "Wer hält den Verlauf bei einer Conversation, bei `previous_response_id` und bei `store=False`?"
+      },
+      "back": {
+        "en": "With a conversation, Foundry stores the items; with `previous_response_id`, Foundry stores the responses; with `store=False`, your app resends the history.",
+        "de": "Bei einer Conversation speichert Foundry die Items, bei `previous_response_id` speichert Foundry die Antworten, und bei `store=False` schickt deine App den Verlauf mit."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "Conversation: Foundry stores the items; `previous_response_id`: Foundry stores the responses; `store=False`: your app resends it",
+            "de": "Conversation: Foundry speichert die Items; `previous_response_id`: Foundry speichert die Antworten; `store=False`: deine App schickt ihn mit"
+          },
+          "correct": true,
+          "why": {
+            "en": "Right: a conversation and `previous_response_id` both keep state on the service, while with `store=False` nothing is stored and your app owns the history.",
+            "de": "Richtig: Conversation und `previous_response_id` halten den Zustand im Dienst, bei `store=False` wird nichts gespeichert, und der Verlauf gehört deiner App."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Conversation: Foundry stores the items; `previous_response_id`: your app resends it; `store=False`: Foundry stores the responses",
+            "de": "Conversation: Foundry speichert die Items; `previous_response_id`: deine App schickt ihn mit; `store=False`: Foundry speichert die Antworten"
+          },
+          "correct": false,
+          "why": {
+            "en": "Swapped: `previous_response_id` points at a response that Foundry stored, while `store=False` stores nothing.",
+            "de": "Vertauscht: `previous_response_id` verweist auf eine von Foundry gespeicherte Antwort, während `store=False` nichts speichert."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Conversation: your app resends it; `previous_response_id`: Foundry stores the responses; `store=False`: Foundry stores the items",
+            "de": "Conversation: deine App schickt ihn mit; `previous_response_id`: Foundry speichert die Antworten; `store=False`: Foundry speichert die Items"
+          },
+          "correct": false,
+          "why": {
+            "en": "A conversation is a durable item store on the service, and `store=False` keeps nothing there — your app resends every turn.",
+            "de": "Eine Conversation ist ein dauerhafter Item-Speicher im Dienst, und bei `store=False` bleibt dort nichts – deine App schickt jede Runde erneut mit."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Conversation: Foundry stores the items; `previous_response_id`: Foundry stores the responses; `store=False`: Foundry keeps it",
+            "de": "Conversation: Foundry speichert die Items; `previous_response_id`: Foundry speichert die Antworten; `store=False`: Foundry behält ihn"
+          },
+          "correct": false,
+          "why": {
+            "en": "With `store=False`, nothing stays on the service — your app resends the history on every turn.",
+            "de": "Bei `store=False` bleibt nichts im Dienst – deine App schickt den Verlauf in jeder Runde mit."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-agents-vscode-takeaway-4",
+      "source": { "kind": "takeaway", "index": 3 },
+      "front": {
+        "en": "Which feature explains a single request, and which features watch the whole agent?",
+        "de": "Was erklärt eine einzelne Anfrage, und was beobachtet den ganzen Agent?"
+      },
+      "back": {
+        "en": "Traces explain one request; the Monitor tab and continuous evaluation watch the whole agent.",
+        "de": "Traces erklären eine Anfrage; Monitor-Tab und kontinuierliche Evaluierung beobachten den ganzen Agent."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "The Monitor tab explains a single request; traces and the CI evaluation gate watch the whole agent",
+            "de": "Der Monitor-Tab erklärt eine einzelne Anfrage; Traces und das CI-Evaluierungs-Gate beobachten den ganzen Agent"
+          },
+          "correct": false,
+          "why": {
+            "en": "Reversed: the Monitor tab aggregates the agent's telemetry, while a trace is the span tree of a single request.",
+            "de": "Umgekehrt: Der Monitor-Tab bündelt die Telemetrie des ganzen Agents, ein Trace ist der Span-Baum einer einzelnen Anfrage."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "Continuous evaluation explains one request; the Traces view and Agent Inspector watch the whole agent",
+            "de": "Kontinuierliche Evaluierung erklärt eine Anfrage; Traces-Ansicht und Agent Inspector beobachten den ganzen Agent"
+          },
+          "correct": false,
+          "why": {
+            "en": "Continuous evaluation scores sampled live responses; to see why one request was slow or wrong, you open its trace.",
+            "de": "Kontinuierliche Evaluierung bewertet Stichproben von Live-Antworten; warum eine Anfrage langsam oder falsch war, zeigt dir ihr Trace."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Traces explain one request; the Monitor tab and continuous evaluation watch the whole agent",
+            "de": "Traces erklären eine Anfrage; Monitor-Tab und kontinuierliche Evaluierung beobachten den ganzen Agent"
+          },
+          "correct": true,
+          "why": {
+            "en": "Correct: a trace is the span tree of one request, while the Monitor tab aggregates tokens, latency and scores and continuous evaluation scores live traffic.",
+            "de": "Korrekt: Ein Trace ist der Span-Baum einer Anfrage, der Monitor-Tab bündelt Tokens, Latenz und Scores, und kontinuierliche Evaluierung bewertet Live-Traffic."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "Traces explain one request; the CI/CD evaluation gate and Agent Inspector watch the agent in production",
+            "de": "Traces erklären eine Anfrage; CI/CD-Evaluierungs-Gate und Agent Inspector beobachten den Agent in der Produktion"
+          },
+          "correct": false,
+          "why": {
+            "en": "The CI/CD gate evaluates a version before release, and Agent Inspector debugs local runs — neither watches production.",
+            "de": "Das CI/CD-Gate evaluiert eine Version vor dem Release, und Agent Inspector debuggt lokale Läufe – keins von beiden beobachtet die Produktion."
+          }
+        }
+      ]
+    },
+    {
+      "id": "z-agents-vscode-takeaway-5",
+      "source": { "kind": "takeaway", "index": 4 },
+      "front": {
+        "en": "Before you move the version selector, what should gate the release in CI?",
+        "de": "Bevor du den Version Selector umstellst: Womit sicherst du das Release in der CI ab?"
+      },
+      "back": {
+        "en": "Gate releases with evaluations in CI (`microsoft/ai-agent-evals`, preview) before you move the version selector.",
+        "de": "Sichere Releases mit Evaluierungen in der CI (`microsoft/ai-agent-evals`, Preview) ab, bevor du den Version Selector umstellst."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "en": "A traffic split that sends 10 % of the users to the new version for a day",
+            "de": "Ein Traffic-Split, der einen Tag lang 10 % der Nutzer an die neue Version schickt"
+          },
+          "correct": false,
+          "why": {
+            "en": "Splitting traffic between versions isn't supported; the gate is an evaluation run in CI before the switch.",
+            "de": "Traffic auf Versionen aufzuteilen wird nicht unterstützt; das Gate ist ein Evaluierungslauf in der CI vor dem Umstellen."
+          }
+        },
+        {
+          "id": "b",
+          "text": {
+            "en": "An evaluation run against the baseline, such as the `microsoft/ai-agent-evals` GitHub Action",
+            "de": "Ein Evaluierungslauf gegen die Baseline, etwa mit der GitHub Action `microsoft/ai-agent-evals`"
+          },
+          "correct": true,
+          "why": {
+            "en": "Right: a CI evaluation run with a test dataset and evaluators, such as the `microsoft/ai-agent-evals` Action (preview), checks the new version against the baseline before you pin the selector.",
+            "de": "Richtig: Ein CI-Evaluierungslauf mit Test-Dataset und Evaluatoren, etwa die Action `microsoft/ai-agent-evals` (Preview), prüft die neue Version gegen die Baseline, bevor du den Selector festlegst."
+          }
+        },
+        {
+          "id": "c",
+          "text": {
+            "en": "Continuous evaluation on live traffic after Always use latest has served the new version to all users",
+            "de": "Kontinuierliche Evaluierung auf Live-Traffic, nachdem Always use latest die neue Version allen Nutzern ausgeliefert hat"
+          },
+          "correct": false,
+          "why": {
+            "en": "Continuous evaluation scores live traffic after release; a gate has to run before the version reaches production.",
+            "de": "Kontinuierliche Evaluierung bewertet Live-Traffic nach dem Release; ein Gate muss laufen, bevor die Version in die Produktion kommt."
+          }
+        },
+        {
+          "id": "d",
+          "text": {
+            "en": "A review of the newest unsaved playground draft in Agent Inspector",
+            "de": "Eine Prüfung des neuesten ungespeicherten Playground-Entwurfs im Agent Inspector"
+          },
+          "correct": false,
+          "why": {
+            "en": "Agent Inspector debugs local runs of hosted agents, and an unsaved draft isn't a version you could release.",
+            "de": "Agent Inspector debuggt lokale Läufe von Hosted Agents, und ein ungespeicherter Entwurf ist keine Version, die du releasen könntest."
+          }
+        }
+      ]
+    }
+  ]
+}

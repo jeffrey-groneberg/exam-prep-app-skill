@@ -1,0 +1,1200 @@
+/* ==========================================================================
+   Flashcards (Zettelkasten in the German UI) — a Leitner card box with three
+   compartments: stage 1 (back, start) → stage 2 → stage 3 (front, goal). Cards are
+   drawn as stacks of card edges; paper and edge colour climb the brand ramp
+   toward the front. The index: one divider per learning path and module.
+   ========================================================================== */
+
+/* ---------- The box (signature) ---------- */
+.zbox {
+  display: grid;
+  gap: var(--s2);
+  margin: 0;
+  min-width: 0;
+}
+
+.zbox__rule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--ink-3);
+  text-align: center;
+}
+
+.zbox__rule strong {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.zbox__tray {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1.5px solid var(--line-strong);
+  border-radius: var(--r-md);
+  background: var(--surface-alt);
+}
+
+.zbox__fach {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  align-items: end;
+  min-width: 0;
+  padding: 10px 12px 12px;
+  --paper: var(--surface);
+  --edge: #c7c7c7;
+}
+
+.zbox__fach + .zbox__fach {
+  border-left: 1.5px solid var(--line-strong);
+}
+
+.zbox__fach--2 {
+  --edge: var(--brand-soft);
+}
+
+.zbox__fach--3 {
+  --paper: var(--brand-tint);
+  --edge: var(--brand);
+}
+
+.zbox__name {
+  overflow: hidden;
+  color: var(--ink-2);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Which way is forward: the back of the box on the left, the goal on the right. */
+.zbox__axis {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s3);
+  margin-bottom: -4px;
+  padding: 0 2px;
+  color: var(--ink-3);
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 600;
+}
+
+.zbox__count {
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+}
+
+.zbox__fach--3 .zbox__count {
+  color: var(--brand-ink);
+}
+
+.zbox__stack {
+  display: flex;
+  align-items: flex-end;
+  height: 56px;
+  margin-top: 6px;
+}
+
+/* A stack of index cards seen from the side: one hairline per card edge. */
+.zbox__cards {
+  width: 100%;
+  border: 1px solid var(--edge);
+  border-radius: var(--r-sm);
+  background: repeating-linear-gradient(to top, var(--edge) 0 1px, var(--paper) 1px 5px);
+}
+
+.zbox__empty {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--r-sm);
+  color: var(--ink-3);
+  font-size: 12px;
+}
+
+/* Forward chip on each divider wall; it sits inside the 12px padding of both compartments. */
+.zbox__next {
+  position: absolute;
+  right: -11px;
+  bottom: 30px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid var(--brand-soft);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--brand);
+}
+
+/* Return path: from stage 3 and stage 2 back down to stage 1. */
+.zbox__return {
+  position: relative;
+  padding-top: 26px;
+}
+
+.zbox__return-line {
+  position: absolute;
+  top: 2px;
+  left: calc(100% / 6);
+  right: calc(100% / 6);
+  height: 20px;
+  border: 1.5px dashed var(--ink-3);
+  border-top: 0;
+  border-radius: 0 0 var(--r-sm) var(--r-sm);
+}
+
+.zbox__return-line::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: -6.25px;
+  border: 5.5px solid transparent;
+  border-top: 0;
+  border-bottom: 7px solid var(--ink-3);
+}
+
+.zbox__return-line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(50% - 0.75px);
+  width: 1.5px;
+  background: repeating-linear-gradient(to bottom, var(--ink-3) 0 4px, transparent 4px 7px);
+}
+
+/* Arrival: the compartment that just received a card flashes once. */
+.zbox__flash {
+  position: absolute;
+  inset: 3px;
+  border-radius: var(--r-sm);
+  pointer-events: none;
+  animation: zbox-flash 640ms var(--ease-out) forwards;
+}
+
+@keyframes zbox-flash {
+  0% {
+    background: rgb(15 108 189 / 0.14);
+    box-shadow: inset 0 0 0 2px var(--brand);
+  }
+  100% {
+    background: rgb(15 108 189 / 0);
+    box-shadow: inset 0 0 0 2px rgb(15 108 189 / 0);
+  }
+}
+
+.zbox__flash ~ .zbox__count {
+  animation: zbox-count 520ms var(--ease-out);
+}
+
+@keyframes zbox-count {
+  0% {
+    transform: scale(1.22);
+    color: var(--brand);
+  }
+  100% {
+    transform: none;
+  }
+}
+
+.zbox__count {
+  transform-origin: left center;
+}
+
+.zbox--compact .zbox__fach {
+  padding: 8px 10px 10px;
+}
+
+.zbox--compact .zbox__count {
+  font-size: 20px;
+  line-height: 26px;
+}
+
+.zbox--compact .zbox__stack {
+  height: 36px;
+  margin-top: 4px;
+}
+
+.zbox--compact .zbox__next {
+  right: -10px;
+  bottom: 18px;
+  width: 18px;
+  height: 18px;
+}
+
+/* ---------- Overview ---------- */
+.zk__grid {
+  display: grid;
+  grid-template-columns: minmax(320px, 420px) minmax(0, 1fr);
+  gap: var(--s5);
+  align-items: start;
+}
+
+.zk__side {
+  display: grid;
+  gap: var(--s5);
+}
+
+.zk__side .panel + .panel {
+  margin-top: 0;
+}
+
+.zk-tally {
+  margin-top: var(--s5);
+  color: var(--ink-2);
+}
+
+.zk-tally strong {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.zk-boxpanel .meter {
+  margin-top: var(--s2);
+}
+
+.zk-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  margin-top: var(--s4);
+}
+
+.zk-note {
+  margin-top: var(--s3);
+  text-wrap: pretty;
+  max-width: 60ch;
+  color: var(--ink-3);
+  font-size: 13px;
+  line-height: 18px;
+}
+
+/* ---------- Index: one divider per learning path and module ---------- */
+.zk-path + .zk-path {
+  margin-top: var(--s6);
+}
+
+.zk-own__title {
+  margin-bottom: var(--s1);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+.zk-dividers {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.zk-divider {
+  position: relative;
+  padding-top: 19px;
+}
+
+/* The tab staggers across four positions, like the dividers of a real card box. */
+.zk-divider__tab {
+  position: absolute;
+  top: 0;
+  left: calc(10px + var(--slot, 0) * 21%);
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 20px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  border-bottom: 0;
+  border-radius: var(--r-sm) var(--r-sm) 0 0;
+  background: var(--surface);
+  color: var(--brand-ink);
+  font-size: 11px;
+  line-height: 16px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.zk-divider.is-done .zk-divider__tab {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: #fff;
+}
+
+.zk-divider__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(96px, 168px) 76px;
+  align-items: center;
+  gap: var(--s4);
+  min-height: 56px;
+  padding: 8px 12px 8px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  transition: border-color var(--dur-fast);
+}
+
+.zk-divider:not(.zk-divider--path):hover .zk-divider__body {
+  border-color: var(--brand-soft);
+}
+
+.zk-divider__text {
+  display: grid;
+  min-width: 0;
+}
+
+.zk-divider__title {
+  color: var(--ink);
+  font-weight: 600;
+  line-height: 20px;
+}
+
+/* The whole divider opens its register; the Lernen button sits above that layer. */
+a.zk-divider__title::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.zk-divider:hover a.zk-divider__title {
+  color: var(--brand);
+}
+
+/* A learning path: a wider divider in front of its modules, with the path's whole split. */
+.zk-divider--path .zk-divider__tab {
+  left: 10px;
+  padding: 0 12px;
+  border-color: var(--line-strong);
+  color: var(--ink);
+  font-size: 12px;
+}
+
+.zk-divider--path .zk-divider__body {
+  border-color: var(--line-strong);
+  background: var(--surface-alt);
+}
+
+.zk-divider__heading {
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 20px;
+  font-weight: 600;
+}
+
+.zk-path .zk-dividers {
+  margin-top: var(--s1);
+}
+
+.zk-divider__meta .tag {
+  margin-left: 6px;
+  vertical-align: 1px;
+}
+
+.zk-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--ink-3);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.zk-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.zk-legend__swatch {
+  width: 14px;
+  height: 8px;
+  border-radius: var(--r-sm);
+}
+
+/* Two-step reset: the question and its danger action replace the button in place. */
+.zk-confirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2);
+  flex-basis: 100%;
+}
+
+.zk-confirm__q {
+  flex-basis: 100%;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.zk-divider__meta {
+  color: var(--ink-3);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.zk-divider__go {
+  position: relative;
+  z-index: 3;
+  justify-self: end;
+}
+
+.zk-divider__state {
+  color: var(--brand-ink);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.zk-split {
+  display: flex;
+  gap: 2px;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--surface-sunken);
+}
+
+.zk-split__seg {
+  min-width: 3px;
+}
+
+.zk-split__seg--1 {
+  background: #c7c7c7;
+}
+
+.zk-split__seg--2 {
+  background: var(--brand-soft);
+}
+
+.zk-split__seg--3 {
+  background: var(--brand);
+}
+
+/* ---------- A register's cards ---------- */
+.zk-module__box {
+  max-width: 760px;
+}
+
+.zk-module__editor {
+  max-width: 760px;
+  margin-top: var(--s5);
+}
+
+.zk-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+  align-items: start;
+  gap: var(--s4);
+  margin: var(--s6) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.zk-card {
+  display: grid;
+  gap: var(--s3);
+  padding-bottom: var(--s2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-2);
+}
+
+.zk-card.is-editing {
+  padding: var(--s4);
+}
+
+/* Index-card header: the ruled line under it is the card's one decoration. */
+.zk-card__head {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+  min-height: 37px;
+  padding: 4px 8px 4px 14px;
+  border-bottom: 1px solid var(--brand-soft);
+}
+
+.zk-card__kind {
+  margin-right: auto;
+  color: var(--ink-3);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+}
+
+.zk-card__front {
+  padding: 0 14px;
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 600;
+}
+
+.zk-card__answer {
+  padding: 0 14px;
+  font-size: 14px;
+  line-height: 21px;
+  color: var(--ink-2);
+}
+
+.zk-card__answer summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  color: var(--brand);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.zk-card__answer[open] summary {
+  margin-bottom: 2px;
+}
+
+.zk-card__term {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.zk-card__right {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: var(--s2);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.zk-card__right .icon {
+  margin-top: 2px;
+}
+
+.zk-card__hide {
+  margin-right: -2px;
+  color: var(--ink-3);
+}
+
+.zk-card:not(:has(.zk-card__actions)) {
+  padding-bottom: var(--s4);
+}
+
+.zk-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px 8px 0;
+  border-top: 1px solid var(--line-soft);
+}
+
+.zk-fach {
+  flex-shrink: 0;
+  padding: 0 7px;
+  border-radius: 8px;
+  font-size: 11px;
+  line-height: 18px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.zk-fach--1 {
+  background: var(--surface-sunken);
+  color: var(--ink-2);
+}
+
+.zk-fach--2 {
+  background: var(--brand-tint);
+  color: var(--brand-ink);
+}
+
+.zk-fach--3 {
+  background: var(--brand);
+  color: #fff;
+}
+
+.zk-hidden {
+  margin-top: var(--s6);
+}
+
+.zk-hidden summary {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.zk-hidden__list {
+  display: grid;
+  gap: var(--s2);
+  margin-top: var(--s3);
+}
+
+.zk-hidden__list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s3);
+  padding: 6px 0;
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--ink-2);
+}
+
+/* ---------- Editor ---------- */
+.zk-editor {
+  display: grid;
+  gap: var(--s4);
+}
+
+.zk-editor .panel__title {
+  margin-bottom: 0;
+}
+
+.zk-field {
+  display: grid;
+  gap: 6px;
+}
+
+.zk-field__label {
+  color: var(--ink-2);
+  font-size: 13px;
+  line-height: 18px;
+  font-weight: 600;
+}
+
+/* 16px text keeps iOS from zooming into the field. */
+.zk-input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--line-strong);
+  border-bottom-color: var(--ink-3);
+  border-radius: var(--r-sm);
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+  line-height: 22px;
+  resize: vertical;
+}
+
+select.zk-input {
+  height: 40px;
+  padding: 0 10px;
+}
+
+.zk-input:focus {
+  border-bottom-color: var(--brand);
+}
+
+.zk-editor__hint {
+  color: var(--ink-3);
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.zk-editor__choices {
+  padding: var(--s3) var(--s4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface-alt);
+}
+
+.zk-editor__choices summary {
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.zk-editor__choices[open] summary {
+  margin-bottom: var(--s1);
+}
+
+.zk-editor__choices > * + * {
+  margin-top: var(--s3);
+}
+
+.zk-editor__wrong {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--s3);
+}
+
+input.zk-input {
+  height: 40px;
+  padding: 0 10px;
+}
+
+.zk-editor__missing {
+  color: var(--warn);
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.zk-editor__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s2);
+}
+
+.zk-editor__saved {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--brand-ink);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ---------- Start page ---------- */
+.zk-home__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  align-items: center;
+  gap: var(--s5);
+}
+
+.zk-home__box {
+  display: block;
+  color: inherit;
+  border-radius: var(--r-md);
+}
+
+.zk-home__box:hover {
+  text-decoration: none;
+}
+
+.zk-home__box:hover .zbox__tray {
+  border-color: var(--brand-soft);
+}
+
+.zk-home__tally {
+  color: var(--ink-2);
+}
+
+.zk-home__tally strong {
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.zk-home__rule {
+  margin-top: var(--s1);
+  text-wrap: pretty;
+  color: var(--ink-3);
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.zk-home__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  margin-top: var(--s3);
+}
+
+/* ---------- A round ---------- */
+.zk-session__scope {
+  margin: calc(-1 * var(--s3)) 0 var(--s3);
+  color: var(--ink-3);
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.zk-session__box {
+  margin-bottom: var(--s5);
+}
+
+.zk-flip {
+  display: block;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-8);
+  outline: none;
+}
+
+.zk-flip:focus-visible {
+  box-shadow: var(--shadow-8), 0 0 0 2px var(--brand);
+}
+
+.zk-flip.is-front {
+  cursor: pointer;
+}
+
+.zk-flip.is-back {
+  animation: zk-turn 320ms var(--ease-out);
+}
+
+/* A card with answer options reveals in place, like a question: no turn. */
+.zk-flip--choice.is-back {
+  animation: none;
+}
+
+.zk-flip--choice .zk-flip__body {
+  gap: var(--s4);
+}
+
+.zk-flip--choice .zk-flip__question {
+  max-width: 40ch;
+}
+
+.zk-lesson {
+  border-top: 1px solid var(--line-soft);
+  padding-top: var(--s3);
+  color: var(--ink-2);
+}
+
+.zk-lesson summary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  color: var(--brand);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.zk-lesson__text {
+  max-width: 62ch;
+  margin-top: var(--s1);
+  font-size: 15px;
+  line-height: 23px;
+}
+
+.zk-flip__backtext {
+  border-top: 1px solid var(--line-soft);
+  padding-top: var(--s3);
+  max-width: 62ch;
+  font-size: 15px;
+  line-height: 23px;
+}
+
+.zk-flip__label {
+  margin-bottom: var(--s1);
+  color: var(--ink-3);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 600;
+}
+
+.zk-flip.is-moving {
+  position: relative;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.zk-bar.is-moving .zk-rate {
+  pointer-events: none;
+}
+
+@keyframes zk-turn {
+  from {
+    opacity: 0.35;
+    transform: perspective(1400px) rotateY(-70deg);
+  }
+}
+
+.zk-flip__head {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--brand-soft);
+}
+
+.zk-flip__side {
+  flex-shrink: 0;
+  white-space: nowrap;
+  color: var(--brand-ink);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 700;
+}
+
+.zk-flip__module {
+  margin-right: auto;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--ink-3);
+  font-size: 12px;
+  line-height: 16px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.zk-flip__body {
+  display: grid;
+  align-content: start;
+  gap: var(--s3);
+  min-height: 180px;
+  padding: var(--s5) var(--s6) var(--s6);
+}
+
+.zk-flip__question {
+  max-width: 34ch;
+  font-family: var(--font-display);
+  font-size: 22px;
+  line-height: 30px;
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+.zk-flip__tap {
+  align-self: end;
+  color: var(--ink-3);
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.zk-flip__asked {
+  color: var(--ink-3);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.zk-flip__term {
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 600;
+}
+
+.zk-flip__answer {
+  max-width: 62ch;
+  font-size: 16px;
+  line-height: 25px;
+}
+
+.zk-rate {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s3);
+  width: 100%;
+}
+
+.zk-rate__btn {
+  justify-content: flex-start;
+  gap: 10px;
+  height: auto;
+  min-height: 52px;
+  padding: 6px 14px;
+  text-align: left;
+  white-space: normal;
+}
+
+.zk-rate__btn--miss {
+  border-color: var(--bad-line);
+  background: var(--bad-tint);
+  color: var(--bad-ink);
+}
+
+.zk-rate__btn--miss:hover {
+  border-color: var(--bad);
+  color: var(--bad-ink);
+}
+
+.zk-rate__btn--hit {
+  border-color: var(--ok-line);
+  background: var(--ok-tint);
+  color: var(--ok-ink);
+}
+
+.zk-rate__btn--hit:hover {
+  border-color: var(--ok);
+  color: var(--ok-ink);
+}
+
+.zk-rate__text {
+  display: grid;
+  line-height: 20px;
+}
+
+.zk-rate__dest {
+  color: var(--ink-2);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+}
+
+kbd.zk-keys {
+  margin-left: auto;
+  padding: 2px 6px;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  font: 600 11px/14px var(--font-ui);
+  opacity: 0.75;
+}
+
+.zk-done .zbox {
+  margin: var(--s2) 0;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1100px) {
+  .zk__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .zk__side {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr));
+    align-items: start;
+  }
+}
+
+@media (max-width: 760px) {
+  /* In a round the box becomes a slim counter strip, so the question and its options keep the screen. */
+  .zk-session__box {
+    margin-bottom: var(--s3);
+  }
+
+  .zk-session .zbox__axis,
+  .zk-session .zbox__stack {
+    display: none;
+  }
+
+  .zk-session .zbox__fach {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--s2);
+    padding: 6px 18px;
+  }
+
+  .zk-session .zbox__count {
+    font-size: 18px;
+    line-height: 24px;
+  }
+
+  .zk-session .zbox__next {
+    top: calc(50% - 10px);
+    bottom: auto;
+  }
+
+  .zk-flip__body {
+    min-height: 150px;
+    padding: var(--s4) var(--s4) var(--s5);
+  }
+
+  .zk-flip__question {
+    font-size: 18px;
+    line-height: 26px;
+  }
+
+  .zk-flip__head {
+    padding: 8px 14px;
+  }
+}
+
+@media (max-width: 560px) {
+  .zk-editor__wrong {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s2);
+  }
+
+  .zk-home__body {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s4);
+  }
+
+  .zk-divider__body {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'text go'
+      'split split';
+    gap: var(--s2) var(--s3);
+    padding: 10px 12px;
+  }
+
+  .zk-divider__text {
+    grid-area: text;
+  }
+
+  .zk-divider__go {
+    grid-area: go;
+  }
+
+  .zk-split {
+    grid-area: split;
+  }
+
+  .zk-divider__state:empty {
+    display: none;
+  }
+
+  .zk-rate {
+    gap: var(--s2);
+  }
+
+  .zk-rate__btn {
+    padding: 6px 10px;
+    gap: 8px;
+  }
+
+  .zk-session .session__hint {
+    font-size: 13px;
+    line-height: 18px;
+  }
+}
+
+/* Keyboard hints only where a keyboard is the likely input. */
+@media (pointer: coarse) {
+  .zk-keys {
+    display: none;
+  }
+
+  .zk-card__answer summary {
+    min-height: 44px;
+  }
+
+  .zk-hidden summary {
+    padding: 12px 0;
+  }
+}
+
+/* ---------- Lesson bridge: the lesson's cards, one step away ---------- */
+.lesson-zettel {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--s3);
+  margin-top: var(--s5);
+  padding: var(--s3) var(--s4);
+  border: 1px solid var(--brand-tint-2);
+  border-radius: var(--r-md);
+  background: var(--brand-tint);
+}
+
+.lesson-zettel p {
+  flex: 1 1 260px;
+  color: var(--ink-2);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+/* Feedback for the card in a round: at the foot of the card, so the header keeps side, module and stage readable. */
+.zk-flip__feedback {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--s3);
+}
